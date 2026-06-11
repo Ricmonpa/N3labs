@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Calendar, MessageSquare } from "lucide-react";
+import Calendly from "./Calendly";
 
 const options = [
   {
@@ -99,6 +100,9 @@ export default function Contact() {
             );
           })}
         </div>
+
+        {/* Embedded scheduler — final step of the funnel */}
+        <Calendly />
 
         <motion.p
           initial={{ opacity: 0 }}
