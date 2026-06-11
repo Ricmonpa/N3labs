@@ -98,7 +98,7 @@ export default function Hero() {
           className="mt-20 grid grid-cols-3 gap-4 max-w-xl mx-auto"
         >
           {[
-            { value: "40+", label: "Proyectos IA" },
+            { value: "2000+", label: "Proyectos IA" },
             { value: "98%", label: "Satisfacción" },
             { value: "12×", label: "ROI promedio" },
           ].map((s) => (
