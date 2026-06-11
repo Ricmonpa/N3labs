@@ -35,7 +35,7 @@ export default function Nav() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <a href="#">
-          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={66} priority />
+          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority />
         </a>
 
         {/* Desktop links */}
