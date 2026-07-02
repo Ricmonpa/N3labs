@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { translations, type Lang } from "@/lib/translations";
 
 type Ctx = {
@@ -11,24 +11,19 @@ type Ctx = {
 
 const LanguageContext = createContext<Ctx | null>(null);
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("es");
-
-  // Resolve initial language: ?lang= query param wins, then localStorage
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const fromQuery = params.get("lang");
-    const stored = localStorage.getItem("n3-lang");
-    const initial = fromQuery === "en" || fromQuery === "es" ? fromQuery : stored;
-    if (initial === "en" || initial === "es") {
-      setLangState(initial);
-      document.documentElement.lang = initial;
-    }
-  }, []);
+export function LanguageProvider({
+  initialLang = "es",
+  children,
+}: {
+  initialLang?: Lang;
+  children: React.ReactNode;
+}) {
+  const [lang, setLangState] = useState<Lang>(initialLang);
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    localStorage.setItem("n3-lang", l);
+    // Persist the explicit choice so the server picks it up on the next load
+    document.cookie = `n3-lang=${l}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
     document.documentElement.lang = l;
   };
 

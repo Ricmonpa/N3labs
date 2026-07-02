@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 
 const inter = Inter({
@@ -14,13 +15,17 @@ export const metadata: Metadata = {
   description: "Construimos sistemas de inteligencia artificial para empresas que no pueden permitirse quedarse atrás.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get("n3-lang")?.value ?? cookieStore.get("n3-geo")?.value;
+  const lang = cookieLang === "en" ? "en" : "es";
+
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang={lang} className={inter.variable}>
       <body className="antialiased">{children}</body>
     </html>
   );
