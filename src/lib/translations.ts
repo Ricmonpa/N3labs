@@ -1,0 +1,323 @@
+export type Lang = "es" | "en";
+
+export const translations = {
+  es: {
+    nav: {
+      links: [
+        { label: "Servicios", href: "#servicios" },
+        { label: "Soluciones", href: "#soluciones" },
+        { label: "Proceso", href: "#proceso" },
+        { label: "Contacto", href: "#contacto" },
+      ],
+      cta: "Agendar llamada",
+    },
+    hero: {
+      badge: "Laboratorio de Inteligencia Artificial",
+      titleA: "Transformamos ",
+      titleHighlight: "decisiones complejas",
+      titleB: "en inteligencia ",
+      titleC: "que escala.",
+      subtitle:
+        "Diseñamos e implementamos sistemas de IA de nivel enterprise — agentes autónomos, software inteligente y estrategia de transformación para organizaciones que exigen resultados medibles.",
+      ctaPrimary: "Hablar con un experto",
+      ctaSecondary: "Ver soluciones entregadas",
+      stats: [
+        { value: "2000+", label: "Proyectos IA" },
+        { value: "98%", label: "Satisfacción" },
+        { value: "12×", label: "ROI promedio" },
+      ],
+    },
+    services: {
+      label: "Servicios",
+      title: "Lo que construimos",
+      subtitle: "Cada proyecto es diseñado a medida. Sin soluciones genéricas.",
+      more: "Saber más",
+      items: [
+        {
+          tag: "ADTECH",
+          title: "Banners Interactivos",
+          desc: 'Creatividades con el efecto "Wow". Banners HTML5 potenciados por chatbots de IA, navegación de video y experiencias inmersivas para marcas como Universal Pictures, Dove, Liverpool e Intelisis.',
+          features: ["Chatbots de IA embebidos", "Navegación de video dinámica", "Experiencias inmersivas", "Incremento radical de Dwell Time"],
+        },
+        {
+          tag: "ENGAGEMENT",
+          title: "Herramientas de Valor de Marca",
+          desc: "Utilidades deep-tech que resuelven problemas del usuario mientras construyen lealtad de marca. Desde calculadoras diagnósticas hasta herramientas de traducción.",
+          features: ["Calculadoras diagnósticas", "Análisis de visión por IA", "Resolución de problemas del usuario", "Generación de lealtad de marca"],
+        },
+        {
+          tag: "INTEGRACIÓN",
+          title: "Integración de IA Web",
+          desc: "Embebemos inteligencia en sitios corporativos. Transformamos webs pasivas en agentes de ventas activos y centros de soporte dinámico.",
+          features: ["Asistentes de ventas inteligentes", "Agentes de soporte al cliente", "Generación de contenido dinámico", "Ecosistemas web conversacionales"],
+        },
+      ],
+    },
+    artifacts: {
+      label: "Artefactos & Soluciones",
+      titleA: "Sistemas que ya",
+      titleB: "están en producción",
+      intro: "Una muestra de soluciones reales entregadas. Cada caso resuelve un problema de negocio concreto con resultados medibles.",
+      items: [
+        {
+          category: "Entretenimiento",
+          title: 'Banner Conversacional "AdChat"',
+          desc: 'Para "Five Nights at Freddy\'s 2" (Universal Pictures), creamos un banner donde los fans "chateaban" directamente con los personajes dentro del espacio publicitario.',
+          tags: ["AdChat", "Character AI", "Entretenimiento"],
+          metric: "+300% tiempo de retención vs display estático",
+        },
+        {
+          category: "Retail",
+          title: "Banner Diagnóstico con IA",
+          desc: "Banner para Dove que utiliza Google Gemini para escanear la piel del usuario en tiempo real, ofreciendo resultados y recomendaciones de productos.",
+          tags: ["Computer Vision", "Gemini", "Retail"],
+          metric: "15-30 segundos de interacción",
+        },
+        {
+          category: "eCommerce",
+          title: "Asistente de Compras Conversacional",
+          desc: "Coach de IA para Liverpool que pregunta sobre metas de ciclismo y terreno, ofreciendo recomendaciones precisas del inventario sobre fondos de video dinámico.",
+          tags: ["Asistente de Ventas", "Recomendación", "eCommerce"],
+          metric: "+400% tiempo de retención",
+        },
+        {
+          category: "Retail",
+          title: "Experiencia de Voz con IA",
+          desc: "Campaña navideña para Sanborns. Los niños dictan sus deseos al banner por voz, la IA lo transcribe y sugiere regalos del catálogo.",
+          tags: ["Voice Recognition", "NLP", "Catálogo"],
+          metric: "Interacción de alto valor emocional",
+        },
+        {
+          category: "FMCG",
+          title: "Asistente de Salud para Mascotas",
+          desc: "Diagnóstico inteligente que analiza raza, peso y actividad del perro para crear planes de alimentación personalizados sugiriendo productos Pedigree.",
+          tags: ["Smart Diagnostics", "Profiling", "FMCG"],
+          metric: "10x más tiempo de permanencia",
+        },
+        {
+          category: "EdTech",
+          title: "Co-Piloto de Aprendizaje Adaptativo",
+          desc: "Asistente para RichmondPro que permite a los estudiantes practicar inglés en tiempo real. Integra modelos múltiples y RAG con el currículo oficial.",
+          tags: ["RAG", "Multi-LLM", "EdTech"],
+          metric: "Práctica conversacional en tiempo real",
+        },
+        {
+          category: "Agentic AI",
+          title: "Radar Comparador de Precios",
+          desc: "Para Avante Llantas: agente autónomo que monitorea precios de competidores en tiempo real, detecta variaciones y genera alertas y recomendaciones de ajuste automáticamente.",
+          tags: ["Workflow IA", "Agentic", "Retail"],
+          metric: "Monitoreo competitivo en tiempo real",
+        },
+        {
+          category: "Agentic AI",
+          title: "Scraper de Oferta y Demanda",
+          desc: "Para Carnovo: agente que rastrea publicaciones de compra-venta de vehículos en Facebook Marketplace, analiza tendencias de mercado y genera reportes de inteligencia comercial.",
+          tags: ["Web Scraping", "Facebook", "Automotriz"],
+          metric: "Inteligencia de mercado automatizada",
+        },
+        {
+          category: "Agentic AI",
+          title: "Scanner de Salud de Neumáticos",
+          desc: "Para Avante Llantas: visión computacional que analiza el desgaste de las llantas, evalúa su estado, estima vida útil restante y programa recordatorios automáticos de cambio.",
+          tags: ["Computer Vision", "Agentic", "Automotriz"],
+          metric: "Diagnóstico preventivo automatizado",
+        },
+      ],
+    },
+    process: {
+      label: "Proceso",
+      title: "Cómo trabajamos",
+      subtitle: "Un proceso estructurado que reduce riesgo y maximiza la probabilidad de éxito del proyecto.",
+      steps: [
+        { title: "Diagnóstico", desc: "Entendemos tu negocio en profundidad: procesos, datos disponibles, restricciones técnicas y oportunidades donde la IA genera mayor retorno.", duration: "1–2 semanas" },
+        { title: "Diseño de solución", desc: "Definimos la arquitectura, el stack tecnológico y los KPIs de éxito. Sin promesas vacías: solo lo que es técnicamente viable y económicamente justificado.", duration: "1 semana" },
+        { title: "Construcción", desc: "Desarrollo iterativo con entregas parciales. El cliente ve avances reales cada semana, no solo al final. Código de producción desde el día uno.", duration: "4–12 semanas" },
+        { title: "Despliegue & Evolución", desc: "Lanzamiento, monitoreo y optimización continua. Los sistemas de IA mejoran con el tiempo — nos aseguramos de que el tuyo lo haga.", duration: "Continuo" },
+      ],
+    },
+    contact: {
+      label: "Contacto",
+      titleA: "El siguiente paso",
+      titleB: "es una conversación.",
+      subtitle: "No necesitas tener todo claro. Nosotros ayudamos a definir el problema antes de proponer la solución.",
+      options: [
+        { title: "Agendar llamada de diagnóstico", desc: "30 minutos. Sin compromiso. Evaluamos si tu caso tiene potencial con IA.", cta: "Reservar espacio" },
+        { title: "Enviarnos un brief", desc: "Cuéntanos tu problema de negocio y te respondemos con una propuesta inicial en 48h.", cta: "Enviar brief" },
+        { title: "Consulta rápida por WhatsApp", desc: "Para preguntas puntuales o explorar si tu caso encaja con lo que hacemos.", cta: "Escribir ahora" },
+      ],
+      trust: "Trabajamos con empresas de toda Latinoamérica y España · Proyectos desde $15,000 USD · Confidencialidad garantizada",
+      scheduler: {
+        prompt: "Elige con quién quieres reunirte:",
+        loading: "Cargando calendario…",
+      },
+    },
+    footer: {
+      rights: "Todos los derechos reservados.",
+      links: [
+        { label: "Servicios", href: "#servicios" },
+        { label: "Soluciones", href: "#soluciones" },
+        { label: "Contacto", href: "#contacto" },
+      ],
+    },
+  },
+
+  en: {
+    nav: {
+      links: [
+        { label: "Services", href: "#servicios" },
+        { label: "Solutions", href: "#soluciones" },
+        { label: "Process", href: "#proceso" },
+        { label: "Contact", href: "#contacto" },
+      ],
+      cta: "Book a call",
+    },
+    hero: {
+      badge: "Artificial Intelligence Laboratory",
+      titleA: "We turn ",
+      titleHighlight: "complex decisions",
+      titleB: "into intelligence ",
+      titleC: "that scales.",
+      subtitle:
+        "We design and deploy enterprise-grade AI systems — autonomous agents, intelligent software and transformation strategy for organizations that demand measurable results.",
+      ctaPrimary: "Talk to an expert",
+      ctaSecondary: "See delivered solutions",
+      stats: [
+        { value: "2000+", label: "AI Projects" },
+        { value: "98%", label: "Satisfaction" },
+        { value: "12×", label: "Average ROI" },
+      ],
+    },
+    services: {
+      label: "Services",
+      title: "What we build",
+      subtitle: "Every project is custom-built. No off-the-shelf solutions.",
+      more: "Learn more",
+      items: [
+        {
+          tag: "ADTECH",
+          title: "Interactive Banners",
+          desc: 'Creatives with the "Wow" effect. HTML5 banners powered by AI chatbots, video navigation and immersive experiences for brands like Universal Pictures, Dove, Liverpool and Intelisis.',
+          features: ["Embedded AI chatbots", "Dynamic video navigation", "Immersive experiences", "Radical Dwell Time increase"],
+        },
+        {
+          tag: "ENGAGEMENT",
+          title: "Brand Value Tools",
+          desc: "Deep-tech utilities that solve real user problems while building brand loyalty. From diagnostic calculators to translation tools.",
+          features: ["Diagnostic calculators", "AI vision analysis", "User problem solving", "Brand loyalty generation"],
+        },
+        {
+          tag: "INTEGRATION",
+          title: "Web AI Integration",
+          desc: "We embed intelligence into corporate websites. We turn passive sites into active sales agents and dynamic support hubs.",
+          features: ["Smart sales assistants", "Customer support agents", "Dynamic content generation", "Conversational web ecosystems"],
+        },
+      ],
+    },
+    artifacts: {
+      label: "Artifacts & Solutions",
+      titleA: "Systems already",
+      titleB: "in production",
+      intro: "A sample of real solutions delivered. Each case solves a concrete business problem with measurable results.",
+      items: [
+        {
+          category: "Entertainment",
+          title: 'Conversational Banner "AdChat"',
+          desc: 'For "Five Nights at Freddy\'s 2" (Universal Pictures), we built a banner where fans "chatted" directly with the characters inside the ad space.',
+          tags: ["AdChat", "Character AI", "Entertainment"],
+          metric: "+300% retention time vs static display",
+        },
+        {
+          category: "Retail",
+          title: "AI Diagnostic Banner",
+          desc: "Banner for Dove that uses Google Gemini to scan the user's skin in real time, delivering results and product recommendations.",
+          tags: ["Computer Vision", "Gemini", "Retail"],
+          metric: "15-30 seconds of interaction",
+        },
+        {
+          category: "eCommerce",
+          title: "Conversational Shopping Assistant",
+          desc: "An AI coach for Liverpool that asks about cycling goals and terrain, delivering precise inventory recommendations over dynamic video backgrounds.",
+          tags: ["Sales Assistant", "Recommendation", "eCommerce"],
+          metric: "+400% retention time",
+        },
+        {
+          category: "Retail",
+          title: "AI Voice Experience",
+          desc: "Holiday campaign for Sanborns. Children speak their wishes to the banner, the AI transcribes them and suggests gifts from the catalog.",
+          tags: ["Voice Recognition", "NLP", "Catalog"],
+          metric: "High emotional-value interaction",
+        },
+        {
+          category: "FMCG",
+          title: "Pet Health Assistant",
+          desc: "Smart diagnostics that analyze breed, weight and activity of the dog to build personalized feeding plans, recommending Pedigree products.",
+          tags: ["Smart Diagnostics", "Profiling", "FMCG"],
+          metric: "10x longer dwell time",
+        },
+        {
+          category: "EdTech",
+          title: "Adaptive Learning Co-Pilot",
+          desc: "Assistant for RichmondPro that lets students practice English in real time. Integrates multiple models and RAG with the official curriculum.",
+          tags: ["RAG", "Multi-LLM", "EdTech"],
+          metric: "Real-time conversational practice",
+        },
+        {
+          category: "Agentic AI",
+          title: "Price Comparison Radar",
+          desc: "For Avante Llantas: an autonomous agent that monitors competitor prices in real time, detects variations and automatically generates alerts and pricing recommendations.",
+          tags: ["AI Workflow", "Agentic", "Retail"],
+          metric: "Real-time competitive monitoring",
+        },
+        {
+          category: "Agentic AI",
+          title: "Supply & Demand Scraper",
+          desc: "For Carnovo: an agent that tracks vehicle buy-sell listings on Facebook Marketplace, analyzes market trends and generates commercial intelligence reports.",
+          tags: ["Web Scraping", "Facebook", "Automotive"],
+          metric: "Automated market intelligence",
+        },
+        {
+          category: "Agentic AI",
+          title: "Tire Health Scanner",
+          desc: "For Avante Llantas: computer vision that analyzes tire wear, evaluates condition, estimates remaining lifespan and schedules automatic replacement reminders.",
+          tags: ["Computer Vision", "Agentic", "Automotive"],
+          metric: "Automated preventive diagnostics",
+        },
+      ],
+    },
+    process: {
+      label: "Process",
+      title: "How we work",
+      subtitle: "A structured process that reduces risk and maximizes the probability of project success.",
+      steps: [
+        { title: "Diagnosis", desc: "We understand your business in depth: processes, available data, technical constraints and the opportunities where AI generates the highest return.", duration: "1–2 weeks" },
+        { title: "Solution Design", desc: "We define the architecture, tech stack and success KPIs. No empty promises: only what is technically viable and economically justified.", duration: "1 week" },
+        { title: "Build", desc: "Iterative development with partial deliveries. The client sees real progress every week, not just at the end. Production code from day one.", duration: "4–12 weeks" },
+        { title: "Deployment & Evolution", desc: "Launch, monitoring and continuous optimization. AI systems improve over time — we make sure yours does.", duration: "Ongoing" },
+      ],
+    },
+    contact: {
+      label: "Contact",
+      titleA: "The next step",
+      titleB: "is a conversation.",
+      subtitle: "You don't need to have it all figured out. We help define the problem before proposing the solution.",
+      options: [
+        { title: "Book a diagnostic call", desc: "30 minutes. No commitment. We assess whether your case has AI potential.", cta: "Reserve a slot" },
+        { title: "Send us a brief", desc: "Tell us your business problem and we'll reply with an initial proposal within 48h.", cta: "Send brief" },
+        { title: "Quick chat on WhatsApp", desc: "For specific questions or to explore whether your case fits what we do.", cta: "Message us" },
+      ],
+      trust: "We work with companies across Latin America, Spain and the US · Projects from $15,000 USD · Confidentiality guaranteed",
+      scheduler: {
+        prompt: "Choose who you'd like to meet with:",
+        loading: "Loading calendar…",
+      },
+    },
+    footer: {
+      rights: "All rights reserved.",
+      links: [
+        { label: "Services", href: "#servicios" },
+        { label: "Solutions", href: "#soluciones" },
+        { label: "Contact", href: "#contacto" },
+      ],
+    },
+  },
+};

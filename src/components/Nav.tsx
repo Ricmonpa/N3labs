@@ -4,15 +4,29 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 
-const links = [
-  { label: "Servicios", href: "#servicios" },
-  { label: "Soluciones", href: "#soluciones" },
-  { label: "Proceso", href: "#proceso" },
-  { label: "Contacto", href: "#contacto" },
-];
+function LangToggle({ className = "" }: { className?: string }) {
+  const { lang, setLang } = useLanguage();
+  return (
+    <div className={`inline-flex items-center rounded-lg border border-white/10 overflow-hidden text-xs font-semibold ${className}`}>
+      {(["es", "en"] as const).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          className={`px-2.5 py-1.5 uppercase transition-colors ${
+            lang === l ? "bg-red-600 text-white" : "text-slate-400 hover:text-white"
+          }`}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function Nav() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -40,7 +54,7 @@ export default function Nav() {
 
         {/* Desktop links */}
         <nav className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
+          {t.nav.links.map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -51,23 +65,27 @@ export default function Nav() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* CTA + lang */}
         <div className="hidden md:flex items-center gap-4">
+          <LangToggle />
           <a
             href="#contacto"
             className="text-sm font-semibold px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
           >
-            Agendar llamada
+            {t.nav.cta}
           </a>
         </div>
 
         {/* Mobile toggle */}
-        <button
-          className="md:hidden text-slate-400 hover:text-white"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="md:hidden flex items-center gap-3">
+          <LangToggle />
+          <button
+            className="text-slate-400 hover:text-white"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -80,7 +98,7 @@ export default function Nav() {
             className="md:hidden glass border-t border-white/5"
           >
             <div className="px-6 py-6 flex flex-col gap-5">
-              {links.map((l) => (
+              {t.nav.links.map((l) => (
                 <a
                   key={l.href}
                   href={l.href}
@@ -95,7 +113,7 @@ export default function Nav() {
                 onClick={() => setOpen(false)}
                 className="mt-2 text-sm font-semibold px-5 py-3 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white text-center"
               >
-                Agendar llamada
+                {t.nav.cta}
               </a>
             </div>
           </motion.div>

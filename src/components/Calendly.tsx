@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 const partners = [
   {
@@ -31,6 +32,7 @@ declare global {
 }
 
 export default function Calendly() {
+  const { t } = useLanguage();
   const [active, setActive] = useState(partners[0]);
   const [loaded, setLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,7 +77,7 @@ export default function Calendly() {
         transition={{ duration: 0.5 }}
         className="flex flex-col items-center gap-4 mb-8"
       >
-        <p className="text-sm text-zinc-500 font-medium">Elige con quién quieres reunirte:</p>
+        <p className="text-sm text-zinc-500 font-medium">{t.contact.scheduler.prompt}</p>
         <div className="inline-flex p-1 rounded-xl glass border border-white/[0.08] gap-1">
           {partners.map((p) => {
             const isActive = p.id === active.id;
@@ -110,7 +112,7 @@ export default function Calendly() {
         <div ref={containerRef} style={{ minWidth: "320px", height: "700px" }}>
           {!loaded && (
             <div className="h-full flex items-center justify-center text-zinc-500 text-sm">
-              Cargando calendario…
+              {t.contact.scheduler.loading}
             </div>
           )}
         </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -13,6 +14,8 @@ const fadeUp = {
 };
 
 export default function Hero() {
+  const { t } = useLanguage();
+  const h = t.hero;
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
       {/* Ambient orbs — rojo del logo */}
@@ -35,7 +38,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/30 bg-red-500/8 text-red-400 text-xs font-medium tracking-wide mb-8"
         >
           <Sparkles size={12} className="text-red-500" />
-          Laboratorio de Inteligencia Artificial
+          {h.badge}
         </motion.div>
 
         {/* Headline */}
@@ -46,11 +49,11 @@ export default function Hero() {
           animate="show"
           className="text-[clamp(2.8rem,7vw,5.5rem)] font-black leading-[1.04] tracking-tight mb-6"
         >
-          <span className="text-white">Transformamos </span>
-          <span className="gradient-text">decisiones complejas</span>
+          <span className="text-white">{h.titleA}</span>
+          <span className="gradient-text">{h.titleHighlight}</span>
           <br />
-          <span className="text-white">en inteligencia </span>
-          <span className="text-zinc-500">que escala.</span>
+          <span className="text-white">{h.titleB}</span>
+          <span className="text-zinc-500">{h.titleC}</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -61,9 +64,7 @@ export default function Hero() {
           animate="show"
           className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-10 font-light"
         >
-          Diseñamos e implementamos sistemas de IA de nivel enterprise —
-          agentes autónomos, software inteligente y estrategia de transformación
-          para organizaciones que exigen resultados medibles.
+          {h.subtitle}
         </motion.p>
 
         {/* CTAs */}
@@ -78,14 +79,14 @@ export default function Hero() {
             href="#contacto"
             className="group flex items-center gap-2.5 px-7 py-4 rounded-xl bg-gradient-to-r from-red-700 to-red-600 text-white font-semibold text-sm shadow-xl shadow-red-950/50 hover:from-red-600 hover:to-red-500 transition-all duration-300"
           >
-            Hablar con un experto
+            {h.ctaPrimary}
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
           </a>
           <a
             href="#soluciones"
             className="flex items-center gap-2 px-7 py-4 rounded-xl border border-white/10 text-zinc-300 font-medium text-sm hover:border-white/20 hover:text-white transition-all duration-200 bg-white/[0.03]"
           >
-            Ver soluciones entregadas
+            {h.ctaSecondary}
           </a>
         </motion.div>
 
@@ -97,11 +98,7 @@ export default function Hero() {
           animate="show"
           className="mt-20 grid grid-cols-3 gap-4 max-w-xl mx-auto"
         >
-          {[
-            { value: "2000+", label: "Proyectos IA" },
-            { value: "98%", label: "Satisfacción" },
-            { value: "12×", label: "ROI promedio" },
-          ].map((s) => (
+          {h.stats.map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-3xl font-black gradient-text mb-1">{s.value}</div>
               <div className="text-xs text-zinc-500 font-medium tracking-wide uppercase">{s.label}</div>

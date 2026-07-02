@@ -2,89 +2,19 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, MessageSquareHeart, ScanFace, ShoppingBag, Mic, PawPrint, GraduationCap, Target, Globe, ScanLine } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
-const artifacts = [
-  {
-    icon: MessageSquareHeart,
-    category: "Entretenimiento",
-    title: "Banner Conversacional \"AdChat\"",
-    desc: "Para \"Five Nights at Freddy's 2\" (Universal Pictures), creamos un banner donde los fans \"chateaban\" directamente con los personajes dentro del espacio publicitario.",
-    tags: ["AdChat", "Character AI", "Entretenimiento"],
-    metric: "+300% tiempo de retención vs display estático",
-    color: "red",
-  },
-  {
-    icon: ScanFace,
-    category: "Retail",
-    title: "Banner Diagnóstico con IA",
-    desc: "Banner para Dove que utiliza Google Gemini para escanear la piel del usuario en tiempo real, ofreciendo resultados y recomendaciones de productos.",
-    tags: ["Computer Vision", "Gemini", "Retail"],
-    metric: "15-30 segundos de interacción",
-    color: "steel",
-  },
-  {
-    icon: ShoppingBag,
-    category: "eCommerce",
-    title: "Asistente de Compras Conversacional",
-    desc: "Coach de IA para Liverpool que pregunta sobre metas de ciclismo y terreno, ofreciendo recomendaciones precisas del inventario sobre fondos de video dinámico.",
-    tags: ["Asistente de Ventas", "Recomendación", "eCommerce"],
-    metric: "+400% tiempo de retención",
-    color: "red",
-  },
-  {
-    icon: Mic,
-    category: "Retail",
-    title: "Experiencia de Voz con IA",
-    desc: "Campaña navideña para Sanborns. Los niños dictan sus deseos al banner por voz, la IA lo transcribe y sugiere regalos del catálogo.",
-    tags: ["Voice Recognition", "NLP", "Catálogo"],
-    metric: "Interacción de alto valor emocional",
-    color: "steel",
-  },
-  {
-    icon: PawPrint,
-    category: "FMCG",
-    title: "Asistente de Salud para Mascotas",
-    desc: "Diagnóstico inteligente que analiza raza, peso y actividad del perro para crear planes de alimentación personalizados sugiriendo productos Pedigree.",
-    tags: ["Smart Diagnostics", "Profiling", "FMCG"],
-    metric: "10x más tiempo de permanencia",
-    color: "red",
-  },
-  {
-    icon: GraduationCap,
-    category: "EdTech",
-    title: "Co-Piloto de Aprendizaje Adaptativo",
-    desc: "Asistente para RichmondPro que permite a los estudiantes practicar inglés en tiempo real. Integra modelos múltiples y RAG con el currículo oficial.",
-    tags: ["RAG", "Multi-LLM", "EdTech"],
-    metric: "Práctica conversacional en tiempo real",
-    color: "steel",
-  },
-  {
-    icon: Target,
-    category: "Agentic AI",
-    title: "Radar Comparador de Precios",
-    desc: "Para Avante Llantas: agente autónomo que monitorea precios de competidores en tiempo real, detecta variaciones y genera alertas y recomendaciones de ajuste automáticamente.",
-    tags: ["Workflow IA", "Agentic", "Retail"],
-    metric: "Monitoreo competitivo en tiempo real",
-    color: "red",
-  },
-  {
-    icon: Globe,
-    category: "Agentic AI",
-    title: "Scraper de Oferta y Demanda",
-    desc: "Para Carnovo: agente que rastrea publicaciones de compra-venta de vehículos en Facebook Marketplace, analiza tendencias de mercado y genera reportes de inteligencia comercial.",
-    tags: ["Web Scraping", "Facebook", "Automotriz"],
-    metric: "Inteligencia de mercado automatizada",
-    color: "steel",
-  },
-  {
-    icon: ScanLine,
-    category: "Agentic AI",
-    title: "Scanner de Salud de Neumáticos",
-    desc: "Para Avante Llantas: visión computacional que analiza el desgaste de las llantas, evalúa su estado, estima vida útil restante y programa recordatorios automáticos de cambio.",
-    tags: ["Computer Vision", "Agentic", "Automotriz"],
-    metric: "Diagnóstico preventivo automatizado",
-    color: "red",
-  },
+// Visual meta stays here; text (category/title/desc/tags/metric) comes from translations by index
+const meta = [
+  { icon: MessageSquareHeart, color: "red" },
+  { icon: ScanFace, color: "steel" },
+  { icon: ShoppingBag, color: "red" },
+  { icon: Mic, color: "steel" },
+  { icon: PawPrint, color: "red" },
+  { icon: GraduationCap, color: "steel" },
+  { icon: Target, color: "red" },
+  { icon: Globe, color: "steel" },
+  { icon: ScanLine, color: "red" },
 ];
 
 const colorMap = {
@@ -103,6 +33,8 @@ const colorMap = {
 };
 
 export default function Artifacts() {
+  const { t } = useLanguage();
+  const s = t.artifacts;
   return (
     <section id="soluciones" className="py-28 px-6 relative bg-[#09090f]">
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-600/20 to-transparent" />
@@ -116,25 +48,24 @@ export default function Artifacts() {
           className="mb-16"
         >
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-red-500 mb-4 block">
-            Artefactos & Soluciones
+            {s.label}
           </span>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-black text-white leading-tight max-w-xl">
-              Sistemas que ya
+              {s.titleA}
               <br />
-              <span className="gradient-text">están en producción</span>
+              <span className="gradient-text">{s.titleB}</span>
             </h2>
             <p className="text-zinc-400 text-base max-w-sm font-light leading-relaxed">
-              Una muestra de soluciones reales entregadas. Cada caso resuelve
-              un problema de negocio concreto con resultados medibles.
+              {s.intro}
             </p>
           </div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {artifacts.map((a, i) => {
-            const c = colorMap[a.color as keyof typeof colorMap];
-            const Icon = a.icon;
+          {s.items.map((a, i) => {
+            const c = colorMap[meta[i].color as keyof typeof colorMap];
+            const Icon = meta[i].icon;
             return (
               <motion.div
                 key={a.title}

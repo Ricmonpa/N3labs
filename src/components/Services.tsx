@@ -2,32 +2,13 @@
 
 import { motion } from "framer-motion";
 import { MousePointerClick, Wrench, Settings, ArrowUpRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
-const services = [
-  {
-    icon: MousePointerClick,
-    accent: "red",
-    tag: "ADTECH",
-    title: "Banners Interactivos",
-    desc: "Creatividades con el efecto \"Wow\". Banners HTML5 potenciados por chatbots de IA, navegación de video y experiencias inmersivas para marcas como Universal Pictures, Dove, Liverpool e Intelisis.",
-    features: ["Chatbots de IA embebidos", "Navegación de video dinámica", "Experiencias inmersivas", "Incremento radical de Dwell Time"],
-  },
-  {
-    icon: Wrench,
-    accent: "steel",
-    tag: "ENGAGEMENT",
-    title: "Herramientas de Valor de Marca",
-    desc: "Utilidades deep-tech que resuelven problemas del usuario mientras construyen lealtad de marca. Desde calculadoras diagnósticas hasta herramientas de traducción.",
-    features: ["Calculadoras diagnósticas", "Análisis de visión por IA", "Resolución de problemas del usuario", "Generación de lealtad de marca"],
-  },
-  {
-    icon: Settings,
-    accent: "red",
-    tag: "INTEGRACIÓN",
-    title: "Integración de IA Web",
-    desc: "Embebemos inteligencia en sitios corporativos. Transformamos webs pasivas en agentes de ventas activos y centros de soporte dinámico.",
-    features: ["Asistentes de ventas inteligentes", "Agentes de soporte al cliente", "Generación de contenido dinámico", "Ecosistemas web conversacionales"],
-  },
+// Visual meta stays in the component; text comes from translations (by index)
+const meta = [
+  { icon: MousePointerClick, accent: "red" },
+  { icon: Wrench, accent: "steel" },
+  { icon: Settings, accent: "red" },
 ];
 
 const accentMap = {
@@ -48,6 +29,8 @@ const accentMap = {
 };
 
 export default function Services() {
+  const { t } = useLanguage();
+  const s = t.services;
   return (
     <section id="servicios" className="py-28 px-6 relative">
       <div className="max-w-7xl mx-auto">
@@ -59,23 +42,23 @@ export default function Services() {
           className="text-center mb-16"
         >
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-red-500 mb-4 block">
-            Servicios
+            {s.label}
           </span>
           <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-black text-white leading-tight mb-4">
-            Lo que construimos
+            {s.title}
           </h2>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto font-light">
-            Cada proyecto es diseñado a medida. Sin soluciones genéricas.
+            {s.subtitle}
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {services.map((s, i) => {
-            const a = accentMap[s.accent as keyof typeof accentMap];
-            const Icon = s.icon;
+          {s.items.map((item, i) => {
+            const a = accentMap[meta[i].accent as keyof typeof accentMap];
+            const Icon = meta[i].icon;
             return (
               <motion.div
-                key={s.title}
+                key={item.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -87,17 +70,17 @@ export default function Services() {
                     <Icon size={20} className={a.iconColor} />
                   </div>
                   <span className={`text-[10px] font-semibold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full border ${a.tagColor}`}>
-                    {s.tag}
+                    {item.tag}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-white font-bold text-xl mb-2 leading-tight">{s.title}</h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed font-light">{s.desc}</p>
+                  <h3 className="text-white font-bold text-xl mb-2 leading-tight">{item.title}</h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed font-light">{item.desc}</p>
                 </div>
 
                 <ul className="mt-auto space-y-2">
-                  {s.features.map((f) => (
+                  {item.features.map((f) => (
                     <li key={f} className="flex items-center gap-2.5 text-sm text-zinc-300">
                       <div className="w-1 h-1 rounded-full bg-red-500 shrink-0" />
                       {f}
@@ -107,7 +90,7 @@ export default function Services() {
 
                 <div className="pt-2 border-t border-white/[0.05] flex items-center justify-between">
                   <a href="#contacto" className="text-xs font-semibold text-zinc-500 group-hover:text-white transition-colors flex items-center gap-1">
-                    Saber más <ArrowUpRight size={12} />
+                    {s.more} <ArrowUpRight size={12} />
                   </a>
                 </div>
               </motion.div>
