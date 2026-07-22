@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -48,7 +48,7 @@ export default function Nav() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#">
+        <a href="/">
           <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority />
         </a>
 
@@ -57,19 +57,26 @@ export default function Nav() {
           {t.nav.links.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={`/${l.href}`}
               className="text-sm text-slate-400 hover:text-white transition-colors duration-200 font-medium"
             >
               {l.label}
             </a>
           ))}
+          <a
+            href="/prompter"
+            className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
+          >
+            <Sparkles size={13} />
+            {t.prompter.navLabel}
+          </a>
         </nav>
 
         {/* CTA + lang */}
         <div className="hidden md:flex items-center gap-4">
           <LangToggle />
           <a
-            href="#contacto"
+            href="/#contacto"
             className="text-sm font-semibold px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
           >
             {t.nav.cta}
@@ -101,7 +108,7 @@ export default function Nav() {
               {t.nav.links.map((l) => (
                 <a
                   key={l.href}
-                  href={l.href}
+                  href={`/${l.href}`}
                   onClick={() => setOpen(false)}
                   className="text-slate-300 font-medium text-base"
                 >
@@ -109,7 +116,15 @@ export default function Nav() {
                 </a>
               ))}
               <a
-                href="#contacto"
+                href="/prompter"
+                onClick={() => setOpen(false)}
+                className="text-red-400 font-semibold text-base flex items-center gap-1.5"
+              >
+                <Sparkles size={14} />
+                {t.prompter.navLabel}
+              </a>
+              <a
+                href="/#contacto"
                 onClick={() => setOpen(false)}
                 className="mt-2 text-sm font-semibold px-5 py-3 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white text-center"
               >

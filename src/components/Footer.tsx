@@ -18,7 +18,7 @@ export default function Footer() {
           {t.footer.links.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={`/${l.href}`}
               className="text-zinc-600 hover:text-zinc-300 text-xs transition-colors"
             >
               {l.label}
