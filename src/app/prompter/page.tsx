@@ -4,6 +4,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import type { Lang } from "@/lib/translations";
 import Nav from "@/components/Nav";
 import Prompter from "@/components/Prompter";
+import LeadGate from "@/components/LeadGate";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -34,7 +35,9 @@ export default async function PrompterPage({
     <LanguageProvider initialLang={initialLang}>
       <main className="min-h-screen bg-[#06060c]">
         <Nav />
-        <Prompter />
+        <LeadGate>
+          <Prompter />
+        </LeadGate>
         <Footer />
       </main>
     </LanguageProvider>
