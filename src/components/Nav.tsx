@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
+import { ENGEL_CALENDLY } from "./Calendly";
 
 function LangToggle({ className = "" }: { className?: string }) {
   const { lang, setLang } = useLanguage();
@@ -76,7 +77,9 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-4">
           <LangToggle />
           <a
-            href="/#contacto"
+            href={ENGEL_CALENDLY}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm font-semibold px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
           >
             {t.nav.cta}
@@ -124,7 +127,9 @@ export default function Nav() {
                 {t.prompter.navLabel}
               </a>
               <a
-                href="/#contacto"
+                href={ENGEL_CALENDLY}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
                 className="mt-2 text-sm font-semibold px-5 py-3 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white text-center"
               >

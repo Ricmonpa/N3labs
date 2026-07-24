@@ -4,18 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 
+// Default booking link — also used by the header CTA
+export const ENGEL_CALENDLY = "https://calendly.com/engelfonseca/25min";
+
+// Engel first — he is the default calendar shown when the section loads
 const partners = [
-  {
-    id: "ricardo",
-    name: "Ricardo Moncada",
-    role: "Co-fundador",
-    url: "https://calendly.com/rmmoncada5/new-meeting",
-  },
   {
     id: "engel",
     name: "Engel Fonseca",
-    role: "Co-fundador",
-    url: "https://calendly.com/engelfonseca/25min",
+    role: "AI Consultant",
+    url: ENGEL_CALENDLY,
+  },
+  {
+    id: "ricardo",
+    name: "Ricardo Moncada",
+    role: "AI Consultant",
+    url: "https://calendly.com/rmmoncada5/new-meeting",
   },
 ];
 
