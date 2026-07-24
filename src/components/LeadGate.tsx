@@ -6,7 +6,12 @@ import { Sparkles, ArrowRight, Lock } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const STORAGE_KEY = "n3-prompter-access";
-const ENDPOINT = process.env.NEXT_PUBLIC_LEADS_ENDPOINT ?? "";
+
+// Google Apps Script web app that appends each lead to our Sheet.
+// Public by design (it only accepts writes); override via env var if it changes.
+const ENDPOINT =
+  process.env.NEXT_PUBLIC_LEADS_ENDPOINT ??
+  "https://script.google.com/macros/s/AKfycbz1dH6uvmicCZs2Im7VIttBfcFsE773xVrX4DWT16yYoXik6Ue3jrdlmxyOPB7odh7m/exec";
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
