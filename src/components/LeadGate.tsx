@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Lock } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { getAttribution, describeSource } from "./Attribution";
 
 const STORAGE_KEY = "n3-prompter-access";
 
@@ -42,12 +43,20 @@ export default function LeadGate({ children }: { children: React.ReactNode }) {
     if (!emailRe.test(email.trim())) return setError(g.invalidEmail);
 
     setSubmitting(true);
+    const attr = getAttribution();
     const lead = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       lang,
       source: "prompter",
       ts: new Date().toISOString(),
+      // Where this visitor originally came from
+      origin: describeSource(attr),
+      utmSource: attr.utmSource ?? "",
+      utmMedium: attr.utmMedium ?? "",
+      utmCampaign: attr.utmCampaign ?? "",
+      referrer: attr.referrer ?? "",
+      landing: attr.landing ?? "",
     };
 
     // Send to Google Sheet (Apps Script). no-cors → fire-and-forget.
