@@ -2,16 +2,20 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, Sparkles, Bot, Asterisk, Infinity as InfinityIcon, Stars } from "lucide-react";
+import {
+  Copy, Check, Sparkles, Bot, Asterisk, Infinity as InfinityIcon, Stars,
+  MessageCircle, Presentation, BookOpen, Zap, TrendingUp, Palette, Share2,
+  Megaphone, Target, type LucideIcon,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { tools, toolGroupOrder, type ToolGroup } from "@/lib/tools";
 
-const ais = [
-  { id: "chatgpt", name: "ChatGPT", url: "https://chatgpt.com/", Icon: Bot },
-  { id: "gemini", name: "Gemini", url: "https://gemini.google.com/app", Icon: Sparkles },
-  { id: "claude", name: "Claude", url: "https://claude.ai/new", Icon: Asterisk },
-  { id: "meta", name: "Meta AI", url: "https://www.meta.ai/", Icon: InfinityIcon },
-  { id: "copilot", name: "Copilot", url: "https://copilot.microsoft.com/", Icon: Stars },
-];
+const iconMap: Record<string, LucideIcon> = {
+  bot: Bot, asterisk: Asterisk, sparkles: Sparkles, stars: Stars,
+  infinity: InfinityIcon, messageCircle: MessageCircle, presentation: Presentation,
+  bookOpen: BookOpen, zap: Zap, trendingUp: TrendingUp, palette: Palette,
+  share2: Share2, megaphone: Megaphone, target: Target,
+};
 
 export default function Prompter() {
   const { t } = useLanguage();
@@ -61,13 +65,15 @@ export default function Prompter() {
     }
   };
 
-  const launchAI = async (url: string) => {
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* ignore */
+  const launchTool = async (url: string, copies: boolean) => {
+    if (copies) {
+      try {
+        await navigator.clipboard.writeText(prompt);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        /* ignore */
+      }
     }
     window.open(url, "_blank", "noopener,noreferrer");
   };
@@ -242,21 +248,42 @@ export default function Prompter() {
           <h3 className="text-xs font-semibold tracking-[0.2em] uppercase text-zinc-500 mb-2">
             {p.aiTitle}
           </h3>
-          <p className="text-zinc-600 text-xs mb-8">{p.aiHint}</p>
+          <p className="text-zinc-600 text-xs mb-10 max-w-xl mx-auto">{p.aiHint}</p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-4xl mx-auto">
-            {ais.map(({ id, name, url, Icon }) => (
-              <button
-                key={id}
-                onClick={() => launchAI(url)}
-                className="glass glass-hover rounded-2xl p-6 border border-white/[0.06] hover:border-red-500/25 flex flex-col items-center gap-3 group transition-all duration-300"
-              >
-                <Icon size={26} className="text-zinc-400 group-hover:text-red-400 transition-colors" />
-                <span className="text-sm font-semibold text-zinc-300 group-hover:text-white transition-colors">
-                  {name}
-                </span>
-              </button>
-            ))}
+          <div className="max-w-4xl mx-auto flex flex-col gap-10">
+            {toolGroupOrder.map((group) => {
+              const groupTools = tools.filter((tool) => tool.group === group);
+              if (groupTools.length === 0) return null;
+              return (
+                <div key={group}>
+                  <h4 className="text-[11px] font-semibold tracking-[0.15em] uppercase text-red-500/80 mb-4">
+                    {p.toolGroups[group as ToolGroup]}
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {groupTools.map(({ id, name, url, copies, icon }) => {
+                      const Icon = iconMap[icon] ?? Bot;
+                      return (
+                        <button
+                          key={id}
+                          onClick={() => launchTool(url, copies)}
+                          className="relative glass glass-hover rounded-2xl p-6 border border-white/[0.06] hover:border-red-500/25 flex flex-col items-center gap-3 group transition-all duration-300"
+                        >
+                          <Icon size={24} className="text-zinc-400 group-hover:text-red-400 transition-colors" />
+                          <span className="text-sm font-semibold text-zinc-300 group-hover:text-white transition-colors">
+                            {name}
+                          </span>
+                          {!copies && (
+                            <span className="absolute top-2 right-2 text-[8px] font-medium tracking-wide uppercase text-zinc-600 border border-white/[0.06] rounded px-1 py-0.5">
+                              {p.opensOnly}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
       </div>

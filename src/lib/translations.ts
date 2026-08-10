@@ -199,8 +199,14 @@ export const translations = {
       },
       copy: "Copiar prompt",
       copied: "¡Copiado!",
-      aiTitle: "Selecciona tu IA de preferencia",
-      aiHint: "Copiamos el prompt y abrimos la IA — solo pégalo (Ctrl+V).",
+      aiTitle: "Lánzalo en tu herramienta",
+      aiHint: "Copiamos el prompt y abrimos la herramienta — solo pégalo (Ctrl+V). Las marcadas “solo abre” no tocan tu portapapeles.",
+      toolGroups: {
+        general: "IA de propósito general",
+        specialized: "Especializadas",
+        marketing: "Marketing digital",
+      },
+      opensOnly: "solo abre",
       gate: {
         badge: "Acceso gratuito",
         title: "Desbloquea el Prompter",
@@ -416,8 +422,14 @@ export const translations = {
       },
       copy: "Copy prompt",
       copied: "Copied!",
-      aiTitle: "Select your preferred AI",
-      aiHint: "We copy the prompt and open the AI — just paste it (Ctrl+V).",
+      aiTitle: "Launch it in your tool",
+      aiHint: "We copy the prompt and open the tool — just paste it (Ctrl+V). The ones marked “opens only” don't touch your clipboard.",
+      toolGroups: {
+        general: "General-purpose AI",
+        specialized: "Specialized",
+        marketing: "Digital marketing",
+      },
+      opensOnly: "opens only",
       gate: {
         badge: "Free access",
         title: "Unlock the Prompter",
