@@ -6,6 +6,7 @@ export const translations = {
       links: [
         { label: "Servicios", href: "#servicios" },
         { label: "Soluciones", href: "#soluciones" },
+        { label: "IA Física", href: "#ia-fisica" },
         { label: "Proceso", href: "#proceso" },
         { label: "Contacto", href: "#contacto" },
       ],
@@ -159,6 +160,20 @@ export const translations = {
         { label: "Contacto", href: "#contacto" },
       ],
     },
+    iafisica: {
+      navLabel: "IA Física",
+      label: "IA Física",
+      title: "Inteligencia que aprende del mundo real",
+      subtitle: "La próxima frontera de la IA no vive solo en el texto — vive en el movimiento, el gesto y la acción física. En N3 ayudamos a construir esos datos.",
+      body: "A través de Shoot, cualquier persona puede grabar sus tareas cotidianas en primera persona y ganar dinero, mientras aporta al desarrollo de la inteligencia artificial física.",
+      points: [
+        "Hasta US$3.50 por hora de video aprobada",
+        "Graba con tu celular y una banda frontal — manos libres",
+        "Registro sin costo · solo se pagan videos aprobados",
+      ],
+      cta: "Participar en Shoot",
+      note: "Programa operado por Shoot México · N3 Labs es socio de datos.",
+    },
     prompter: {
       navLabel: "Prompter",
       badge: "Herramienta gratuita",
@@ -229,6 +244,7 @@ export const translations = {
       links: [
         { label: "Services", href: "#servicios" },
         { label: "Solutions", href: "#soluciones" },
+        { label: "Physical AI", href: "#ia-fisica" },
         { label: "Process", href: "#proceso" },
         { label: "Contact", href: "#contacto" },
       ],
@@ -381,6 +397,20 @@ export const translations = {
         { label: "Solutions", href: "#soluciones" },
         { label: "Contact", href: "#contacto" },
       ],
+    },
+    iafisica: {
+      navLabel: "Physical AI",
+      label: "Physical AI",
+      title: "Intelligence that learns from the real world",
+      subtitle: "AI's next frontier doesn't live in text alone — it lives in movement, gesture and physical action. At N3 we help build that data.",
+      body: "Through Shoot, anyone can record their everyday tasks in first-person and earn money while contributing to the development of physical AI.",
+      points: [
+        "Up to US$3.50 per approved video hour",
+        "Record with your phone and a headstrap — hands-free",
+        "Free signup · only approved videos are paid",
+      ],
+      cta: "Join Shoot",
+      note: "Program operated by Shoot México · N3 Labs is a data partner.",
     },
     prompter: {
       navLabel: "Prompter",

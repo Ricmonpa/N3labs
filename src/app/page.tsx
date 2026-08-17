@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Artifacts from "@/components/Artifacts";
+import IAFisica from "@/components/IAFisica";
 import Process from "@/components/Process";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -35,6 +36,7 @@ export default async function Home({
         <Hero />
         <Services />
         <Artifacts />
+        <IAFisica />
         <Process />
         <Contact />
         <Footer />
