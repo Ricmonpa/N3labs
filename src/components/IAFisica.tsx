@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Activity, ArrowRight, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { linkFisica } from "./FisicaAutolink";
 
 const SHOOT_URL = "https://www.shoot.com.mx/n3";
 
@@ -34,8 +35,8 @@ export default function IAFisica() {
             <h2 className="text-[clamp(2rem,4vw,3rem)] font-black text-white leading-tight mb-5">
               {s.title}
             </h2>
-            <p className="text-zinc-400 text-lg font-light leading-relaxed mb-4">{s.subtitle}</p>
-            <p className="text-zinc-500 text-base font-light leading-relaxed mb-8">{s.body}</p>
+            <p className="text-zinc-400 text-lg font-light leading-relaxed mb-4">{linkFisica(s.subtitle)}</p>
+            <p className="text-zinc-500 text-base font-light leading-relaxed mb-8">{linkFisica(s.body)}</p>
 
             <a
               href={SHOOT_URL}
