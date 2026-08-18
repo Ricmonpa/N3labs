@@ -173,6 +173,20 @@ export const translations = {
       ],
       cta: "Participar en Shoot",
       note: "Programa operado por Shoot México · N3 Labs es socio de datos.",
+      table: {
+        title: "Potencial de ganancia por actividades cotidianas",
+        headers: ["Actividad", "Tiempo diario", "Horas/semana", "Horas/mes", "Valor total ($3.50/h)"],
+        rows: [
+          ["Rutina de cuidar mascota", "45 min", "5.25 h", "22.5 h", "$78.75 USD"],
+          ["Sacar la basura", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
+          ["Ordenar escritorio", "10 min", "1.17 h", "5.0 h", "$17.50 USD"],
+          ["Limpiar baño", "15 min", "1.75 h", "7.5 h", "$26.25 USD"],
+          ["Preparar café", "10 min", "1.17 h", "5.0 h", "$17.50 USD"],
+          ["Hacer la cama", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
+        ],
+        total: ["TOTAL", "1.5 h/día", "10.5 h", "45.0 h", "$157.50 USD"],
+        note: "Ejemplo ilustrativo a $3.50 USD por hora de video aprobado. El monto real depende de los videos que cumplan los criterios de calidad.",
+      },
     },
     prompter: {
       navLabel: "Prompter",
@@ -411,6 +425,20 @@ export const translations = {
       ],
       cta: "Join Shoot",
       note: "Program operated by Shoot México · N3 Labs is a data partner.",
+      table: {
+        title: "Earning potential from everyday activities",
+        headers: ["Activity", "Daily time", "Hours/week", "Hours/month", "Total value ($3.50/h)"],
+        rows: [
+          ["Pet care routine", "45 min", "5.25 h", "22.5 h", "$78.75 USD"],
+          ["Take out the trash", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
+          ["Tidy up the desk", "10 min", "1.17 h", "5.0 h", "$17.50 USD"],
+          ["Clean the bathroom", "15 min", "1.75 h", "7.5 h", "$26.25 USD"],
+          ["Make coffee", "10 min", "1.17 h", "5.0 h", "$17.50 USD"],
+          ["Make the bed", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
+        ],
+        total: ["TOTAL", "1.5 h/day", "10.5 h", "45.0 h", "$157.50 USD"],
+        note: "Illustrative example at $3.50 USD per approved video hour. The actual amount depends on videos that meet the quality criteria.",
+      },
     },
     prompter: {
       navLabel: "Prompter",

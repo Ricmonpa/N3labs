@@ -68,6 +68,74 @@ export default function IAFisica() {
             ))}
           </motion.div>
         </div>
+
+        {/* Earnings table */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-20"
+        >
+          <h3 className="text-white font-bold text-xl mb-6 text-center">{s.table.title}</h3>
+
+          <div className="glass rounded-2xl border border-white/[0.08] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[640px]">
+                <thead>
+                  <tr className="border-b border-white/[0.08]">
+                    {s.table.headers.map((h, i) => (
+                      <th
+                        key={i}
+                        className={`px-5 py-4 font-semibold text-red-400 whitespace-nowrap ${i === 0 ? "text-left" : "text-center"}`}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {s.table.rows.map((row, ri) => (
+                    <tr key={ri} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+                      {row.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className={`px-5 py-3.5 whitespace-nowrap ${
+                            ci === 0
+                              ? "text-left text-zinc-200 font-medium"
+                              : ci === row.length - 1
+                                ? "text-center text-red-400 font-semibold"
+                                : "text-center text-zinc-400"
+                          }`}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                  <tr className="bg-red-500/[0.06] border-t border-red-500/20">
+                    {s.table.total.map((cell, ci) => (
+                      <td
+                        key={ci}
+                        className={`px-5 py-4 font-bold whitespace-nowrap ${
+                          ci === 0
+                            ? "text-left text-white"
+                            : ci === s.table.total.length - 1
+                              ? "text-center text-red-300"
+                              : "text-center text-zinc-200"
+                        }`}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p className="text-zinc-600 text-xs mt-4 text-center max-w-2xl mx-auto">{s.table.note}</p>
+        </motion.div>
       </div>
 
       <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-500/15 to-transparent" />
