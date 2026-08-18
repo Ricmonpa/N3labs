@@ -133,8 +133,6 @@ export default function IAFisica() {
               </table>
             </div>
           </div>
-
-          <p className="text-zinc-600 text-xs mt-4 text-center max-w-2xl mx-auto">{s.table.note}</p>
         </motion.div>
       </div>
 

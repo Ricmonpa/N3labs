@@ -185,7 +185,6 @@ export const translations = {
           ["Hacer la cama", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
         ],
         total: ["TOTAL", "1.5 h/día", "10.5 h", "45.0 h", "$157.50 USD"],
-        note: "Ejemplo ilustrativo a $3.50 USD por hora de video aprobado. El monto real depende de los videos que cumplan los criterios de calidad.",
       },
     },
     prompter: {
@@ -437,7 +436,6 @@ export const translations = {
           ["Make the bed", "5 min", "0.58 h", "2.5 h", "$8.75 USD"],
         ],
         total: ["TOTAL", "1.5 h/day", "10.5 h", "45.0 h", "$157.50 USD"],
-        note: "Illustrative example at $3.50 USD per approved video hour. The actual amount depends on videos that meet the quality criteria.",
       },
     },
     prompter: {
