@@ -252,13 +252,8 @@ background:var(--bg-panel-2); color:var(--text); cursor:pointer; display:inline-
 <!-- INTRO -->
 <div id="intro">
 <div class="hero">
-<div class="hero-top">
-<img class="hero-icon" src="https://n3labs.potenttial.site/_next/image?url=%2Fn3-logo.png&w=384&q=75" alt="Ícono IA Ready">
-<div class="hero-copy">
 <div class="eyebrow"><span class="dot"></span> Elaborado por N3</div>
 <h1>¿Cuál es tu relación real<br>con la <span>IA</span>?</h1>
-</div>
-</div>
 <p>Un diagnóstico de 5 preguntas basado en la metodología <strong>Thinktech</strong> de Engel Fonseca. No mide cuánto sabes de tecnología: muestra el paradigma desde el que te relacionas con ella — y hacia dónde puedes moverlo tú mismo.</p>
 </div>
 
@@ -558,7 +553,7 @@ ready:[
 ]
 };
 
-document.getElementById('favicon').href = document.querySelector('.hero-icon').src;
+document.getElementById('favicon').href = document.querySelector('.brand img').src;
 
 /* ---------------- STATE ---------------- */
 let answers = [];
