@@ -115,3 +115,14 @@ body {
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 .animate-gradient { animation: gradient-shift 8s ease infinite; }
+
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+  .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

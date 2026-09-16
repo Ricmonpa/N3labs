@@ -4,17 +4,9 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Lock } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { getAttribution, describeSource } from "./Attribution";
+import { sendLead, emailRe } from "@/lib/leads";
 
 const STORAGE_KEY = "n3-prompter-access";
-
-// Google Apps Script web app that appends each lead to our Sheet.
-// Public by design (it only accepts writes); override via env var if it changes.
-const ENDPOINT =
-  process.env.NEXT_PUBLIC_LEADS_ENDPOINT ??
-  "https://script.google.com/macros/s/AKfycbz1dH6uvmicCZs2Im7VIttBfcFsE773xVrX4DWT16yYoXik6Ue3jrdlmxyOPB7odh7m/exec";
-
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LeadGate({ children }: { children: React.ReactNode }) {
   const { t, lang } = useLanguage();
@@ -43,35 +35,7 @@ export default function LeadGate({ children }: { children: React.ReactNode }) {
     if (!emailRe.test(email.trim())) return setError(g.invalidEmail);
 
     setSubmitting(true);
-    const attr = getAttribution();
-    const lead = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      lang,
-      source: "prompter",
-      ts: new Date().toISOString(),
-      // Where this visitor originally came from
-      origin: describeSource(attr),
-      utmSource: attr.utmSource ?? "",
-      utmMedium: attr.utmMedium ?? "",
-      utmCampaign: attr.utmCampaign ?? "",
-      referrer: attr.referrer ?? "",
-      landing: attr.landing ?? "",
-    };
-
-    // Send to Google Sheet (Apps Script). no-cors → fire-and-forget.
-    if (ENDPOINT) {
-      try {
-        await fetch(ENDPOINT, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(lead),
-        });
-      } catch {
-        /* don't block the user if capture fails */
-      }
-    }
+    const lead = await sendLead({ name, email, lang, source: "prompter" });
 
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(lead));

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, Radar } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { ENGEL_CALENDLY } from "./Calendly";
@@ -71,6 +71,13 @@ export default function Nav() {
             <Sparkles size={13} />
             {t.prompter.navLabel}
           </a>
+          <a
+            href="/geo"
+            className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
+          >
+            <Radar size={13} />
+            GEO
+          </a>
         </nav>
 
         {/* CTA + lang */}
@@ -125,6 +132,14 @@ export default function Nav() {
               >
                 <Sparkles size={14} />
                 {t.prompter.navLabel}
+              </a>
+              <a
+                href="/geo"
+                onClick={() => setOpen(false)}
+                className="text-red-400 font-semibold text-base flex items-center gap-1.5"
+              >
+                <Radar size={14} />
+                GEO
               </a>
               <a
                 href={ENGEL_CALENDLY}
