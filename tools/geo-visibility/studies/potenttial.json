@@ -1,0 +1,32 @@
+{
+  "name": "Potenttial Group",
+  "brand": {
+    "name": "Potenttial Group",
+    "aliases": ["Potenttial"],
+    "domains": ["potenttial.com"]
+  },
+  "competitors": [],
+  "market": {
+    "country": "MX",
+    "city": "Ciudad de México",
+    "region": "Ciudad de México",
+    "timezone": "America/Mexico_City",
+    "language": "es-MX"
+  },
+  "runs": 3,
+  "engines": ["openai", "anthropic", "perplexity", "gemini"],
+  "prompts": [
+    { "id": "c1", "type": "category", "text": "¿Cuáles son las mejores agencias de marketing digital en México?" },
+    { "id": "c2", "type": "category", "text": "¿Dónde puedo capacitar a mi equipo en marketing digital en México?" },
+    { "id": "c3", "type": "category", "text": "¿Qué agencias en México se especializan en marketing digital para turismo?" },
+    { "id": "c4", "type": "category", "text": "¿Qué empresas en México ofrecen compra programática de medios digitales?" },
+    { "id": "p1", "type": "problem", "text": "¿Cómo atraigo más turistas internacionales a mi hotel en México con marketing digital? ¿Qué agencia me recomiendas?" },
+    { "id": "p2", "type": "problem", "text": "Necesito medir el retorno de mi publicidad digital. ¿Qué empresa en México me puede ayudar con analítica web y atribución?" },
+    { "id": "p3", "type": "problem", "text": "¿Quién puede capacitar a los directivos de mi empresa en transformación digital en México?" },
+    { "id": "p4", "type": "problem", "text": "Somos un destino turístico en Latinoamérica. ¿Qué agencia con experiencia nos puede hacer campañas digitales?" },
+    { "id": "x1", "type": "comparison", "text": "¿Qué conviene más para una marca en México: una agencia de medios digitales grande o una consultora especializada en ciencia del marketing digital?" },
+    { "id": "b1", "type": "brand", "text": "¿Qué es Potenttial Group?" },
+    { "id": "b2", "type": "brand", "text": "¿Quién es Engel Fonseca?" },
+    { "id": "b3", "type": "brand", "text": "¿Potenttial Group es una buena opción para marketing digital en México?" }
+  ]
+}

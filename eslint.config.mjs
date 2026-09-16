@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Internal tools have their own package and tsconfig.
+    "tools/**",
   ]),
 ]);
 

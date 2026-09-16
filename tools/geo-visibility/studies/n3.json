@@ -1,0 +1,28 @@
+{
+  "name": "N3 Thinktech",
+  "brand": {
+    "name": "N3 Thinktech",
+    "aliases": ["N3 Thinktech IA Laboratory", "N3 Labs", "N3 IA Laboratory"],
+    "domains": ["n3labs.potenttial.site"]
+  },
+  "competitors": [],
+  "market": {
+    "country": "MX",
+    "city": "Ciudad de México",
+    "region": "Ciudad de México",
+    "timezone": "America/Mexico_City",
+    "language": "es-MX"
+  },
+  "runs": 3,
+  "engines": ["openai", "anthropic", "perplexity", "gemini"],
+  "prompts": [
+    { "id": "c1", "type": "category", "text": "¿Qué laboratorios o consultoras de inteligencia artificial para empresas hay en México?" },
+    { "id": "c2", "type": "category", "text": "¿Qué empresas en Latinoamérica desarrollan sistemas de inteligencia artificial a la medida para empresas?" },
+    { "id": "c3", "type": "category", "text": "¿Qué empresas en México trabajan con IA física aplicada a negocios?" },
+    { "id": "p1", "type": "problem", "text": "Quiero implementar inteligencia artificial en mi empresa en México. ¿Con quién puedo trabajar?" },
+    { "id": "p2", "type": "problem", "text": "¿Quién me puede ayudar en México a que ChatGPT y otras IAs mencionen a mi marca?" },
+    { "id": "p3", "type": "problem", "text": "¿Hay alguna herramienta gratuita que me diga si las IAs pueden leer mi sitio web?" },
+    { "id": "b1", "type": "brand", "text": "¿Qué es N3 Thinktech?" },
+    { "id": "b2", "type": "brand", "text": "¿Qué hace N3 Labs de Potenttial Group?" }
+  ]
+}
