@@ -123,16 +123,25 @@ export async function getRecords(runId: string): Promise<RunRecord[]> {
   return rows.map((r) => r.record);
 }
 
+export type RunError = { engine: EngineId; error: string; count: number };
+
 export async function progress(runId: string) {
   const sql = await db();
   const rows = (await sql`SELECT count(*)::int AS answered, count(*) FILTER (WHERE NOT ok)::int AS failed FROM geo_responses WHERE run_id = ${runId}`) as { answered: number; failed: number }[];
-  return rows[0];
+  const errors = rows[0].failed
+    ? ((await sql`
+        SELECT record->>'engine' AS engine, record->>'error' AS error, count(*)::int AS count
+        FROM geo_responses WHERE run_id = ${runId} AND NOT ok
+        GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 3`) as RunError[])
+    : [];
+  return { ...rows[0], errors };
 }
 
 async function finalize(run: RunRow, status: RunStatus) {
   const sql = await db();
   const records = await getRecords(run.id);
-  const report = records.length ? buildReport(run.study, records) : null;
+  // A report with no valid answers would read as "0%" instead of "it didn't run".
+  const report = records.some((r) => r.ok) ? buildReport(run.study, records) : null;
   await sql`
     UPDATE geo_runs SET status = ${status}, report = ${report ? JSON.stringify(report) : null}::jsonb,
       finished_at = now(), lease_until = NULL
@@ -170,6 +179,8 @@ export async function stepRun(runId: string) {
     const missing = run.simulated ? [] : run.engines.filter((e) => !process.env[ENGINES[e].envKey]);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), STEP_BUDGET_MS);
+    let okCount = 0;
+    let failCount = 0;
     try {
       await pool(
         pending,
@@ -188,6 +199,13 @@ export async function stepRun(runId: string) {
             // Raw provider payloads are large and not needed for the report.
             record = answer ? { ...rest, answer: { ...answer, raw: null } } : rest;
           }
+          if (record.ok) okCount++;
+          else {
+            failCount++;
+            console.warn(`geo run ${runId}: ${task.key} failed: ${record.error}`);
+            // Several failures and no success usually means a bad key or quota: stop instead of burning the queue.
+            if (failCount >= STEP_CONCURRENCY && okCount === 0) controller.abort();
+          }
           await sql`
             INSERT INTO geo_responses (run_id, key, ok, record) VALUES (${runId}, ${task.key}, ${record.ok}, ${JSON.stringify(record)}::jsonb)
             ON CONFLICT (run_id, key) DO UPDATE SET ok = EXCLUDED.ok, record = EXCLUDED.record, created_at = now()`;
@@ -198,6 +216,10 @@ export async function stepRun(runId: string) {
       clearTimeout(timer);
     }
 
+    if (failCount >= STEP_CONCURRENCY && okCount === 0) {
+      await finalize(run, "cancelled");
+      return { busy: false };
+    }
     const answered = (await sql`SELECT count(*)::int AS n FROM geo_responses WHERE run_id = ${runId}`) as { n: number }[];
     if (answered[0].n >= run.total) await finalize(run, "done");
     return { busy: false };
@@ -220,6 +242,10 @@ export async function retryFailed(runId: string) {
 
 export async function setSharing(runId: string, enabled: boolean) {
   const sql = await db();
+  if (enabled) {
+    const run = await getRun(runId);
+    if (!run?.report) return null;
+  }
   const token = enabled ? randomBytes(24).toString("base64url") : null;
   await sql`UPDATE geo_runs SET share_token = ${token} WHERE id = ${runId}`;
   return token;

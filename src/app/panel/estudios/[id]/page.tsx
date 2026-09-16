@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Gate from "@/components/panel/Gate";
-import StudyEditor, { EMPTY_STUDY } from "@/components/panel/StudyEditor";
+import StudyEditor from "@/components/panel/StudyEditor";
+import NewStudyWizard from "@/components/panel/NewStudyWizard";
 import NewRunForm from "@/components/panel/NewRunForm";
 import { RunList } from "@/components/panel/RunList";
 import { engineAvailability } from "@/lib/geo-visibility/engines/index.ts";
@@ -16,7 +17,7 @@ async function StudyPage({ id }: { id: string }) {
     return (
       <>
         <h1 className="text-2xl font-black text-white mb-5">Nuevo estudio</h1>
-        <StudyEditor id={null} initial={EMPTY_STUDY} />
+        <NewStudyWizard aiAvailable={!!process.env.GEMINI_API_KEY} />
       </>
     );
   }

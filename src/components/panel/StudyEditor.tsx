@@ -16,7 +16,7 @@ const TYPE_HELP: Record<PromptType, string> = {
   brand: "Incluye el nombre de la marca (no cuenta para la cifra principal).",
 };
 
-const COUNTRIES = [
+export const COUNTRIES = [
   { code: "MX", name: "México", tz: "America/Mexico_City", lang: "es-MX" },
   { code: "US", name: "Estados Unidos", tz: "America/New_York", lang: "en-US" },
   { code: "CO", name: "Colombia", tz: "America/Bogota", lang: "es-CO" },
@@ -162,9 +162,9 @@ export default function StudyEditor({ id, initial }: { id: string | null; initia
       <section className={cardClass}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-bold text-white">Marca</h2>
-          {!id && (
-            <button type="button" onClick={() => setShowImport((v) => !v)} className={secondaryButton}>
-              <FileJson size={14} /> Importar JSON
+          {!id && !initial.prompts.length && (
+            <button type="button" onClick={() => setShowImport((v) => !v)} className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-300">
+              <FileJson size={12} /> Importar JSON (avanzado)
             </button>
           )}
         </div>

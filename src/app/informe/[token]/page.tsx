@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function SharedReport({ params }: PageProps<"/informe/[token]">) {
   const { token } = await params;
   const run = await getRunByToken(token).catch(() => null);
-  if (!run?.report) notFound();
+  if (!run?.report?.responses.ok) notFound();
 
   return (
     <div className="min-h-screen bg-[#06060c] print:bg-white">

@@ -13,7 +13,8 @@ export const dynamic = "force-dynamic";
 async function RunPage({ id }: { id: string }) {
   const run = UUID.test(id) ? await getRun(id) : null;
   if (!run) notFound();
-  const { answered, failed } = await progress(id);
+  const { answered, failed, errors } = await progress(id);
+  const report = run.report?.responses.ok ? run.report : null;
   const date = new Date(run.created_at).toISOString().slice(0, 10);
   const fileName = `${run.study.name}-${date}`.replace(/[^\p{L}\p{N}-]+/gu, "-");
 
@@ -26,15 +27,15 @@ async function RunPage({ id }: { id: string }) {
         key={run.status}
         runId={id}
         studyId={run.study_id}
-        initial={{ status: run.status, total: run.total, answered, failed }}
+        initial={{ status: run.status, total: run.total, answered, failed, errors }}
         shareToken={run.share_token}
-        report={run.report}
+        report={report}
         fileName={fileName}
       />
-      {run.report ? (
-        <ReportView report={run.report} />
+      {report ? (
+        <ReportView report={report} />
       ) : (
-        run.status !== "running" && <p className="text-sm text-zinc-400">Esta corrida no tiene respuestas.</p>
+        run.status !== "running" && <p className="text-sm text-zinc-400">Esta corrida no tiene respuestas válidas todavía, así que no hay informe.</p>
       )}
       {answered > 0 && (
         <AnswersExplorer

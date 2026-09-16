@@ -4,11 +4,32 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Copy, Download, Link2, Loader2, Printer, RotateCcw, Square, Trash2 } from "lucide-react";
 import { renderMarkdown } from "@/lib/geo-visibility/markdown.ts";
-import type { Report } from "@/lib/geo-visibility/report.ts";
+import { ENGINE_LABEL, type Report } from "@/lib/geo-visibility/report.ts";
+import type { EngineId } from "@/lib/geo-visibility/types.ts";
 import { api, cardClass, secondaryButton } from "./api";
 
 type Status = "running" | "done" | "cancelled";
-type StepResult = { busy: boolean; status: Status; total: number; answered: number; failed: number };
+type RunError = { engine: EngineId; error: string; count: number };
+type Progress = { status: Status; total: number; answered: number; failed: number; errors: RunError[] };
+type StepResult = Progress & { busy: boolean };
+
+const KEY_NAME: Record<EngineId, string> = {
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  perplexity: "PERPLEXITY_API_KEY",
+  gemini: "GEMINI_API_KEY",
+};
+
+/** Plain-language next step for the most common provider errors. */
+function hint(e: RunError) {
+  const m = e.error.toLowerCase();
+  if (/api key|api_key|401|403|unauthori|permission|invalid.*key|falta la llave/.test(m))
+    return `Revisa ${KEY_NAME[e.engine]} en Vercel (Settings → Environment Variables): pega solo la llave, sin comillas ni espacios, y vuelve a desplegar.`;
+  if (/429|quota|rate|exhausted|billing|credit|insufficient/.test(m))
+    return "La cuenta del proveedor llegó a su límite o no tiene saldo. Revisa su facturación y vuelve a intentar.";
+  if (/model|not found|404/.test(m)) return "El modelo configurado no está disponible para esta llave.";
+  return "Vuelve a intentar; si se repite, revisa la cuenta del proveedor.";
+}
 
 export default function RunConsole({
   runId,
@@ -20,7 +41,7 @@ export default function RunConsole({
 }: {
   runId: string;
   studyId: string;
-  initial: { status: Status; total: number; answered: number; failed: number };
+  initial: Progress;
   shareToken: string | null;
   report: Report | null;
   fileName: string;
@@ -43,7 +64,7 @@ export default function RunConsole({
           const r = await api<StepResult>(`/api/panel/runs/${runId}/step`, { body: {} });
           failures = 0;
           setError("");
-          setState({ status: r.status, total: r.total, answered: r.answered, failed: r.failed });
+          setState({ status: r.status, total: r.total, answered: r.answered, failed: r.failed, errors: r.errors });
           if (r.status !== "running") {
             router.refresh();
             return;
@@ -69,7 +90,7 @@ export default function RunConsole({
     try {
       const r = await api<{ token?: string | null }>(`/api/panel/runs/${runId}`, { body: { action } });
       if (action === "share" || action === "unshare") setToken(r.token ?? null);
-      if (action === "retry") setState((s) => ({ ...s, status: "running", answered: s.answered - s.failed, failed: 0 }));
+      if (action === "retry") setState((s) => ({ ...s, status: "running", answered: s.answered - s.failed, failed: 0, errors: [] }));
       if (action === "cancel") {
         stopped.current = true;
         setState((s) => ({ ...s, status: "cancelled" }));
@@ -129,12 +150,12 @@ export default function RunConsole({
               <RotateCcw size={14} /> Reintentar fallidas
             </button>
           )}
-          {state.status === "cancelled" && state.answered < state.total && (
+          {state.status === "cancelled" && state.failed === 0 && state.answered < state.total && (
             <button type="button" onClick={() => act("retry")} className={secondaryButton}>
               <RotateCcw size={14} /> Continuar
             </button>
           )}
-          {report && (
+          {report && report.responses.ok > 0 && (
             <>
               <button type="button" onClick={() => window.print()} className={secondaryButton}>
                 <Printer size={14} /> PDF
@@ -153,7 +174,27 @@ export default function RunConsole({
         </div>
       )}
 
-      {shareUrl && state.status !== "running" && (
+      {state.errors.length > 0 && (
+        <div className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-sm" role="alert">
+          <p className="font-semibold text-amber-200">
+            {state.answered === state.failed ? "Ninguna pregunta se pudo contestar." : `${state.failed} preguntas no se pudieron contestar.`}
+            {state.status === "cancelled" && state.answered === state.failed && " La corrida se detuvo para no seguir fallando."}
+          </p>
+          <ul className="mt-2 space-y-2">
+            {state.errors.map((e) => (
+              <li key={e.engine + e.error}>
+                <p className="text-zinc-200">
+                  <strong>{ENGINE_LABEL[e.engine]}</strong> ({e.count}): <span className="font-mono text-xs text-zinc-400 break-all">{e.error}</span>
+                </p>
+                <p className="text-zinc-400">{hint(e)}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-zinc-500 text-xs">Cuando lo corrijas, usa “Reintentar fallidas”.</p>
+        </div>
+      )}
+
+      {shareUrl && report && state.status !== "running" && (
         <div className="mt-4 flex flex-wrap items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-2">
           <span className="text-xs text-emerald-300">Link privado del cliente:</span>
           <code className="flex-1 min-w-0 truncate text-xs text-zinc-200">{shareUrl}</code>

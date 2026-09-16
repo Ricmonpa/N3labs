@@ -13,6 +13,7 @@ const MESSAGES: Record<string, string> = {
   missing_keys: "Faltan llaves de API en el servidor para:",
   too_many_calls: "La corrida excede el límite de llamadas permitido.",
   not_found: "No se encontró.",
+  invalid_url: "Escribe un sitio web válido, por ejemplo cliente.com.",
   server_error: "Error del servidor. Intenta de nuevo.",
 };
 
