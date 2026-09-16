@@ -3,6 +3,16 @@ import type { Engine, EngineAnswer, Source } from "../types.ts";
 
 const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.8-flash";
 
+const GROUNDING_REDIRECT = /^https:\/\/vertexaisearch\.cloud\.google\.com\/grounding-api-redirect\//;
+const DOMAIN = /^(?:[a-z0-9-]+\.)+[a-z]{2,}$/i;
+
+/** Grounding citations point to an opaque Google redirect; the real domain is only in the title. */
+function resolveCitationUrl(url: string, title?: string): string {
+  if (!GROUNDING_REDIRECT.test(url)) return url;
+  const domain = title?.trim();
+  return domain && DOMAIN.test(domain) ? `https://${domain.toLowerCase()}/` : url;
+}
+
 export const geminiEngine: Engine = {
   id: "gemini",
   label: "Gemini",
@@ -29,7 +39,9 @@ export const geminiEngine: Engine = {
           if (block.type !== "text") continue;
           text += block.text;
           for (const a of block.annotations ?? []) {
-            if (a.type === "url_citation" && a.url) citations.push({ url: a.url, title: a.title });
+            if (a.type !== "url_citation" || !a.url) continue;
+            const url = resolveCitationUrl(a.url, a.title);
+            if (!citations.some((c) => c.url === url)) citations.push({ url, title: a.title });
           }
         }
       }
