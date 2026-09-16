@@ -5,12 +5,14 @@ import type { Lang } from "@/lib/translations";
 import Nav from "@/components/Nav";
 import GeoAudit from "@/components/GeoAudit";
 import Footer from "@/components/Footer";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Diagnóstico GEO · ¿Las IAs pueden leer tu sitio? | N3",
   description:
     "Herramienta gratuita de N3: revisa en vivo si ChatGPT, Claude, Perplexity y Google pueden leer tu sitio, con evidencia de cada resultado.",
-};
+  path: "/geo",
+});
 
 function resolve(value: string | undefined): Lang | null {
   return value === "en" || value === "es" ? value : null;

@@ -6,12 +6,14 @@ import Nav from "@/components/Nav";
 import Prompter from "@/components/Prompter";
 import LeadGate from "@/components/LeadGate";
 import Footer from "@/components/Footer";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Prompter by N3 · Constructor de prompts gratis",
   description:
     "Herramienta gratuita de N3 Thinktech: responde unos campos y arma el prompt perfecto para ChatGPT, Gemini, Claude, Meta AI o Copilot.",
-};
+  path: "/prompter",
+});
 
 function resolve(value: string | undefined): Lang | null {
   return value === "en" || value === "es" ? value : null;
