@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N3 GEO Test â€” DiagnÃ³stico de visibilidad ante IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#05070d;
+    --bg-panel:#0c111c;
+    --bg-panel-2:#121a29;
+    --line:#212b3d;
+    --text:#eef2f8;
+    --text-dim:#93a0b4;
+    --text-faint:#5b6579;
+    --blue:#3b82f6;
+    --blue-bright:#5aa4ff;
+    --red:#e8323b;
+    --red-bright:#ff4d56;
+    --green:#2ed573;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100%;}
+  body{
+    background-image:
+      radial-gradient(circle at 20% -5%, rgba(59,130,246,0.14), transparent 42%),
+      radial-gradient(circle at 90% 10%, rgba(232,50,59,0.09), transparent 40%);
+    padding:28px 16px 70px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* HEADER */
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:28px;}
+  .brand img{height:34px; width:auto; filter:drop-shadow(0 0 12px rgba(59,130,246,.3));}
+  .brand .tag{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--text-dim);
+    text-transform:uppercase; border-left:1px solid var(--line); padding-left:12px;
+  }
+  .brand .version{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--red-bright); background:rgba(232,50,59,.12);
+    border:1px solid rgba(232,50,59,.4); padding:2px 8px; border-radius:100px; margin-left:auto;
+  }
+
+  /* HERO â€” TESSERACT RADAR (8 nodes = 8 herramientas de IA) */
+  .radar-wrap{position:relative; width:132px; height:132px; margin:0 auto 20px; flex-shrink:0;}
+  .radar-sweep-bg{
+    position:absolute; inset:6px; border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(90,164,255,0) 0deg, rgba(90,164,255,.45) 28deg, rgba(90,164,255,0) 60deg);
+    animation:spin 3.2s linear infinite;
+  }
+  .radar-ring-bg{position:absolute; inset:6px; border-radius:50%; border:1px solid rgba(90,164,255,.18);}
+  .tesseract-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
+  .tess-outer{transform-origin:100px 100px; animation:spin 14s linear infinite;}
+  .tess-inner{transform-origin:100px 100px; animation:spinCCW 10s linear infinite;}
+  .tess-links{transform-origin:100px 100px; animation:spin 20s linear infinite;}
+  .tess-node{filter:drop-shadow(0 0 4px rgba(232,50,59,.9));}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes spinCCW{to{transform:rotate(-360deg);}}
+
+  .hero{text-align:center; margin-bottom:26px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; color:var(--blue-bright);
+    text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue-bright); box-shadow:0 0 8px var(--blue-bright); animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.35}}
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,6vw,38px);
+    line-height:1.1; letter-spacing:-.02em; margin-bottom:12px;
+  }
+  .hero h1 span{color:var(--blue-bright);}
+  .hero p{color:var(--text-dim); font-size:15px; line-height:1.55; max-width:52ch; margin:0 auto;}
+  .engine-strip{
+    display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin-top:16px;
+  }
+  .engine-chip-mini{
+    font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-dim); border:1px solid var(--line);
+    padding:4px 10px; border-radius:100px; background:var(--bg-panel);
+  }
+
+  /* INPUT PANEL */
+  .panel{background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px;}
+  .input-panel{margin-top:22px;}
+
+  /* GEO EXPLAINER */
+  .geo-explain{margin-top:22px;}
+  .geo-explain h3{
+    font-family:'Space Grotesk'; font-weight:700; font-size:17px; margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  }
+  .geo-explain p{font-size:13.5px; line-height:1.6; color:var(--text-dim); margin-bottom:12px;}
+  .geo-explain p strong{color:var(--text);}
+  .geo-compare{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;}
+  .geo-compare-card{background:var(--bg-panel-2); border:1px solid var(--line); border-radius:11px; padding:13px 14px;}
+  .geo-compare-card.geo-new{border-color:rgba(232,50,59,.35);}
+  .geo-compare-card .gc-label{font-family:'JetBrains Mono'; font-size:10px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; color:var(--text-faint);}
+  .geo-compare-card.geo-new .gc-label{color:var(--red-bright);}
+  .geo-compare-card .gc-text{font-size:12.8px; line-height:1.5; color:var(--text-dim);}
+  .geo-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0;}
+  .geo-stat{background:var(--bg-panel-2); border:1px solid var(--line); border-radius:11px; padding:13px 10px; text-align:center;}
+  .geo-stat .gs-num{font-family:'Space Grotesk'; font-weight:700; font-size:22px; color:var(--blue-bright); line-height:1;}
+  .geo-stat .gs-label{font-size:10.5px; color:var(--text-dim); line-height:1.4; margin-top:6px;}
+  .geo-stat .gs-src{font-family:'JetBrains Mono'; font-size:8.5px; color:var(--text-faint); margin-top:5px;}
+  @media (max-width:560px){
+    .geo-compare{grid-template-columns:1fr;}
+    .geo-stats{grid-template-columns:1fr 1fr;}
+  }
+  .framework-note{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-left:3px solid var(--red-bright);
+    border-radius:0 11px 11px 0; padding:13px 15px; margin-top:14px;
+  }
+  .framework-note p{font-size:12.8px; line-height:1.6; color:var(--text-dim); margin:0 0 10px;}
+  .framework-note p:last-child{margin-bottom:0;}
+  .framework-note p strong{color:var(--text);}
+  .read-links{display:flex; flex-direction:column; gap:7px;}
+  .read-chip{
+    display:flex; align-items:center; gap:7px; font-family:'JetBrains Mono'; font-size:11px; color:var(--blue-bright);
+    text-decoration:none; background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.3);
+    border-radius:8px; padding:8px 11px; line-height:1.4;
+  }
+  .read-chip:hover{background:rgba(59,130,246,.14);}
+  .input-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .market-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .market-select{
+    flex:1; min-width:180px; background:var(--bg-panel-2); border:1px solid var(--line); color:var(--text);
+    font-family:'JetBrains Mono'; font-size:13px; padding:12px 14px; border-radius:11px; outline:none; cursor:pointer;
+  }
+  .market-select:focus{border-color:var(--blue-bright);}
+  .market-label{
+    font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em;
+    display:block; margin:14px 0 6px;
+  }
+  .market-badge{
+    font-family:'JetBrains Mono'; font-size:10.5px; color:var(--blue-bright); background:rgba(59,130,246,.1);
+    border:1px solid rgba(59,130,246,.35); padding:3px 10px; border-radius:100px; display:inline-flex; align-items:center; gap:6px;
+  }
+  .url-input{
+    flex:1; min-width:200px; background:var(--bg-panel-2); border:1px solid var(--line); color:var(--text);
+    font-family:'JetBrains Mono'; font-size:14px; padding:14px 16px; border-radius:11px; outline:none;
+  }
+  .url-input:focus{border-color:var(--blue-bright);}
+  .url-input::placeholder{color:var(--text-faint);}
+  .scan-btn{
+    background:linear-gradient(135deg, var(--blue-bright), var(--blue));
+    color:#04101f; font-weight:700; font-family:'Space Grotesk'; font-size:14.5px; border:none; cursor:pointer;
+    padding:14px 22px; border-radius:11px; white-space:nowrap;
+    box-shadow:0 8px 26px -8px rgba(59,130,246,.55);
+  }
+  .scan-btn:hover{filter:brightness(1.08);}
+  .input-hint{font-size:12px; color:var(--text-faint); margin-top:9px;}
+  .input-error{font-size:12.5px; color:var(--red-bright); margin-top:9px; display:none;}
+
+  /* SCANNING */
+  .scan-panel{display:none; margin-top:22px;}
+  .scan-panel.active{display:block;}
+  .scan-topbar{display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+  .avatar{
+    width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--blue-bright),var(--red-bright));
+    display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk'; font-weight:700; font-size:10px; color:#04101f; flex-shrink:0;
+  }
+  .scan-topbar .st-name{font-family:'Space Grotesk'; font-weight:600; font-size:13.5px;}
+  .scan-topbar .st-url{font-family:'JetBrains Mono'; font-size:11px; color:var(--text-faint); word-break:break-all;}
+  .scan-log{display:flex; flex-direction:column; gap:9px;}
+  .scan-phase{
+    font-family:'JetBrains Mono'; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--red-bright);
+    margin:14px 0 8px; padding-top:10px; border-top:1px dashed var(--line);
+    opacity:0; animation:rise .35s ease forwards;
+  }
+  .scan-phase:first-child{border-top:none; padding-top:0; margin-top:0;}
+  .scan-item{
+    display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--text-dim);
+    opacity:0; animation:rise .35s ease forwards;
+  }
+  .scan-item .metric{font-family:'JetBrains Mono'; font-size:12px; color:var(--blue-bright); margin-left:auto; padding-left:8px;}
+  @keyframes rise{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);}}
+  .scan-icon{width:16px; height:16px; flex-shrink:0; position:relative;}
+  .spinner{
+    width:14px; height:14px; border-radius:50%; border:2px solid var(--line); border-top-color:var(--blue-bright);
+    animation:spin .7s linear infinite;
+  }
+  .check{color:var(--green); font-weight:700; font-size:14px;}
+  .scan-item.done{color:var(--text);}
+
+  /* RESULTS */
+  .result{display:none;}
+  .result.active{display:block; margin-top:22px;}
+  .section{background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 20px; margin-bottom:16px;}
+  .section h2{
+    font-family:'Space Grotesk'; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  .section h2 .n{font-family:'JetBrains Mono'; color:var(--blue-bright);}
+
+  .score-header{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:4px;}
+  .score-url{font-family:'JetBrains Mono'; font-size:12.5px; color:var(--text-dim); word-break:break-all;}
+  .page-tag{
+    font-family:'JetBrains Mono'; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--blue-bright);
+    background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.35); padding:2px 8px; border-radius:100px; margin-left:8px;
+  }
+  .avg-badge{
+    display:flex; align-items:baseline; gap:6px; background:rgba(232,50,59,.1); border:1px solid rgba(232,50,59,.4);
+    border-radius:100px; padding:8px 16px;
+  }
+  .avg-badge .num{font-family:'Space Grotesk'; font-weight:700; font-size:24px; color:var(--red-bright);}
+  .avg-badge .of{font-family:'JetBrains Mono'; font-size:12px; color:var(--text-dim);}
+
+  .bars{margin-top:18px; display:flex; flex-direction:column; gap:13px;}
+  .bar-row .bar-label{font-size:13px; color:var(--text-dim); margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;}
+  .bar-row .bar-label b{color:var(--text); font-weight:600; font-family:'JetBrains Mono'; font-size:13px;}
+  .bar-track{height:10px; border-radius:100px; background:var(--bg-panel-2); overflow:hidden;}
+  .bar-fill{height:100%; border-radius:100px; width:0; background:linear-gradient(90deg, var(--blue), var(--blue-bright)); transition:width 1s cubic-bezier(.2,.8,.2,1);}
+
+  /* SEMAFORO */
+  .semaforo{margin-top:18px;}
+  .semaforo-track{position:relative; height:14px; border-radius:100px; display:flex; overflow:visible;}
+  .sf-seg{height:100%;}
+  .sf-seg:first-child{border-radius:100px 0 0 100px;}
+  .sf-seg:last-child{border-radius:0 100px 100px 0;}
+  .sf-red{flex:0 0 40%; background:#e8323b;}
+  .sf-yellow{flex:0 0 30%; background:#e3b23e;}
+  .sf-green{flex:0 0 30%; background:#2ed573;}
+  .sf-marker{
+    position:absolute; top:-9px; width:2px; height:32px; background:#fff;
+    box-shadow:0 0 10px rgba(255,255,255,.85); transition:left 1s cubic-bezier(.2,.8,.2,1);
+  }
+  .sf-marker::after{
+    content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:7px solid #fff;
+  }
+  .semaforo-labels{display:flex; margin-top:11px; font-family:'JetBrains Mono'; font-size:10px; color:var(--text-faint);}
+  .semaforo-labels span{flex:1;}
+  .semaforo-labels span:nth-child(1){text-align:left;}
+  .semaforo-labels span:nth-child(2){text-align:center;}
+  .semaforo-labels span:nth-child(3){text-align:right;}
+
+  .bar-row.special{
+    background:rgba(232,50,59,.07); border:1px solid rgba(232,50,59,.3); border-radius:11px; padding:10px 12px; margin:-2px 0 3px;
+  }
+  .bar-row.special .bar-label span{color:var(--red-bright); font-weight:700; display:flex; align-items:center; gap:6px;}
+  .bar-row.special .bar-label b{color:var(--red-bright);}
+  .bar-row.special .bar-fill{background:linear-gradient(90deg, var(--red), var(--red-bright));}
+  .special-tag{
+    font-family:'JetBrains Mono'; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:#fff;
+    background:var(--red); padding:2px 7px; border-radius:100px; font-weight:600;
+  }
+
+  .lectura{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:11px; padding:15px 16px; margin-top:6px;
+  }
+  .lectura .lt-k{font-family:'JetBrains Mono'; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--blue-bright); margin-bottom:8px;}
+  .lectura p{font-size:13.8px; line-height:1.6; color:var(--text);}
+
+  .engine-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .engine-card{background:var(--bg-panel-2); border:1px solid var(--line); border-radius:11px; padding:12px 14px;}
+  .engine-card .e-top{display:flex; align-items:center; gap:8px; margin-bottom:9px;}
+  .engine-logo{
+    width:24px; height:24px; border-radius:7px; background:var(--c, var(--blue)); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk'; font-weight:700; font-size:11px; color:#fff;
+  }
+  .engine-card .e-name-text{font-family:'Space Grotesk'; font-weight:600; font-size:13px; flex:1;}
+  .engine-card .e-score{font-family:'JetBrains Mono'; font-size:12.5px; color:var(--blue-bright); flex-shrink:0;}
+  .engine-card .bar-track{height:6px; margin-bottom:9px;}
+  .engine-link{
+    font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-dim); text-decoration:none;
+    display:inline-flex; align-items:center; gap:4px;
+  }
+  .engine-link:hover{color:var(--blue-bright); text-decoration:underline;}
+  @media (max-width:480px){.engine-grid{grid-template-columns:1fr;}}
+
+  /* COMPETITORS */
+  .comp-intro{font-size:12.5px; color:var(--text-faint); margin:-8px 0 14px; line-height:1.5;}
+  .comp-intro strong{color:var(--text-dim);}
+  .comp-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px;}
+  .comp-card{
+    background:var(--bg-panel-2); border:1px solid rgba(232,50,59,.3); border-radius:11px; padding:16px 14px; text-align:center; position:relative;
+  }
+  .comp-card .comp-label{font-family:'JetBrains Mono'; font-size:10px; letter-spacing:.06em; color:var(--text-faint); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:5px;}
+  .comp-card .comp-score{font-family:'Space Grotesk'; font-weight:700; font-size:30px; color:var(--red-bright); line-height:1;}
+  .comp-card .comp-score span{font-family:'JetBrains Mono'; font-size:12px; color:var(--text-faint); font-weight:400;}
+  .comp-fake-bars{display:flex; flex-direction:column; gap:5px; margin-top:12px; filter:blur(3px); opacity:.55; pointer-events:none;}
+  .comp-fake-bars .fb{height:6px; border-radius:100px; background:linear-gradient(90deg, var(--blue), var(--blue-bright));}
+  .comp-card .comp-lockline{
+    font-family:'JetBrains Mono'; font-size:9.5px; color:var(--text-faint); margin-top:10px; display:flex; align-items:center; justify-content:center; gap:4px;
+  }
+  .comp-cta{
+    background:rgba(232,50,59,.07); border:1px solid rgba(232,50,59,.3); border-radius:11px; padding:14px 16px;
+  }
+  .comp-cta p{font-size:13px; line-height:1.55; color:var(--text-dim); margin-bottom:10px;}
+  .comp-cta p strong{color:var(--text);}
+  .comp-cta a{
+    font-family:'Space Grotesk'; font-weight:700; font-size:13px; color:var(--red-bright); text-decoration:none;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .comp-cta a:hover{text-decoration:underline;}
+  @media (max-width:560px){.comp-grid{grid-template-columns:1fr;}}
+
+  /* CTA */
+  .cta-box{
+    background:linear-gradient(180deg, rgba(232,50,59,.10), rgba(59,130,246,.06));
+    border:1px solid rgba(232,50,59,.4); border-radius:14px; padding:22px 20px; text-align:center;
+  }
+  .cta-box p{font-size:14px; line-height:1.6; color:var(--text-dim); margin-bottom:16px; max-width:48ch; margin-left:auto; margin-right:auto;}
+  .cta-box p strong{color:var(--text);}
+  .cta-btn{
+    display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg, var(--red-bright), var(--red));
+    color:#fff; font-weight:700; font-family:'Space Grotesk'; font-size:14.5px; padding:13px 24px;
+    border-radius:100px; text-decoration:none; box-shadow:0 8px 26px -8px rgba(232,50,59,.55);
+  }
+  .cta-btn:hover{filter:brightness(1.08);}
+
+  .footer-actions{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:18px;}
+  .btn-ghost{
+    font-family:'Space Grotesk'; font-weight:600; font-size:13.5px; color:var(--text-dim);
+    background:none; border:1px solid var(--line); padding:10px 18px; border-radius:100px; cursor:pointer;
+  }
+  .btn-ghost:hover{border-color:var(--blue-bright); color:var(--text);}
+  .btn-pdf{
+    font-family:'Space Grotesk'; font-weight:700; font-size:13.5px; color:#fff;
+    background:linear-gradient(135deg, var(--blue-bright), var(--blue)); border:none; padding:10px 18px; border-radius:100px; cursor:pointer;
+  }
+  .btn-pdf:hover{filter:brightness(1.08);}
+
+  .credit{text-align:center; margin-top:24px; font-family:'JetBrains Mono'; font-size:11px; color:var(--text-faint); line-height:1.7;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <img src="https://n3labs.potenttial.site/_next/image?url=%2Fn3-logo.png&w=384&q=75" alt="N3 Labs">
+    <div class="tag">N3 GEO Test</div>
+    <span class="version">v1.3</span>
+  </div>
+
+  <div id="intro">
+    <div class="radar-wrap">
+      <div class="radar-ring-bg"></div>
+      <div class="radar-sweep-bg"></div>
+      <svg class="tesseract-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- connecting spokes (independent rotation) -->
+        <g class="tess-links" stroke="rgba(90,164,255,.35)" stroke-width="1">
+          <line x1="100" y1="30" x2="100" y2="170"/>
+          <line x1="30" y1="100" x2="170" y2="100"/>
+          <line x1="49" y1="49" x2="151" y2="151"/>
+          <line x1="151" y1="49" x2="49" y2="151"/>
+        </g>
+        <!-- inner square: Claude Â· Perplexity Â· Meta AI Â· Otras -->
+        <g class="tess-inner" fill="none" stroke="rgba(140,107,255,.55)" stroke-width="1.4">
+          <polygon points="140,100 100,140 60,100 100,60"/>
+        </g>
+        <g class="tess-inner">
+          <circle class="tess-node" cx="140" cy="100" r="5" fill="#e8323b"><title>Claude</title></circle>
+          <circle class="tess-node" cx="100" cy="140" r="5" fill="#e8323b"><title>Perplexity</title></circle>
+          <circle class="tess-node" cx="60" cy="100" r="5" fill="#e8323b"><title>Meta AI</title></circle>
+          <circle class="tess-node" cx="100" cy="60" r="5" fill="#e8323b"><title>Otras plataformas de IA</title></circle>
+        </g>
+        <!-- outer diamond: ChatGPT Â· Gemini Â· Copilot Â· Grok -->
+        <g class="tess-outer" fill="none" stroke="rgba(90,164,255,.55)" stroke-width="1.4">
+          <polygon points="149.5,149.5 50.5,149.5 50.5,50.5 149.5,50.5"/>
+        </g>
+        <g class="tess-outer">
+          <circle class="tess-node" cx="149.5" cy="149.5" r="5" fill="#e8323b"><title>ChatGPT</title></circle>
+          <circle class="tess-node" cx="50.5" cy="149.5" r="5" fill="#e8323b"><title>Gemini</title></circle>
+          <circle class="tess-node" cx="50.5" cy="50.5" r="5" fill="#e8323b"><title>Copilot</title></circle>
+          <circle class="tess-node" cx="149.5" cy="50.5" r="5" fill="#e8323b"><title>Grok</title></circle>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero">
+      <div class="eyebrow"><span class="dot"></span> N3 GEO Test</div>
+      <h1>Identificar la relevancia<br>de tu negocio ante herramientas de <span>IA</span></h1>
+      <p>Analiza un sitio, una marca o un nombre y descubre quÃ© tan visible es ante la IA (1â€“100).</p>
+      <div class="engine-strip">
+        <span class="engine-chip-mini">ChatGPT</span>
+        <span class="engine-chip-mini">Gemini</span>
+        <span class="engine-chip-mini">Copilot</span>
+        <span class="engine-chip-mini">Grok</span>
+        <span class="engine-chip-mini">Claude</span>
+        <span class="engine-chip-mini">Perplexity</span>
+        <span class="engine-chip-mini">Meta AI</span>
+        <span class="engine-chip-mini">+ otras</span>
+      </div>
+    </div>
+
+    <div class="panel geo-explain">
+      <h3>ðŸ“¡ GEO: la evoluciÃ³n del SEO</h3>
+      <p><strong>GEO</strong> son las siglas de <em>Generative Engine Optimization</em> â€” en espaÃ±ol, <em>"OptimizaciÃ³n para Motores Generativos"</em>. Hace que la IA te cite dentro de su respuesta, no solo que aparezcas en una lista de links.</p>
+      <div class="geo-compare">
+        <div class="geo-compare-card">
+          <div class="gc-label">SEO clÃ¡sico</div>
+          <div class="gc-text">Ganas posiciÃ³n en resultados. El objetivo es el clic.</div>
+        </div>
+        <div class="geo-compare-card geo-new">
+          <div class="gc-label">GEO</div>
+          <div class="gc-text">Ganas una menciÃ³n dentro de la respuesta de la IA.</div>
+        </div>
+      </div>
+      <div class="geo-stats">
+        <div class="geo-stat">
+          <div class="gs-num">~68%</div>
+          <div class="gs-label">bÃºsquedas en Google sin clic</div>
+          <div class="gs-src">SparkToro / Datos, 2026</div>
+        </div>
+        <div class="geo-stat">
+          <div class="gs-num">~83%</div>
+          <div class="gs-label">cero clics con AI Overview</div>
+          <div class="gs-src">Bain & Company, 2026</div>
+        </div>
+        <div class="geo-stat">
+          <div class="gs-num">1,000M+</div>
+          <div class="gs-label">usuarios/mes en Google AI Mode</div>
+          <div class="gs-src">Google I/O, 2026</div>
+        </div>
+      </div>
+      <p>Hasta Google ya responde con IA antes de mostrarte un link.</p>
+    </div>
+
+    <div class="panel input-panel">
+      <div class="input-row">
+        <input type="text" class="url-input mono" id="urlInput" placeholder="tuempresa.com Â· una marca Â· el nombre de una persona" autocomplete="off">
+        <button class="scan-btn" onclick="runScan()">Analizar nivel de GEO</button>
+      </div>
+      <label class="market-label" for="marketSelect">Mercado / idioma objetivo</label>
+      <div class="market-row">
+        <select class="market-select mono" id="marketSelect">
+          <option value="mx">MÃ©xico Â· EspaÃ±ol</option>
+          <option value="co">Colombia Â· EspaÃ±ol</option>
+          <option value="pa">PanamÃ¡ Â· EspaÃ±ol</option>
+          <option value="es">EspaÃ±a Â· EspaÃ±ol</option>
+          <option value="us-en">Estados Unidos Â· InglÃ©s</option>
+          <option value="us-es">Estados Unidos Â· EspaÃ±ol (hispano)</option>
+          <option value="br">Brasil Â· PortuguÃ©s</option>
+          <option value="global">Global / sin definir</option>
+        </select>
+      </div>
+      <div class="input-hint">Funciona con un sitio web (pÃ¡gina principal o una secciÃ³n especÃ­fica), una marca o el nombre de una persona. Sitios: 9 criterios tÃ©cnicos GEO. Marcas/nombres: relevancia ante IA. Escala 1â€“100.</div>
+      <div class="input-error" id="inputError">Escribe una URL vÃ¡lida, una marca o un nombre (2â€“80 caracteres).</div>
+    </div>
+
+    <div class="scan-panel" id="scanPanel">
+      <div class="panel">
+        <div class="scan-topbar">
+          <div class="avatar">N3</div>
+          <div>
+            <div class="st-name">Analizando visibilidad ante IA</div>
+            <div class="st-url" id="scanUrl"></div>
+          </div>
+        </div>
+        <div class="scan-log" id="scanLog"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+
+    <div class="section">
+      <h2><span class="n">01</span> <span id="criteriaHeading">PuntuaciÃ³n por criterio GEO</span></h2>
+      <div class="score-header">
+        <div class="score-url mono" id="resultUrl"></div>
+        <div class="avg-badge"><span class="num" id="avgScore">0</span><span class="of">/ 100 promedio general</span></div>
+      </div>
+
+      <div class="semaforo">
+        <div class="semaforo-track">
+          <div class="sf-seg sf-red"></div>
+          <div class="sf-seg sf-yellow"></div>
+          <div class="sf-seg sf-green"></div>
+          <div class="sf-marker" id="sfMarker"></div>
+        </div>
+        <div class="semaforo-labels"><span>Rojo Â· bajo</span><span>Amarillo Â· promedio</span><span>Verde Â· bueno</span></div>
+      </div>
+
+      <div class="bars" id="barsGrid"></div>
+    </div>
+
+    <div class="section">
+      <h2><span class="n">02</span> Lectura rÃ¡pida</h2>
+      <div class="lectura"><div class="lt-k">DiagnÃ³stico preliminar</div><p id="lecturaText"></p></div>
+    </div>
+
+    <div class="section">
+      <h2><span class="n">03</span> Visibilidad estimada por motor de IA</h2>
+      <p style="font-size:12.5px; color:var(--text-faint); margin:-8px 0 14px; line-height:1.5;" id="engineSubtitle">PuntuaciÃ³n estimada por plataforma. Usa el enlace de cada tarjeta para entrar y comprobarlo tÃº mismo con tus propias bÃºsquedas.</p>
+      <div class="engine-grid" id="engineGrid"></div>
+    </div>
+
+    <div class="section">
+      <h2><span class="n">04</span> CÃ³mo te comparas con tu competencia</h2>
+      <p class="comp-intro" id="compIntro">Sector detectado: <strong></strong>. Se identificaron 3 competidores directos en esta categorÃ­a â€” por ahora, solo se muestra su promedio general.</p>
+      <div class="comp-grid" id="compGrid"></div>
+      <div class="comp-cta">
+        <p>Tu promedio es <strong id="compYourAvg"></strong>/100. <strong>N3 Labs</strong> puede decirte exactamente quiÃ©nes son estos competidores, cÃ³mo te ganan (o no) criterio por criterio y motor por motor, y diseÃ±ar el plan para superarlos.</p>
+        <a href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener">Quiero ver el anÃ¡lisis competitivo completo â†’</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><span class="n">05</span> Para cerrar</h2>
+      <div class="framework-note">
+        <p>La IA no es <strong>alguien</strong>, es <strong>algo</strong> que simula serlo (teorÃ­a Creaxoma). Por eso hoy hay que escribir para tu <strong>SPH (Sistema de Pensamiento Humano)</strong> â€” cÃ³mo piensan las personas â€” y para el <strong>SPA (Sistema de Pensamiento Artificial)</strong> de la IA â€” cÃ³mo procesa la mÃ¡quina â€” al mismo tiempo. La IA existe hace mÃ¡s de 68 aÃ±os, pero apenas ahora empezÃ³ a comportarse como alguien: por eso la FobIA es real, aunque tambiÃ©n absurda.</p>
+        <div class="read-links">
+          <a class="read-chip" href="https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/" target="_blank" rel="noopener">ðŸ“– Creaxoma: la IA es algo creado por alguien â†’</a>
+          <a class="read-chip" href="https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/" target="_blank" rel="noopener">ðŸ“– SPH + SPA: complementa tu pensamiento con la IA â†’</a>
+          <a class="read-chip" href="https://www.youtube.com/shorts/Nwz1k6YWdII" target="_blank" rel="noopener">ðŸŽ¬ FobIA â€” Engel Fonseca (YouTube) â†’</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <p>Esta es una <strong>fotografÃ­a inicial</strong>, no un plan de acciÃ³n. Interpretar estas seÃ±ales, priorizarlas y diseÃ±ar la estrategia para que tu marca aparezca donde hoy se estÃ¡n formando las decisiones de compra, es trabajo de un especialista.</p>
+      <a class="cta-btn" href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener">Hablar con un especialista de N3 â†’</a>
+    </div>
+
+    <div class="footer-actions">
+      <button class="btn-pdf" onclick="downloadPDF()">â¬‡ Descargar PDF resumen</button>
+      <button class="btn-ghost" onclick="restart()">â†º Hacer otra evaluaciÃ³n</button>
+    </div>
+  </div>
+
+  <div class="credit"><strong style="color:var(--red-bright)">N3 GEO Test Â· v1.3</strong><br>Desarrollado por <a href="https://n3labs.potenttial.site/" target="_blank" rel="noopener" style="color:var(--text-faint); text-decoration:underline;">N3 Labs</a></div>
+
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const CRITERIA = [
+  {name:'Neuroescritura (contenido para humanos e IA a la vez)', min:20, max:80, special:true,
+   scanMsg:'Evaluando Neuroescritura: contenido diseÃ±ado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempoâ€¦'},
+  {name:'Contenido estructurado y jerarquÃ­a', min:40, max:80},
+  {name:'Datos estructurados (schema)', min:20, max:60},
+  {name:'Respuesta directa / conversacional', min:30, max:70},
+  {name:'Autoridad y confianza (E-E-A-T)', min:40, max:90},
+  {name:'Citas y menciones de terceros', min:30, max:80},
+  {name:'Frescura de contenido', min:40, max:90},
+  {name:'Accesibilidad tÃ©cnica para IA', min:30, max:80},
+  {name:'Presencia en grafo de conocimiento', min:20, max:70}
+];
+
+const CRITERIA_NAME = [
+  {name:'Neuroescritura (contenido sobre ti para humanos e IA a la vez)', min:20, max:80, special:true,
+   scanMsg:'Evaluando Neuroescritura: contenido sobre ti diseÃ±ado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempoâ€¦'},
+  {name:'Reconocimiento de nombre ante IA', min:25, max:85},
+  {name:'DiferenciaciÃ³n (evitar confusiÃ³n con homÃ³nimos)', min:25, max:80},
+  {name:'Cobertura y menciones de terceros', min:20, max:80},
+  {name:'Actualidad de la informaciÃ³n disponible', min:30, max:85},
+  {name:'Consistencia del mensaje entre fuentes', min:25, max:80}
+];
+
+const ENGINE_DEFS = [
+  {name:'ChatGPT', metric:'similitud vectorial de embeddings', fmt:v=>v.toFixed(3), color:'#10A37F', initial:'Ch', url:'https://chatgpt.com'},
+  {name:'Gemini', metric:'cobertura del grafo de entidades', fmt:v=>Math.round(v*100)+'%', color:'#4285F4', initial:'Ge', url:'https://gemini.google.com'},
+  {name:'Copilot', metric:'densidad de citabilidad', fmt:v=>v.toFixed(3), color:'#0078D4', initial:'Co', url:'https://copilot.microsoft.com'},
+  {name:'Grok', metric:'seÃ±al conversacional en tiempo real', fmt:v=>v.toFixed(2)+'Ïƒ', color:'#333333', initial:'Gr', url:'https://grok.com'},
+  {name:'Claude', metric:'coherencia semÃ¡ntica estructural', fmt:v=>v.toFixed(3), color:'#CC785C', initial:'Cl', url:'https://claude.ai'},
+  {name:'Perplexity', metric:'profundidad de indexaciÃ³n', fmt:v=>Math.round(v*100)+'%', color:'#20808D', initial:'Pe', url:'https://www.perplexity.ai'},
+  {name:'Meta AI', metric:'presencia en el grafo social', fmt:v=>Math.round(v*100)+'%', color:'#0866FF', initial:'M', url:'https://www.meta.ai'},
+  {name:'Otras plataformas de IA', metric:'afinidad promedio con modelos generalistas', fmt:v=>v.toFixed(3), color:'#5b6579', initial:'+', url:null}
+];
+
+const MARKETS = {
+  'mx':     {label:'MÃ©xico', language:'EspaÃ±ol', bias:{ChatGPT:8, Gemini:4, Copilot:-4, Grok:-2, Claude:0, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
+  'co':     {label:'Colombia', language:'EspaÃ±ol', bias:{ChatGPT:7, Gemini:3, Copilot:-5, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':6, 'Otras plataformas de IA':4}},
+  'pa':     {label:'PanamÃ¡', language:'EspaÃ±ol', bias:{ChatGPT:6, Gemini:3, Copilot:-4, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
+  'es':     {label:'EspaÃ±a', language:'EspaÃ±ol', bias:{ChatGPT:6, Gemini:6, Copilot:-2, Grok:-3, Claude:1, Perplexity:1, 'Meta AI':3, 'Otras plataformas de IA':2}},
+  'us-en':  {label:'Estados Unidos', language:'InglÃ©s', bias:{ChatGPT:5, Gemini:5, Copilot:4, Grok:2, Claude:3, Perplexity:3, 'Meta AI':2, 'Otras plataformas de IA':-2}},
+  'us-es':  {label:'Estados Unidos (hispano)', language:'EspaÃ±ol', bias:{ChatGPT:7, Gemini:4, Copilot:0, Grok:-1, Claude:1, Perplexity:2, 'Meta AI':4, 'Otras plataformas de IA':1}},
+  'br':     {label:'Brasil', language:'PortuguÃ©s', bias:{ChatGPT:6, Gemini:5, Copilot:-3, Grok:-2, Claude:-1, Perplexity:1, 'Meta AI':7, 'Otras plataformas de IA':5}},
+  'global': {label:'Global / sin definir', language:'MultilingÃ¼e', bias:{ChatGPT:3, Gemini:3, Copilot:0, Grok:0, Claude:0, Perplexity:0, 'Meta AI':2, 'Otras plataformas de IA':0}}
+};
+
+const CATEGORIES = [
+  {label:'Hoteles y Resorts', keywords:['hotel','resort','hospedaje','suites','autograph','marriott','hyatt','hilton']},
+  {label:'AerolÃ­neas y Viajes', keywords:['airlines','vuelo','viaje','travel','tour','aerolinea']},
+  {label:'Banca y Finanzas', keywords:['banco','bank','finan','credito','fintech']},
+  {label:'Seguros', keywords:['seguro','insurance','aseguradora']},
+  {label:'E-commerce / Retail', keywords:['shop','tienda','store','mercado','retail','ecommerce']},
+  {label:'Salud y Bienestar', keywords:['salud','clinica','hospital','health','medic','wellness']},
+  {label:'Bienes RaÃ­ces', keywords:['inmobiliaria','realestate','realty','bienesraices','propiedades','inmuebles']},
+  {label:'Restaurantes y GastronomÃ­a', keywords:['restaurant','food','gastro','menu','comida','cocina']},
+  {label:'TecnologÃ­a / SaaS', keywords:['software','tech','app','saas','cloud','labs']},
+  {label:'EducaciÃ³n', keywords:['edu','universidad','school','academy','curso','instituto']},
+  {label:'Automotriz', keywords:['auto','car','llanta','vehiculo','motors']}
+];
+
+function detectCategory(u){
+  const hay = (u.hostname + ' ' + u.pathname).toLowerCase();
+  for(const cat of CATEGORIES){
+    if(cat.keywords.some(k => hay.includes(k))) return cat.label;
+  }
+  return 'Negocios y Servicios Profesionales';
+}
+
+function detectCategoryFromText(name){
+  const hay = name.toLowerCase();
+  for(const cat of CATEGORIES){
+    if(cat.keywords.some(k => hay.includes(k))) return cat.label;
+  }
+  return 'Marca personal / ReputaciÃ³n digital';
+}
+
+/* ---------------- SEEDED RANDOM ---------------- */
+function hashStr(str){
+  let h = 2166136261;
+  for(let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function mulberry32(a){
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function randInRange(rng, min, max){
+  return Math.round(min + rng()*(max-min));
+}
+
+function normalizeUrl(raw){
+  let v = raw.trim();
+  if(!v) return null;
+  if(!/^https?:\/\//i.test(v)) v = 'https://' + v;
+  try{
+    const u = new URL(v);
+    if(!u.hostname.includes('.')) return null;
+    return u;
+  }catch(e){ return null; }
+}
+
+function analysisKey(u){
+  // Includes the full path (and query) so specific sections/pages of a domain
+  // are analyzed on their own terms, not folded into one generic domain-wide result.
+  const host = u.hostname.replace(/^www\./,'').toLowerCase();
+  const path = u.pathname.replace(/\/$/,'');
+  const query = u.search || '';
+  return (host + path + query).toLowerCase();
+}
+
+function displayUrl(u){
+  const host = u.hostname.replace(/^www\./,'');
+  const path = u.pathname === '/' ? '' : u.pathname;
+  return host + path + (u.search || '');
+}
+
+function isSpecificPage(u){
+  return u.pathname && u.pathname !== '/' && u.pathname.length > 1;
+}
+
+function parseInput(raw){
+  const v = raw.trim();
+  if(!v) return null;
+  const u = normalizeUrl(v);
+  if(u) return {mode:'url', u};
+  // Not a valid URL/domain â€” treat as a brand or person's name.
+  if(v.length < 2 || v.length > 80) return null;
+  return {mode:'name', name:v};
+}
+
+/* ---------------- FLOW ---------------- */
+let currentResult = null;
+
+function runScan(){
+  const raw = document.getElementById('urlInput').value;
+  const input = parseInput(raw);
+  const errEl = document.getElementById('inputError');
+  if(!input){ errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  document.querySelector('.input-panel').style.display = 'none';
+  document.querySelector('.hero').style.display = 'none';
+  document.querySelector('.radar-wrap').style.display = 'none';
+  document.querySelector('.geo-explain').style.display = 'none';
+
+  const mode = input.mode;
+  const criteriaSet = mode === 'url' ? CRITERIA : CRITERIA_NAME;
+
+  // Precompute everything now so the numbers shown while "thinking" match the final reveal.
+  const marketId = document.getElementById('marketSelect').value;
+  const market = MARKETS[marketId];
+  const subjectKey = mode === 'url' ? analysisKey(input.u) : input.name.trim().toLowerCase();
+  const subjectLabel = mode === 'url' ? displayUrl(input.u) : input.name.trim();
+  const seed = hashStr(subjectKey + '|' + marketId + '|' + mode);
+  const rng = mulberry32(seed);
+
+  const scores = criteriaSet.map(c => randInRange(rng, c.min, c.max));
+  const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+
+  const engineScores = ENGINE_DEFS.map((def)=>{
+    const jitter = (rng()*24 - 12) + (market.bias[def.name] || 0);
+    let s = Math.round(avg + jitter);
+    s = Math.max(1, Math.min(100, s));
+    const metricVal = 0.55 + rng()*0.4;
+    return {name:def.name, score:s, metricLabel:def.metric, metricValue:def.fmt(metricVal), color:def.color, initial:def.initial, url:def.url};
+  });
+
+  const category = mode === 'url' ? detectCategory(input.u) : detectCategoryFromText(input.name);
+  let comp1 = Math.round(avg + 10 + rng()*20); comp1 = Math.max(avg+3, Math.min(100, comp1));
+  let comp2 = Math.round(avg + 4 + rng()*16); comp2 = Math.max(avg+2, Math.min(100, comp2));
+  let comp3 = Math.round(avg - 6 - rng()*18); comp3 = Math.min(avg-2, Math.max(1, comp3));
+
+  currentResult = {
+    mode, subject:subjectLabel, specific: mode === 'url' ? isSpecificPage(input.u) : false,
+    scores, avg, engineScores, market, category, competitors:[comp1, comp2, comp3], criteriaSet
+  };
+
+  const scanPanel = document.getElementById('scanPanel');
+  scanPanel.classList.add('active');
+  document.getElementById('scanUrl').textContent = `${subjectLabel} Â· ${market.label} (${market.language})`;
+  const log = document.getElementById('scanLog');
+  log.innerHTML = '';
+
+  let delay = 0;
+  const phase1Header = document.createElement('div');
+  phase1Header.className = 'scan-phase';
+  phase1Header.textContent = mode === 'url' ? 'Fase 1 Â· Lectura de criterios GEO' : 'Fase 1 Â· SeÃ±ales de relevancia ante IA';
+  log.appendChild(phase1Header);
+
+  criteriaSet.forEach((c, i)=>{
+    const msg = c.scanMsg || `Analizando "${c.name}"â€¦`;
+    setTimeout(()=> addScanItem(log, msg, null, c.special), delay);
+    delay += 560;
+  });
+
+  delay += 200;
+  setTimeout(()=>{
+    const phase2Header = document.createElement('div');
+    phase2Header.className = 'scan-phase';
+    phase2Header.textContent = 'Fase 2 Â· Modelado matemÃ¡tico por motor de IA';
+    log.appendChild(phase2Header);
+    window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+  }, delay);
+  delay += 300;
+
+  engineScores.forEach((e)=>{
+    setTimeout(()=> addScanItem(log, `${e.name} Â· ${e.metricLabel}`, e.metricValue, false), delay);
+    delay += 640;
+  });
+
+  delay += 200;
+  setTimeout(()=> addScanItem(log, 'Consolidando resultados y ponderando criteriosâ€¦', null, false), delay);
+  delay += 900;
+
+  setTimeout(()=> showResult(), delay);
+}
+
+function addScanItem(log, text, metric, isSpecial){
+  const row = document.createElement('div');
+  row.className = 'scan-item';
+  const metricHTML = metric ? `<span class="metric">${metric}</span>` : '';
+  row.innerHTML = `<span class="scan-icon"><span class="spinner"></span></span><span style="${isSpecial?'color:var(--red-bright);font-weight:600;':''}">${text}</span>${metricHTML}`;
+  log.appendChild(row);
+  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+  setTimeout(()=>{
+    row.classList.add('done');
+    row.querySelector('.scan-icon').innerHTML = '<span class="check">âœ“</span>';
+  }, 480);
+}
+
+function showResult(){
+  const {scores, avg, engineScores, mode, criteriaSet} = currentResult;
+
+  document.getElementById('scanPanel').classList.remove('active');
+  const result = document.getElementById('result');
+  result.classList.add('active');
+
+  const modeTag = mode === 'url'
+    ? (currentResult.specific ? '<span class="page-tag">pÃ¡gina especÃ­fica</span>' : '<span class="page-tag">dominio Â· home</span>')
+    : '<span class="page-tag">ðŸ”Ž marca / nombre</span>';
+  document.getElementById('resultUrl').innerHTML = `${currentResult.subject}${modeTag} <span class="market-badge">ðŸ“ ${currentResult.market.label} Â· ${currentResult.market.language}</span>`;
+  document.getElementById('avgScore').textContent = avg;
+  document.getElementById('criteriaHeading').textContent = mode === 'url' ? 'PuntuaciÃ³n por criterio GEO' : 'PuntuaciÃ³n por criterio de relevancia';
+
+  const sfPct = Math.max(2, Math.min(98, avg));
+  setTimeout(()=>{ document.getElementById('sfMarker').style.left = `calc(${sfPct}% - 1px)`; }, 150);
+
+  const barsGrid = document.getElementById('barsGrid');
+  barsGrid.innerHTML = '';
+  criteriaSet.forEach((c,i)=>{
+    const row = document.createElement('div');
+    row.className = 'bar-row' + (c.special ? ' special' : '');
+    const label = c.special
+      ? `<span>ðŸ§¬ ${c.name} <span class="special-tag">nuevo</span></span>`
+      : `<span>${c.name}</span>`;
+    row.innerHTML = `<div class="bar-label">${label}<b>${scores[i]}</b></div><div class="bar-track"><div class="bar-fill" id="bar${i}"></div></div>`;
+    barsGrid.appendChild(row);
+  });
+  setTimeout(()=>{
+    criteriaSet.forEach((c,i)=>{
+      document.getElementById('bar'+i).style.width = scores[i]+'%';
+    });
+  }, 100);
+
+  document.getElementById('lecturaText').textContent = buildLectura(scores, avg, currentResult, engineScores);
+
+  document.getElementById('engineSubtitle').textContent = mode === 'url'
+    ? `PuntuaciÃ³n estimada por plataforma, calibrada para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para entrar y comprobarlo tÃº mismo con tus propias bÃºsquedas.`
+    : `QuÃ© tan relevante es "${currentResult.subject}" para cada plataforma, calibrado para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para preguntarle tÃº mismo.`;
+
+  const engineGrid = document.getElementById('engineGrid');
+  engineGrid.innerHTML = '';
+  engineScores.forEach((e,i)=>{
+    const card = document.createElement('div');
+    card.className = 'engine-card';
+    const linkText = mode === 'url'
+      ? 'PregÃºntale a esta IA cuÃ¡l es la mejor marca de tu categorÃ­a en tu geografÃ­a â†’'
+      : `PregÃºntale a esta IA quiÃ©n es "${currentResult.subject}" â†’`;
+    const linkHTML = e.url
+      ? `<a class="engine-link" href="${e.url}" target="_blank" rel="noopener">${linkText}</a>`
+      : `<span class="engine-link" style="opacity:.6">Sin plataforma Ãºnica para verificar</span>`;
+    card.innerHTML = `
+      <div class="e-top">
+        <span class="engine-logo" style="--c:${e.color}">${e.initial}</span>
+        <span class="e-name-text">${e.name}</span>
+        <span class="e-score">${e.score}/100</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="ebar${i}"></div></div>
+      ${linkHTML}`;
+    engineGrid.appendChild(card);
+  });
+  setTimeout(()=>{
+    engineScores.forEach((e,i)=>{
+      document.getElementById('ebar'+i).style.width = e.score+'%';
+    });
+  }, 150);
+
+  document.getElementById('compIntro').textContent = mode === 'url'
+    ? `Sector detectado: ${currentResult.category}. Se identificaron 3 competidores directos en esta categorÃ­a â€” por ahora, solo se muestra su promedio general.`
+    : `CategorÃ­a detectada: ${currentResult.category}. Se identificaron 3 marcas o nombres similares en este espacio â€” por ahora, solo se muestra su promedio general.`;
+  document.getElementById('compYourAvg').textContent = avg;
+  const compGrid = document.getElementById('compGrid');
+  compGrid.innerHTML = '';
+  currentResult.competitors.forEach((score, i)=>{
+    const card = document.createElement('div');
+    card.className = 'comp-card';
+    card.innerHTML = `
+      <div class="comp-label">ðŸ”’ Competidor detectado #${i+1}</div>
+      <div class="comp-score">${score}<span>/100</span></div>
+      <div class="comp-fake-bars">
+        <div class="fb" style="width:${40+((score*7+i*13)%50)}%"></div>
+        <div class="fb" style="width:${30+((score*11+i*7)%55)}%"></div>
+        <div class="fb" style="width:${50+((score*5+i*17)%40)}%"></div>
+      </div>
+      <div class="comp-lockline">Desglose completo disponible con N3</div>`;
+    compGrid.appendChild(card);
+  });
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildLectura(scores, avg, result, engineScores){
+  const criteriaSet = result.criteriaSet;
+  let best=0, worst=0;
+  scores.forEach((s,i)=>{ if(s>scores[best]) best=i; if(s<scores[worst]) worst=i; });
+  const bestC = criteriaSet[best].name.toLowerCase();
+  const worstC = criteriaSet[worst].name.toLowerCase();
+  const subject = result.mode === 'name' ? 'Esta marca o nombre' : (result.specific ? 'Esta pÃ¡gina' : 'La marca');
+  const market = result.market;
+
+  let level;
+  if(avg < 40) level = `${subject} todavÃ­a es prÃ¡cticamente invisible para los motores de respuesta con IA.`;
+  else if(avg < 60) level = `${subject} tiene seÃ±ales dispersas: algo la hace visible para la IA, pero de forma inconsistente.`;
+  else if(avg < 80) level = `${subject} tiene una base sÃ³lida de visibilidad ante IA, aunque con brechas puntuales.`;
+  else level = `${subject} ya muestra seÃ±ales fuertes de visibilidad ante motores de respuesta con IA.`;
+
+  let marketLine = '';
+  if(engineScores && engineScores.length){
+    let eBest=0, eWorst=0;
+    engineScores.forEach((e,i)=>{ if(e.score>engineScores[eBest].score) eBest=i; if(e.score<engineScores[eWorst].score) eWorst=i; });
+    marketLine = ` Calibrado para ${market.label} (${market.language}): en este mercado, ${engineScores[eBest].name} tiende a pesar mÃ¡s en las respuestas de IA, mientras que ${engineScores[eWorst].name} tiene hoy menor presencia relativa.`;
+  }
+
+  return `${level} El punto mÃ¡s fuerte detectado es ${bestC}, mientras que ${worstC} aparece como la seÃ±al mÃ¡s dÃ©bil dentro de los ${criteriaSet.length === 9 ? 'nueve' : 'seis'} criterios evaluados.${marketLine}`;
+}
+
+/* ---------------- PDF ---------------- */
+function downloadPDF(){
+  if(!currentResult) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'letter'});
+  const margin = 54;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const maxW = pageW - margin*2;
+  const contact = 'Contacto N3 Labs: n3labs.potenttial.site/#contacto';
+  let y = margin;
+
+  function drawHeader(){
+    doc.setFillColor(232,50,59); doc.rect(margin, 28, 22, 22, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(255,255,255);
+    doc.text('N3', margin+5.5, 43);
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(20,20,20);
+    doc.text('N3 GEO TEST', margin+30, 41);
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(232,50,59);
+    doc.text('v1.3', margin+30 + doc.getTextWidth('N3 GEO TEST ')+2, 41);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(120,120,120);
+    doc.text(contact, pageW-margin, 43, {align:'right'});
+    doc.setDrawColor(225,225,225); doc.line(margin, 56, pageW-margin, 56);
+  }
+  function drawFooter(){
+    doc.setDrawColor(225,225,225); doc.line(margin, pageH-40, pageW-margin, pageH-40);
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(232,50,59);
+    doc.text('N3 GEO Test Â· v1.3', margin, pageH-26);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(140,140,140);
+    doc.text(contact, pageW-margin, pageH-26, {align:'right'});
+  }
+  function checkPage(extra){
+    if(y + extra > pageH - 56){ drawFooter(); doc.addPage(); drawHeader(); y = 76; }
+  }
+  function heading(text, size, color){
+    checkPage(size+14);
+    doc.setFont('helvetica','bold'); doc.setFontSize(size); doc.setTextColor(color[0],color[1],color[2]);
+    doc.text(text, margin, y); y += size + 10;
+  }
+  function body(text, size=10.5, color=[40,40,40]){
+    doc.setFont('helvetica','normal'); doc.setFontSize(size); doc.setTextColor(color[0],color[1],color[2]);
+    const lines = doc.splitTextToSize(text, maxW);
+    checkPage(lines.length*(size+3));
+    doc.text(lines, margin, y);
+    y += lines.length*(size+3) + 8;
+  }
+
+  drawHeader();
+  y = 76;
+
+  heading('N3 GEO Test â€” Resultado', 19, [10,10,10]);
+  body(`${currentResult.mode === 'url' ? 'Sitio evaluado' : 'Marca / nombre evaluado'}: ${currentResult.subject}`, 10.5);
+  body(`Mercado / idioma objetivo: ${currentResult.market.label} (${currentResult.market.language})`, 10.5);
+  y += 2;
+
+  heading(`Promedio general: ${currentResult.avg} / 100`, 15, [232,50,59]);
+
+  heading(currentResult.mode === 'url' ? 'PuntuaciÃ³n por criterio GEO' : 'PuntuaciÃ³n por criterio de relevancia', 12.5, [10,10,10]);
+  currentResult.criteriaSet.forEach((c,i)=>{
+    checkPage(16);
+    const isSpecial = c.special;
+    doc.setFont('helvetica','bold'); doc.setFontSize(10);
+    doc.setTextColor(isSpecial?232:60, isSpecial?50:60, isSpecial?59:60);
+    const lines = doc.splitTextToSize(`${c.name}${isSpecial?'  (habilidad clave)':''} â€” ${currentResult.scores[i]}/100`, maxW);
+    doc.text(lines, margin, y);
+    y += lines.length*13 + 3;
+  });
+
+  y += 6;
+  heading('Lectura rÃ¡pida', 12.5, [10,10,10]);
+  body(document.getElementById('lecturaText').textContent, 10.5);
+
+  y += 4;
+  heading('Visibilidad estimada por motor de IA', 12.5, [10,10,10]);
+  currentResult.engineScores.forEach(e=>{
+    checkPage(14);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(50,50,50);
+    doc.text(`${e.name} â€” ${e.score}/100`, margin, y); y += 15;
+  });
+
+  y += 6;
+  heading('CÃ³mo te comparas con tu competencia', 12.5, [10,10,10]);
+  const compNoun = currentResult.mode === 'url' ? 'competidores directos' : 'marcas o nombres similares';
+  body(`CategorÃ­a detectada: ${currentResult.category}. Se identificaron 3 ${compNoun} â€” por ahora, solo se muestra su promedio general.`, 10);
+  checkPage(16);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(232,50,59);
+  doc.text(`Competidor detectado #1 â€” ${currentResult.competitors[0]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.text(`Competidor detectado #2 â€” ${currentResult.competitors[1]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.text(`Competidor detectado #3 â€” ${currentResult.competitors[2]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(50,50,50);
+  doc.text(`Tu promedio â€” ${currentResult.avg}/100`, margin, y); y += 18;
+
+  y += 6;
+  heading('Para cerrar', 12.5, [10,10,10]);
+  body('La IA no es "alguien", es "algo" que simula serlo (teorÃ­a Creaxoma, Engel Fonseca). Por eso hoy hay que escribir para tu SPH (Sistema de Pensamiento Humano) y para el SPA (Sistema de Pensamiento Artificial) de la IA a la vez. La IA existe hace mÃ¡s de 68 aÃ±os, pero apenas ahora empezÃ³ a comportarse como alguien: por eso la FobIA es real, aunque tambiÃ©n absurda.', 9.5, [90,90,90]);
+  checkPage(28);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(33,140,199);
+  doc.textWithLink('ðŸ“– Leer: Creaxoma â€” la IA es algo creado por alguien', margin, y, {url:'https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/'});
+  y += 14;
+  doc.textWithLink('ðŸ“– Leer: SPH + SPA â€” complementa tu pensamiento con la IA', margin, y, {url:'https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/'});
+  y += 14;
+  doc.textWithLink('ðŸŽ¬ Ver: FobIA â€” Engel Fonseca (YouTube)', margin, y, {url:'https://www.youtube.com/shorts/Nwz1k6YWdII'});
+  y += 18;
+
+  y += 6;
+  checkPage(70);
+  doc.setFillColor(250,235,235); doc.rect(margin, y-14, maxW, 62, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(20,20,20);
+  doc.text('Este es un diagnÃ³stico preliminar, no un plan de acciÃ³n.', margin+12, y+6);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(70,70,70);
+  const ctaLines = doc.splitTextToSize('Para interpretar estas seÃ±ales y diseÃ±ar la estrategia, habla con un especialista de N3.', maxW-24);
+  doc.text(ctaLines, margin+12, y+22);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(232,50,59);
+  doc.textWithLink('n3labs.potenttial.site/#contacto', margin+12, y+42, {url:'https://n3labs.potenttial.site/#contacto'});
+  y += 62;
+
+  drawFooter();
+  doc.save('N3-GEO-Test-resultado.pdf');
+}
+
+function restart(){
+  document.getElementById('urlInput').value = '';
+  document.getElementById('inputError').style.display = 'none';
+  document.querySelector('.input-panel').style.display = 'block';
+  document.querySelector('.hero').style.display = 'block';
+  document.querySelector('.radar-wrap').style.display = 'block';
+  document.querySelector('.geo-explain').style.display = 'block';
+  document.getElementById('scanPanel').classList.remove('active');
+  document.getElementById('result').classList.remove('active');
+  currentResult = null;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('urlInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') runScan();
+});
+</script>
+</body>
+</html>
