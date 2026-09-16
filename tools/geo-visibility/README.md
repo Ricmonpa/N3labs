@@ -4,9 +4,28 @@ Herramienta interna de N3. Hace las preguntas de un cliente a ChatGPT, Claude, P
 (con búsqueda web), varias veces, y mide si mencionan y citan a la marca. No es pública: cada
 corrida cuesta dinero.
 
-## Preparar
+**El uso normal es el panel en línea: `/panel` del sitio.** Esta carpeta es la versión de terminal,
+útil para pruebas. Las dos usan el mismo motor, que vive en `src/lib/geo-visibility/`.
+
+## Panel en línea (Vercel)
+
+Variables de entorno del proyecto en Vercel:
+
+- `DATABASE_URL`: se crea sola al conectar Neon en Vercel → Storage.
+- `PANEL_EMAILS`: correos del equipo que pueden entrar, separados por coma.
+- `PANEL_PASSWORD`: contraseña del panel (mínimo 12 caracteres).
+- `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `PERPLEXITY_API_KEY`: los motores sin llave
+  aparecen deshabilitados.
+- Opcionales: `PANEL_MAX_CALLS` (tope por corrida, 1500 por defecto), `PANEL_SESSION_SECRET` y los
+  `*_MODEL` de `.env.example`.
+
+Las tablas se crean solas la primera vez. Una corrida avanza mientras su página está abierta; si se
+cierra, se pausa y continúa al volver.
+
+## Preparar (terminal)
 
 ```bash
+npm install            # en la raíz del repo: instala los SDKs del motor
 cd tools/geo-visibility
 npm install
 cp .env.example .env   # y pega las llaves

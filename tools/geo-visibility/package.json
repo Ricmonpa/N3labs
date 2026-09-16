@@ -2,16 +2,11 @@
   "name": "geo-visibility",
   "private": true,
   "type": "module",
-  "description": "Internal N3 tool: measures whether AI answer engines mention and cite a brand.",
+  "description": "Internal N3 tool: CLI for the AI visibility study (the engine lives in src/lib/geo-visibility; install the root package first).",
   "scripts": {
     "run": "node --env-file-if-exists=.env src/run.ts",
     "analyze": "node src/analyze.ts",
     "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.126.0",
-    "@google/genai": "^2.22.0",
-    "openai": "^7.16.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.5",
