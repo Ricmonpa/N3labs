@@ -108,6 +108,26 @@ function isBlocked(res: SafeResponse | null): boolean {
   return CHALLENGE.test(res.body.slice(0, 20_000));
 }
 
+const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
+const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+
+/** Checks a BCP 47 tag like "es-MX". Unknown codes come back from DisplayNames unchanged. */
+function validateLangTag(tag: string): { problem: "malformed" | "language" | "region" | null; region?: string } {
+  let locale: Intl.Locale;
+  try {
+    Intl.getCanonicalLocales(tag);
+    locale = new Intl.Locale(tag);
+  } catch {
+    return { problem: "malformed" };
+  }
+  if (languageNames.of(locale.language) === locale.language) return { problem: "language" };
+  const region = locale.region;
+  if (region && /^[A-Z]{2}$/.test(region) && regionNames.of(region) === region) {
+    return { problem: "region", region };
+  }
+  return { problem: null, region };
+}
+
 export function normalizeInput(raw: string): URL {
   let v = raw.trim();
   if (!v || v.length > 2000) throw new AuditError("invalid_url");
@@ -434,6 +454,7 @@ export async function runAudit(rawInput: string, lang: Lang): Promise<AuditRepor
   const h2s = elementTexts(html, "h2").filter(Boolean);
   const canonical = links.find((l) => (l.attrs.rel ?? "").toLowerCase().split(/\s+/).includes("canonical"))?.attrs.href;
   const htmlLang = findTags(html, "html")[0]?.attrs.lang;
+  const { problem: langProblem, region: htmlLangRegion } = htmlLang ? validateLangTag(htmlLang) : { problem: null, region: undefined };
 
   let sitemapFound = !!robots?.sitemaps.length;
   let sitemapEvidence = robots?.sitemaps[0] ?? "";
@@ -508,12 +529,24 @@ export async function runAudit(rawInput: string, lang: Lang): Promise<AuditRepor
     {
       id: "lang",
       label: L("Idioma declarado", "Language declared"),
-      status: na ? "na" : htmlLang ? "pass" : "fail",
-      earned: htmlLang ? 2 : 0,
+      status: na ? "na" : !htmlLang ? "fail" : langProblem ? "warn" : "pass",
+      earned: !htmlLang ? 0 : langProblem ? 1 : 2,
       max: 2,
-      detail: htmlLang
-        ? L("El idioma está declarado en la etiqueta <html>.", "Language is declared on the <html> tag.")
-        : L("No declara idioma, lo que dificulta mostrarla en el mercado correcto.", "No language declared, which makes it harder to surface in the right market."),
+      detail: !htmlLang
+        ? L("No declara idioma, lo que dificulta mostrarla en el mercado correcto.", "No language declared, which makes it harder to surface in the right market.")
+        : langProblem === "malformed"
+          ? L(
+              "El código de idioma está mal escrito. Debe usar guion, por ejemplo es-MX (no es_MX).",
+              "The language code is malformed. It must use a hyphen, e.g. es-MX (not es_MX).",
+            )
+          : langProblem === "language"
+            ? L("El código de idioma no corresponde a ningún idioma conocido.", "The language code doesn't match any known language.")
+            : langProblem === "region"
+              ? L(
+                  `El código de país "${htmlLangRegion}" no existe, así que el idioma declarado es inválido. Por ejemplo: es-MX para México o en-US para Estados Unidos.`,
+                  `The country code "${htmlLangRegion}" doesn't exist, so the declared language is invalid. For example: es-MX for Mexico or en-US for the United States.`,
+                )
+              : L("El idioma está declarado en la etiqueta <html> y el código es válido.", "Language is declared on the <html> tag and the code is valid."),
       evidence: htmlLang ? `lang="${htmlLang}"` : undefined,
     },
     {
