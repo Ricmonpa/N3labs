@@ -19,6 +19,9 @@ const TYPE_LABEL: Record<PromptType, string> = {
   brand: "Marca",
 };
 
+// Search/redirect hosts, not real sources.
+const IGNORED_HOSTS = ["google.com", "vertexaisearch.cloud.google.com", "bing.com"];
+
 function rate(hits: number, n: number): Rate {
   return { hits, n, ...wilson(hits, n) };
 }
@@ -89,19 +92,26 @@ export async function analyzeDir(dir: string) {
     source: rate(rows.filter((s) => s.sourced[i]).length, rows.length),
   });
 
-  const byEngine = Object.fromEntries(engines.map((e) => [e, summarize(scored.filter((s) => s.rec.engine === e))]));
-  const overall = summarize(scored);
+  // Brand-name prompts almost always return the brand, so they'd inflate the headline.
+  // Real discovery is measured only on prompts that don't name it.
+  const unbranded = scored.filter((s) => s.rec.promptType !== "brand");
+  const branded = scored.filter((s) => s.rec.promptType === "brand");
+  const forEngine = (rows: Scored[], e: EngineId) => summarize(rows.filter((s) => s.rec.engine === e));
+  const byEngine = Object.fromEntries(
+    engines.map((e) => [e, { unbranded: forEngine(unbranded, e), branded: forEngine(branded, e) }]),
+  );
+  const overall = { unbranded: summarize(unbranded), branded: summarize(branded) };
 
   const shareOfVoice = entities.map((ent, i) => {
     const perEngine = Object.fromEntries(
-      engines.map((e) => [e, rate(scored.filter((s) => s.rec.engine === e && s.mentioned[i]).length, scored.filter((s) => s.rec.engine === e).length)]),
+      engines.map((e) => [e, rate(unbranded.filter((s) => s.rec.engine === e && s.mentioned[i]).length, unbranded.filter((s) => s.rec.engine === e).length)]),
     );
-    const mentions = scored.filter((s) => s.mentioned[i]).length;
+    const mentions = unbranded.filter((s) => s.mentioned[i]).length;
     return { name: ent.name, perEngine, mentions };
   });
   const totalMentions = shareOfVoice.reduce((n, x) => n + x.mentions, 0);
 
-  const ranks = scored.map((s) => s.brandRank).filter((r): r is number => r !== null);
+  const ranks = unbranded.map((s) => s.brandRank).filter((r): r is number => r !== null);
   const avgRank = ranks.length ? ranks.reduce((a, b) => a + b, 0) / ranks.length : null;
 
   const types = [...new Set(study.prompts.map((p) => p.type))];
@@ -122,7 +132,7 @@ export async function analyzeDir(dir: string) {
     for (const s of rows) {
       const hosts = new Set(s.rec.answer!.citations.map((c) => hostOf(c.url)).filter((h): h is string => !!h));
       for (const h of hosts) {
-        if (hostMatches(h, study.brand.domains)) continue;
+        if (hostMatches(h, study.brand.domains) || hostMatches(h, IGNORED_HOSTS)) continue;
         const row = map.get(h) ?? { runs: 0, engines: new Set<string>(), competitor: hostMatches(h, knownDomains) };
         row.runs++;
         row.engines.add(ENGINE_LABEL[s.rec.engine]);
@@ -134,7 +144,7 @@ export async function analyzeDir(dir: string) {
       .slice(0, 20)
       .map(([domain, v]) => ({ domain, runs: v.runs, engines: [...v.engines], competitor: v.competitor }));
   };
-  const citedInstead = countDomains(scored.filter((s) => !s.cited[0]));
+  const citedInstead = countDomains(unbranded.filter((s) => !s.cited[0]));
   const topCited = countDomains(scored);
 
   const costs = ok.map((r) => r.answer!.costUsd).filter((c): c is number => typeof c === "number");
@@ -182,21 +192,36 @@ export async function analyzeDir(dir: string) {
     "",
     "Los porcentajes llevan entre paréntesis el intervalo de confianza del 95%: con muestras chicas, el rango importa tanto como el número.",
     "",
-    `## ¿Las IAs mencionan y citan a ${b}?`,
+    `## ¿Las IAs recomiendan a ${b} cuando no la nombran?`,
+    "",
+    `Preguntas donde el usuario busca una solución sin decir el nombre de la marca (categoría, problema, comparación). **Esta es la cifra que mide si una IA te hace llegar clientes nuevos.**`,
     "",
     ...head(["Motor", "Menciona la marca", "Cita el sitio (link)", "Sitio entre las fuentes", "Respuestas"]),
-    ...engines.map((e) => `| ${ENGINE_LABEL[e]} | ${pct(byEngine[e].mention)} | ${pct(byEngine[e].citation)} | ${pct(byEngine[e].source)} | ${byEngine[e].mention.n} |`),
-    `| **Total** | **${pct(overall.mention)}** | **${pct(overall.citation)}** | **${pct(overall.source)}** | **${overall.mention.n}** |`,
+    ...engines.map((e) => { const r = byEngine[e].unbranded; return `| ${ENGINE_LABEL[e]} | ${pct(r.mention)} | ${pct(r.citation)} | ${pct(r.source)} | ${r.mention.n} |`; }),
+    `| **Total** | **${pct(overall.unbranded.mention)}** | **${pct(overall.unbranded.citation)}** | **${pct(overall.unbranded.source)}** | **${overall.unbranded.mention.n}** |`,
     "",
     "- **Menciona:** el nombre de la marca aparece en la respuesta.",
     "- **Cita:** la respuesta enlaza a un dominio de la marca.",
     "- **Fuentes:** el motor reporta haber consultado el sitio, aunque no lo enlace. Gemini solo expone lo que cita.",
+    "",
+    ...(branded.length
+      ? [
+          `## ¿Qué saben de ${b} cuando preguntan por ella?`,
+          "",
+          "Preguntas que ya incluyen el nombre. Mide si la IA reconoce la marca y la describe con tu sitio como fuente; no mide descubrimiento.",
+          "",
+          ...head(["Motor", "Menciona la marca", "Cita el sitio (link)", "Respuestas"]),
+          ...engines.map((e) => { const r = byEngine[e].branded; return `| ${ENGINE_LABEL[e]} | ${pct(r.mention)} | ${pct(r.citation)} | ${r.mention.n} |`; }),
+        ]
+      : []),
     "",
   );
 
   if (study.competitors.length) {
     md.push(
       "## Participación frente a la competencia",
+      "",
+      "Solo preguntas que no nombran a la marca.",
       "",
       ...head(["Marca", ...engines.map((e) => ENGINE_LABEL[e]), "Participación de voz"]),
       ...report.shareOfVoice.map(
@@ -206,7 +231,7 @@ export async function analyzeDir(dir: string) {
       "",
       avgRank !== null
         ? `Cuando aparece, ${b} es en promedio la marca **#${avgRank.toFixed(1)}** en ser mencionada.`
-        : `${b} no apareció en ninguna respuesta.`,
+        : `${b} no apareció en ninguna respuesta sin su nombre.`,
       "",
     );
   }
@@ -236,7 +261,7 @@ export async function analyzeDir(dir: string) {
     "",
     `## Fuentes que citan cuando ${b} no aparece`,
     "",
-    "Estas son las páginas en las que el motor ya confía para tu categoría. Conseguir presencia ahí suele pesar más que cambiar tu propio sitio.",
+    "Solo preguntas que no nombran a la marca. Estas son las páginas en las que el motor ya confía para tu categoría. Conseguir presencia ahí suele pesar más que cambiar tu propio sitio.",
     "",
     ...head(["Dominio", "Respuestas", "Motores", ""]),
     ...citedInstead.map((d) => `| ${d.domain} | ${d.runs} | ${d.engines.join(", ")} | ${d.competitor ? "competidor" : ""} |`),
@@ -257,7 +282,7 @@ export async function analyzeDir(dir: string) {
   await writeFile(path.join(dir, "report.md"), md.join("\n") + "\n");
   console.log(`\nInforme: ${path.join(dir, "report.md")}`);
   console.log(
-    `${b} · menciona ${pct(overall.mention)} · cita ${pct(overall.citation)} · ${ok.length} respuestas${simulated ? "  [SIMULACIÓN]" : ""}`,
+    `${b} · sin nombre: menciona ${pct(overall.unbranded.mention)}, cita ${pct(overall.unbranded.citation)} · con nombre: menciona ${pct(overall.branded.mention)} · ${ok.length} respuestas${simulated ? "  [SIMULACIÓN]" : ""}`,
   );
   return report;
 }
