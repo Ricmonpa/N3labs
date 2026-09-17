@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import Gate from "@/components/panel/Gate";
 import { RunList } from "@/components/panel/RunList";
+import DeleteStudyButton from "@/components/panel/DeleteStudyButton";
 import { listRuns, listStudies } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
@@ -30,13 +31,22 @@ async function Dashboard() {
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {studies.map((s) => (
-              <Link key={s.id} href={`/panel/estudios/${s.id}`} className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5 hover:border-red-500/40 transition-colors">
-                <p className="font-bold text-white">{s.data.name}</p>
-                <p className="text-xs font-mono text-zinc-500 mt-0.5">{s.data.brand.domains.join(", ")}</p>
-                <p className="text-xs text-zinc-400 mt-3">
-                  {s.data.prompts.length} preguntas · {s.data.competitors.length} competidores · {s.runs_count} corridas
-                </p>
-              </Link>
+              <div key={s.id} className="relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:border-red-500/40 transition-colors">
+                <Link href={`/panel/estudios/${s.id}`} className="block p-5 pr-14">
+                  <p className="font-bold text-white">{s.data.name}</p>
+                  <p className="text-xs font-mono text-zinc-500 mt-0.5">{s.data.brand.domains.join(", ")}</p>
+                  <p className="text-xs text-zinc-400 mt-3">
+                    {s.data.prompts.length} preguntas · {s.data.competitors.length} competidores ·{" "}
+                    {s.runs_count === 1 ? "1 medición" : `${s.runs_count} mediciones`}
+                  </p>
+                  <p className="text-[11px] text-zinc-600 mt-1">
+                    Creado por {s.created_by} · {new Date(s.created_at).toLocaleDateString("es-MX", { dateStyle: "medium", timeZone: "America/Mexico_City" })}
+                  </p>
+                </Link>
+                <div className="absolute right-3 top-3">
+                  <DeleteStudyButton id={s.id} name={s.data.name} />
+                </div>
+              </div>
             ))}
           </div>
         )}
