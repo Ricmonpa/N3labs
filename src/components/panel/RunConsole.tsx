@@ -53,7 +53,8 @@ export default function RunConsole({
   const [copied, setCopied] = useState(false);
   const stopped = useRef(false);
 
-  // Drive the run from the browser: each call to /step answers one batch on the server.
+  // The server works through the run on its own; this only polls progress (and restarts
+  // the server's chain if it ever stopped).
   useEffect(() => {
     if (state.status !== "running") return;
     stopped.current = false;
@@ -69,11 +70,11 @@ export default function RunConsole({
             router.refresh();
             return;
           }
-          // Another tab holds the run; check back shortly.
-          if (r.busy) await new Promise((res) => setTimeout(res, 5000));
-        } catch (err) {
+          await new Promise((res) => setTimeout(res, 3000));
+        } catch {
           failures++;
-          setError(`${(err as Error).message} Reintentando…`);
+          // Phones drop requests when the screen locks; the run keeps going on the server.
+          if (failures > 2) setError("Sin conexión con el panel; la medición sigue en el servidor. Reintentando…");
           await new Promise((res) => setTimeout(res, Math.min(30_000, 3000 * failures)));
         }
       }
@@ -135,7 +136,7 @@ export default function RunConsole({
             <div className="h-full bg-red-600 transition-all" style={{ width: `${pctDone}%` }} />
           </div>
           <p className="mt-2 text-xs text-zinc-500">
-            Mantén esta página abierta mientras corre. Si la cierras, se pausa y continúa al volver a abrirla.
+            Corre en el servidor: puedes cerrar esta página o bloquear el teléfono y volver después.
             {state.failed > 0 && <span className="text-amber-400"> {state.failed} fallidas hasta ahora.</span>}
           </p>
         </div>

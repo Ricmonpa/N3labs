@@ -148,32 +148,42 @@ async function finalize(run: RunRow, status: RunStatus) {
     WHERE id = ${run.id}`;
 }
 
-// No new questions start after this; calls already in flight may take a few more minutes,
-// which is why the step route allows 300s.
-const STEP_BUDGET_MS = 60_000;
-const STEP_CONCURRENCY = 4;
+// No new questions start after this; calls already in flight can take a while longer
+// (web search is slow), which is why the step route allows 300s.
+const STEP_BUDGET_MS = 30_000;
+const STEP_CONCURRENCY = 8;
+// Failures in a row, with no success, that mean a bad key or quota rather than bad luck.
+const FAIL_FAST = 4;
+
+const RUN_COLUMNS = "id, study_id, study, engines, runs, simulated, status, total, report, share_token, created_by, created_at, finished_at";
+
+/** Takes the run for one batch of work, or returns null if it's finished or another worker holds it. */
+export async function leaseRun(runId: string): Promise<RunRow | null> {
+  const sql = await db();
+  const rows = (await sql.query(
+    `UPDATE geo_runs SET lease_until = now() + interval '330 seconds'
+     WHERE id = $1 AND status = 'running' AND (lease_until IS NULL OR lease_until < now())
+     RETURNING ${RUN_COLUMNS}`,
+    [runId],
+  )) as RunRow[];
+  return rows[0] ?? null;
+}
 
 /**
- * Advances a run by one batch. The browser calls this in a loop while the run page is open,
- * so a run survives serverless time limits and resumes where it stopped.
+ * Answers one batch of a leased run, then releases the lease. Runs in the background
+ * (see the step route), and the next batch is chained from there.
+ * Returns whether the run still has work left.
  */
-export async function stepRun(runId: string) {
+export async function workRun(run: RunRow): Promise<boolean> {
   const sql = await db();
-  // Lease the run so two open tabs don't ask the same questions twice.
-  const leased = (await sql`
-    UPDATE geo_runs SET lease_until = now() + interval '330 seconds'
-    WHERE id = ${runId} AND status = 'running' AND (lease_until IS NULL OR lease_until < now())
-    RETURNING id, study_id, study, engines, runs, simulated, status, total, report, share_token, created_by, created_at, finished_at`) as RunRow[];
-  const run = leased[0];
-  if (!run) return { busy: true };
-
+  const runId = run.id;
   try {
     const doneRows = (await sql`SELECT key FROM geo_responses WHERE run_id = ${runId}`) as { key: string }[];
     const done = new Set(doneRows.map((r) => r.key));
     const pending = listTasks(run.study.prompts, run.engines, run.runs).filter((t) => !done.has(t.key));
     if (!pending.length) {
       await finalize(run, "done");
-      return { busy: false };
+      return false;
     }
 
     const missing = run.simulated ? [] : run.engines.filter((e) => !process.env[ENGINES[e].envKey]);
@@ -203,8 +213,7 @@ export async function stepRun(runId: string) {
           else {
             failCount++;
             console.warn(`geo run ${runId}: ${task.key} failed: ${record.error}`);
-            // Several failures and no success usually means a bad key or quota: stop instead of burning the queue.
-            if (failCount >= STEP_CONCURRENCY && okCount === 0) controller.abort();
+            if (failCount >= FAIL_FAST && okCount === 0) controller.abort();
           }
           await sql`
             INSERT INTO geo_responses (run_id, key, ok, record) VALUES (${runId}, ${task.key}, ${record.ok}, ${JSON.stringify(record)}::jsonb)
@@ -216,13 +225,19 @@ export async function stepRun(runId: string) {
       clearTimeout(timer);
     }
 
-    if (failCount >= STEP_CONCURRENCY && okCount === 0) {
+    if (failCount >= FAIL_FAST && okCount === 0) {
       await finalize(run, "cancelled");
-      return { busy: false };
+      return false;
     }
     const answered = (await sql`SELECT count(*)::int AS n FROM geo_responses WHERE run_id = ${runId}`) as { n: number }[];
-    if (answered[0].n >= run.total) await finalize(run, "done");
-    return { busy: false };
+    if (answered[0].n >= run.total) {
+      await finalize(run, "done");
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error(`geo run ${runId}: batch failed`, err);
+    return true;
   } finally {
     await sql`UPDATE geo_runs SET lease_until = NULL WHERE id = ${runId} AND status = 'running'`;
   }

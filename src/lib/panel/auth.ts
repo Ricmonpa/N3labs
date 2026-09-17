@@ -71,6 +71,16 @@ export async function getSession(): Promise<Session | null> {
   }
 }
 
+/** Signature the server uses to call its own step route when chaining a run's batches. */
+export function internalStepToken(runId: string) {
+  return sign(`step:${runId}`);
+}
+
+export function isInternalStep(request: Request, runId: string) {
+  const token = request.headers.get("x-panel-step");
+  return authConfigured() && !!token && safeEqual(token, internalStepToken(runId));
+}
+
 /** For API routes: the session, or a 401 response. Also rejects cross-site writes. */
 export async function requireApiSession(request: Request): Promise<Session | Response> {
   if (request.method !== "GET" && request.method !== "HEAD") {
