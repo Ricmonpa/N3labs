@@ -88,7 +88,11 @@ function EntityRow({ index, entity, onChange, onRemove }: { index: number; entit
   );
 }
 
-export default function StudyEditor({ id, initial }: { id: string | null; initial: Study }) {
+/**
+ * Full study form. With `onChange` it works as a controlled draft (no save buttons);
+ * otherwise it creates (id = null) or updates the study itself.
+ */
+export default function StudyEditor({ id, initial, onChange }: { id: string | null; initial: Study; onChange?: (s: Study) => void }) {
   const router = useRouter();
   const [study, setStudy] = useState<Study>(initial);
   const [bulkType, setBulkType] = useState<PromptType>("category");
@@ -103,7 +107,9 @@ export default function StudyEditor({ id, initial }: { id: string | null; initia
 
   const set = (patch: Partial<Study>) => {
     setSaved(false);
-    setStudy((s) => ({ ...s, ...patch }));
+    const next = { ...study, ...patch };
+    setStudy(next);
+    onChange?.(next);
   };
 
   function addPrompts() {
@@ -313,7 +319,7 @@ export default function StudyEditor({ id, initial }: { id: string | null; initia
       </section>
 
       {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className={onChange ? "hidden" : "flex flex-wrap items-center gap-3"}>
         <button type="button" onClick={save} disabled={busy} className={primaryButton}>
           {busy ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} {id ? "Guardar cambios" : "Crear estudio"}
         </button>

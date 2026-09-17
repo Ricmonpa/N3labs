@@ -1,16 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertTriangle, ArrowLeft, Globe, Loader2, PencilLine, Sparkles } from "lucide-react";
 import type { Study } from "@/lib/geo-visibility/types.ts";
 import StudyEditor, { COUNTRIES, EMPTY_STUDY } from "./StudyEditor";
+import StudySummary from "./StudySummary";
+import NewRunForm, { type EngineStatus } from "./NewRunForm";
 import { api, cardClass, inputClass, labelClass, primaryButton } from "./api";
 
 type Suggestion = { study: Study; summary: string; source: "ai" | "template"; warnings: string[] };
 
 const STAGES = ["Leyendo el sitio…", "Investigando la marca en la web…", "Buscando competidores reales…", "Escribiendo preguntas como las haría un cliente…", "Verificando dominios…"];
 
-export default function NewStudyWizard({ aiAvailable }: { aiAvailable: boolean }) {
+export default function NewStudyWizard({ aiAvailable, engines, maxCalls }: { aiAvailable: boolean; engines: EngineStatus[]; maxCalls: number }) {
+  const router = useRouter();
+  const [study, setStudy] = useState<Study | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const [url, setUrl] = useState("");
   const [notes, setNotes] = useState("");
   const [country, setCountry] = useState("MX");
@@ -34,7 +42,9 @@ export default function NewStudyWizard({ aiAvailable }: { aiAvailable: boolean }
     setStage(0);
     setError("");
     try {
-      setDraft(await api<Suggestion>("/api/panel/suggest", { body: { url, notes, city, country, language: c.lang, timezone: c.tz } }));
+      const d = await api<Suggestion>("/api/panel/suggest", { body: { url, notes, city, country, language: c.lang, timezone: c.tz } });
+      setDraft(d);
+      setStudy(d.study);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -42,30 +52,87 @@ export default function NewStudyWizard({ aiAvailable }: { aiAvailable: boolean }
     }
   }
 
-  if (blank || draft) {
+  async function save() {
+    // Save again if the user tweaked the study after a failed start.
+    if (savedId) {
+      await api(`/api/panel/studies/${savedId}`, { method: "PUT", body: study });
+      return savedId;
+    }
+    const created = await api<{ id: string }>("/api/panel/studies", { body: study });
+    setSavedId(created.id);
+    return created.id;
+  }
+
+  if (blank) {
     return (
       <div className="space-y-5">
-        <button type="button" onClick={() => (setDraft(null), setBlank(false))} className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white">
-          <ArrowLeft size={14} /> Empezar de nuevo
+        <button type="button" onClick={() => setBlank(false)} className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white">
+          <ArrowLeft size={14} /> Volver
         </button>
-        {draft && (
-          <div className={`${cardClass} border-red-500/20`}>
-            <p className="flex items-center gap-2 text-sm font-semibold text-white">
-              <Sparkles size={16} className="text-red-500" />
-              {draft.source === "ai" ? "Propuesta lista: revísala y ajusta lo que haga falta" : "Plantilla lista para ajustar"}
+        <StudyEditor id={null} initial={EMPTY_STUDY} />
+      </div>
+    );
+  }
+
+  if (draft && study) {
+    const reset = () => (setDraft(null), setStudy(null), setEditing(false), setSavedId(null));
+    return (
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="flex items-center gap-2 text-lg font-bold text-white">
+              <Sparkles size={18} className="text-red-500" />
+              {draft.source === "ai" ? "Listo. Esto es lo que vamos a medir" : "Plantilla lista"}
             </p>
-            {draft.summary && <p className="mt-2 text-sm text-zinc-300">{draft.summary}</p>}
-            <p className="mt-2 text-xs text-zinc-500">
-              {draft.study.competitors.length} competidores · {draft.study.prompts.length} preguntas. Los competidores y las preguntas son una propuesta: confirma que tengan sentido para el cliente.
-            </p>
+            {draft.summary && <p className="mt-1 max-w-3xl text-sm text-zinc-400">{draft.summary}</p>}
             {draft.warnings.map((w) => (
-              <p key={w} className="mt-2 flex items-start gap-2 text-xs text-amber-300">
+              <p key={w} className="mt-1 flex items-start gap-2 text-xs text-amber-300">
                 <AlertTriangle size={13} className="mt-0.5 shrink-0" /> {w}
               </p>
             ))}
           </div>
+          <button type="button" onClick={reset} className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white">
+            <ArrowLeft size={14} /> Otro sitio
+          </button>
+        </div>
+
+        <div className={`${cardClass} border-red-500/25 bg-red-950/10`}>
+          <NewRunForm
+            ensureStudy={save}
+            promptCount={study.prompts.length}
+            defaultRuns={study.runs}
+            engines={engines}
+            maxCalls={maxCalls}
+            secondary={
+              <>
+                <button
+                  type="button"
+                  disabled={saving}
+                  onClick={async () => {
+                    setSaving(true);
+                    try {
+                      router.push(`/panel/estudios/${await save()}`);
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  className="text-sm text-zinc-300 hover:text-white"
+                >
+                  Solo guardar
+                </button>
+                <button type="button" onClick={() => setEditing((v) => !v)} className="inline-flex items-center gap-1 text-sm text-zinc-400 hover:text-white">
+                  <PencilLine size={14} /> {editing ? "Cerrar edición" : "Ajustar a mano"}
+                </button>
+              </>
+            }
+          />
+        </div>
+
+        {editing ? (
+          <StudyEditor id={null} initial={study} onChange={setStudy} />
+        ) : (
+          <StudySummary study={study} onChange={setStudy} />
         )}
-        <StudyEditor id={null} initial={draft?.study ?? EMPTY_STUDY} />
       </div>
     );
   }
