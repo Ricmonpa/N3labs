@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>N3 GEO Test â€” DiagnÃ³stico de visibilidad ante IA</title>
+<title>N3 GEO Test — Diagnóstico de visibilidad ante IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -46,7 +46,7 @@
     border:1px solid rgba(232,50,59,.4); padding:2px 8px; border-radius:100px; margin-left:auto;
   }
 
-  /* HERO â€” TESSERACT RADAR (8 nodes = 8 herramientas de IA) */
+  /* HERO — TESSERACT RADAR (8 nodes = 8 herramientas de IA) */
   .radar-wrap{position:relative; width:132px; height:132px; margin:0 auto 20px; flex-shrink:0;}
   .radar-sweep-bg{
     position:absolute; inset:6px; border-radius:50%;
@@ -352,7 +352,7 @@
           <line x1="49" y1="49" x2="151" y2="151"/>
           <line x1="151" y1="49" x2="49" y2="151"/>
         </g>
-        <!-- inner square: Claude Â· Perplexity Â· Meta AI Â· Otras -->
+        <!-- inner square: Claude · Perplexity · Meta AI · Otras -->
         <g class="tess-inner" fill="none" stroke="rgba(140,107,255,.55)" stroke-width="1.4">
           <polygon points="140,100 100,140 60,100 100,60"/>
         </g>
@@ -362,7 +362,7 @@
           <circle class="tess-node" cx="60" cy="100" r="5" fill="#e8323b"><title>Meta AI</title></circle>
           <circle class="tess-node" cx="100" cy="60" r="5" fill="#e8323b"><title>Otras plataformas de IA</title></circle>
         </g>
-        <!-- outer diamond: ChatGPT Â· Gemini Â· Copilot Â· Grok -->
+        <!-- outer diamond: ChatGPT · Gemini · Copilot · Grok -->
         <g class="tess-outer" fill="none" stroke="rgba(90,164,255,.55)" stroke-width="1.4">
           <polygon points="149.5,149.5 50.5,149.5 50.5,50.5 149.5,50.5"/>
         </g>
@@ -378,7 +378,7 @@
     <div class="hero">
       <div class="eyebrow"><span class="dot"></span> N3 GEO Test</div>
       <h1>Identificar la relevancia<br>de tu negocio ante herramientas de <span>IA</span></h1>
-      <p>Analiza un sitio, una marca o un nombre y descubre quÃ© tan visible es ante la IA (1â€“100).</p>
+      <p>Analiza un sitio, una marca o un nombre y descubre qué tan visible es ante la IA (1–100).</p>
       <div class="engine-strip">
         <span class="engine-chip-mini">ChatGPT</span>
         <span class="engine-chip-mini">Gemini</span>
@@ -392,22 +392,22 @@
     </div>
 
     <div class="panel geo-explain">
-      <h3>ðŸ“¡ GEO: la evoluciÃ³n del SEO</h3>
-      <p><strong>GEO</strong> son las siglas de <em>Generative Engine Optimization</em> â€” en espaÃ±ol, <em>"OptimizaciÃ³n para Motores Generativos"</em>. Hace que la IA te cite dentro de su respuesta, no solo que aparezcas en una lista de links.</p>
+      <h3>📡 GEO: la evolución del SEO</h3>
+      <p><strong>GEO</strong> son las siglas de <em>Generative Engine Optimization</em> — en español, <em>"Optimización para Motores Generativos"</em>. Hace que la IA te cite dentro de su respuesta, no solo que aparezcas en una lista de links.</p>
       <div class="geo-compare">
         <div class="geo-compare-card">
-          <div class="gc-label">SEO clÃ¡sico</div>
-          <div class="gc-text">Ganas posiciÃ³n en resultados. El objetivo es el clic.</div>
+          <div class="gc-label">SEO clásico</div>
+          <div class="gc-text">Ganas posición en resultados. El objetivo es el clic.</div>
         </div>
         <div class="geo-compare-card geo-new">
           <div class="gc-label">GEO</div>
-          <div class="gc-text">Ganas una menciÃ³n dentro de la respuesta de la IA.</div>
+          <div class="gc-text">Ganas una mención dentro de la respuesta de la IA.</div>
         </div>
       </div>
       <div class="geo-stats">
         <div class="geo-stat">
           <div class="gs-num">~68%</div>
-          <div class="gs-label">bÃºsquedas en Google sin clic</div>
+          <div class="gs-label">búsquedas en Google sin clic</div>
           <div class="gs-src">SparkToro / Datos, 2026</div>
         </div>
         <div class="geo-stat">
@@ -426,24 +426,24 @@
 
     <div class="panel input-panel">
       <div class="input-row">
-        <input type="text" class="url-input mono" id="urlInput" placeholder="tuempresa.com Â· una marca Â· el nombre de una persona" autocomplete="off">
+        <input type="text" class="url-input mono" id="urlInput" placeholder="tuempresa.com · una marca · el nombre de una persona" autocomplete="off">
         <button class="scan-btn" onclick="runScan()">Analizar nivel de GEO</button>
       </div>
       <label class="market-label" for="marketSelect">Mercado / idioma objetivo</label>
       <div class="market-row">
         <select class="market-select mono" id="marketSelect">
-          <option value="mx">MÃ©xico Â· EspaÃ±ol</option>
-          <option value="co">Colombia Â· EspaÃ±ol</option>
-          <option value="pa">PanamÃ¡ Â· EspaÃ±ol</option>
-          <option value="es">EspaÃ±a Â· EspaÃ±ol</option>
-          <option value="us-en">Estados Unidos Â· InglÃ©s</option>
-          <option value="us-es">Estados Unidos Â· EspaÃ±ol (hispano)</option>
-          <option value="br">Brasil Â· PortuguÃ©s</option>
+          <option value="mx">México · Español</option>
+          <option value="co">Colombia · Español</option>
+          <option value="pa">Panamá · Español</option>
+          <option value="es">España · Español</option>
+          <option value="us-en">Estados Unidos · Inglés</option>
+          <option value="us-es">Estados Unidos · Español (hispano)</option>
+          <option value="br">Brasil · Portugués</option>
           <option value="global">Global / sin definir</option>
         </select>
       </div>
-      <div class="input-hint">Funciona con un sitio web (pÃ¡gina principal o una secciÃ³n especÃ­fica), una marca o el nombre de una persona. Sitios: 9 criterios tÃ©cnicos GEO. Marcas/nombres: relevancia ante IA. Escala 1â€“100.</div>
-      <div class="input-error" id="inputError">Escribe una URL vÃ¡lida, una marca o un nombre (2â€“80 caracteres).</div>
+      <div class="input-hint">Funciona con un sitio web (página principal o una sección específica), una marca o el nombre de una persona. Sitios: 9 criterios técnicos GEO. Marcas/nombres: relevancia ante IA. Escala 1–100.</div>
+      <div class="input-error" id="inputError">Escribe una URL válida, una marca o un nombre (2–80 caracteres).</div>
     </div>
 
     <div class="scan-panel" id="scanPanel">
@@ -464,7 +464,8 @@
   <div class="result" id="result">
 
     <div class="section">
-      <h2><span class="n">01</span> <span id="criteriaHeading">PuntuaciÃ³n por criterio GEO</span></h2>
+      <h2><span class="n">01</span> <span id="criteriaHeading">Puntuación por criterio GEO</span></h2>
+      <p style="font-size:12.5px; color:var(--text-faint); margin:-6px 0 14px">Ejercicio orientativo: las cifras son ilustrativas, no una medición de tu sitio. <a href="#terminos" style="color:var(--text-dim)">Ver términos</a>.</p>
       <div class="score-header">
         <div class="score-url mono" id="resultUrl"></div>
         <div class="avg-badge"><span class="num" id="avgScore">0</span><span class="of">/ 100 promedio general</span></div>
@@ -477,57 +478,67 @@
           <div class="sf-seg sf-green"></div>
           <div class="sf-marker" id="sfMarker"></div>
         </div>
-        <div class="semaforo-labels"><span>Rojo Â· bajo</span><span>Amarillo Â· promedio</span><span>Verde Â· bueno</span></div>
+        <div class="semaforo-labels"><span>Rojo · bajo</span><span>Amarillo · promedio</span><span>Verde · bueno</span></div>
       </div>
 
       <div class="bars" id="barsGrid"></div>
     </div>
 
     <div class="section">
-      <h2><span class="n">02</span> Lectura rÃ¡pida</h2>
-      <div class="lectura"><div class="lt-k">DiagnÃ³stico preliminar</div><p id="lecturaText"></p></div>
+      <h2><span class="n">02</span> Lectura rápida</h2>
+      <div class="lectura"><div class="lt-k">Diagnóstico preliminar</div><p id="lecturaText"></p></div>
     </div>
 
     <div class="section">
       <h2><span class="n">03</span> Visibilidad estimada por motor de IA</h2>
-      <p style="font-size:12.5px; color:var(--text-faint); margin:-8px 0 14px; line-height:1.5;" id="engineSubtitle">PuntuaciÃ³n estimada por plataforma. Usa el enlace de cada tarjeta para entrar y comprobarlo tÃº mismo con tus propias bÃºsquedas.</p>
+      <p style="font-size:12.5px; color:var(--text-faint); margin:-8px 0 14px; line-height:1.5;" id="engineSubtitle">Puntuación estimada por plataforma. Usa el enlace de cada tarjeta para entrar y comprobarlo tú mismo con tus propias búsquedas.</p>
       <div class="engine-grid" id="engineGrid"></div>
     </div>
 
     <div class="section">
-      <h2><span class="n">04</span> CÃ³mo te comparas con tu competencia</h2>
-      <p class="comp-intro" id="compIntro">Sector detectado: <strong></strong>. Se identificaron 3 competidores directos en esta categorÃ­a â€” por ahora, solo se muestra su promedio general.</p>
+      <h2><span class="n">04</span> Cómo te comparas con tu competencia</h2>
+      <p class="comp-intro" id="compIntro">Sector detectado: <strong></strong>. Se identificaron 3 competidores directos en esta categoría — por ahora, solo se muestra su promedio general.</p>
       <div class="comp-grid" id="compGrid"></div>
       <div class="comp-cta">
-        <p>Tu promedio es <strong id="compYourAvg"></strong>/100. <strong>N3 Labs</strong> puede decirte exactamente quiÃ©nes son estos competidores, cÃ³mo te ganan (o no) criterio por criterio y motor por motor, y diseÃ±ar el plan para superarlos.</p>
-        <a href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener">Quiero ver el anÃ¡lisis competitivo completo â†’</a>
+        <p>Tu promedio es <strong id="compYourAvg"></strong>/100. <strong>N3 Labs</strong> puede decirte exactamente quiénes son estos competidores, cómo te ganan (o no) criterio por criterio y motor por motor, y diseñar el plan para superarlos.</p>
+        <a href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener">Quiero ver el análisis competitivo completo →</a>
       </div>
     </div>
 
     <div class="section">
       <h2><span class="n">05</span> Para cerrar</h2>
       <div class="framework-note">
-        <p>La IA no es <strong>alguien</strong>, es <strong>algo</strong> que simula serlo (teorÃ­a Creaxoma). Por eso hoy hay que escribir para tu <strong>SPH (Sistema de Pensamiento Humano)</strong> â€” cÃ³mo piensan las personas â€” y para el <strong>SPA (Sistema de Pensamiento Artificial)</strong> de la IA â€” cÃ³mo procesa la mÃ¡quina â€” al mismo tiempo. La IA existe hace mÃ¡s de 68 aÃ±os, pero apenas ahora empezÃ³ a comportarse como alguien: por eso la FobIA es real, aunque tambiÃ©n absurda.</p>
+        <p>La IA no es <strong>alguien</strong>, es <strong>algo</strong> que simula serlo (teoría Creaxoma). Por eso hoy hay que escribir para tu <strong>SPH (Sistema de Pensamiento Humano)</strong> — cómo piensan las personas — y para el <strong>SPA (Sistema de Pensamiento Artificial)</strong> de la IA — cómo procesa la máquina — al mismo tiempo. La IA existe hace más de 68 años, pero apenas ahora empezó a comportarse como alguien: por eso la FobIA es real, aunque también absurda.</p>
         <div class="read-links">
-          <a class="read-chip" href="https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/" target="_blank" rel="noopener">ðŸ“– Creaxoma: la IA es algo creado por alguien â†’</a>
-          <a class="read-chip" href="https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/" target="_blank" rel="noopener">ðŸ“– SPH + SPA: complementa tu pensamiento con la IA â†’</a>
-          <a class="read-chip" href="https://www.youtube.com/shorts/Nwz1k6YWdII" target="_blank" rel="noopener">ðŸŽ¬ FobIA â€” Engel Fonseca (YouTube) â†’</a>
+          <a class="read-chip" href="https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/" target="_blank" rel="noopener">📖 Creaxoma: la IA es algo creado por alguien →</a>
+          <a class="read-chip" href="https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/" target="_blank" rel="noopener">📖 SPH + SPA: complementa tu pensamiento con la IA →</a>
+          <a class="read-chip" href="https://www.youtube.com/shorts/Nwz1k6YWdII" target="_blank" rel="noopener">🎬 FobIA — Engel Fonseca (YouTube) →</a>
         </div>
       </div>
     </div>
 
     <div class="cta-box">
-      <p>Esta es una <strong>fotografÃ­a inicial</strong>, no un plan de acciÃ³n. Interpretar estas seÃ±ales, priorizarlas y diseÃ±ar la estrategia para que tu marca aparezca donde hoy se estÃ¡n formando las decisiones de compra, es trabajo de un especialista.</p>
-      <a class="cta-btn" href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener">Hablar con un especialista de N3 â†’</a>
+      <p>Esta es una <strong>fotografía inicial y orientativa</strong>, no un plan de acción ni una medición técnica de tu sitio. El siguiente paso es el <strong>diagnóstico GEO real</strong> de N3: revisa tu página en vivo, con la evidencia de cada resultado, y es gratis.</p>
+      <a class="cta-btn" href="https://n3labs.potenttial.site/geo">Hacer el diagnóstico real de mi sitio →</a>
+      <p style="margin-top:14px"><a href="https://n3labs.potenttial.site/#contacto" target="_blank" rel="noopener" style="color:var(--text-faint); text-decoration:underline;">o hablar con un especialista de N3 →</a></p>
+    </div>
+
+    <div class="section" id="terminos">
+      <h2><span class="n">06</span> Términos y condiciones</h2>
+      <div class="framework-note">
+        <p><strong>Este ejercicio es orientativo y de divulgación.</strong> Su objetivo es despertar el interés en un tema clave para cualquier negocio: cómo aparece —o no— una marca en las respuestas de la inteligencia artificial. <strong>No es una medición técnica de tu sitio</strong>: no consulta a ChatGPT, Gemini, Claude ni Perplexity, y no revisa tu página. Las puntuaciones, los competidores y los porcentajes son <strong>ilustrativos</strong>, generados a partir del dominio que escribes para mostrar cómo se ve un diagnóstico de este tipo.</p>
+        <p>Por eso <strong>no debe usarse para tomar decisiones</strong> de negocio, inversión o contratación, ni citarse como evidencia del desempeño de una marca. Para números reales, con la evidencia de cada resultado, usa el <a href="https://n3labs.potenttial.site/geo" style="color:var(--red-bright)">diagnóstico GEO de N3</a>, que sí revisa tu sitio en vivo; y para medir si las IAs de verdad mencionan y citan a tu marca, el estudio de visibilidad que N3 hace por encargo.</p>
+        <p>Este ejercicio no guarda ni envía lo que escribes: todo ocurre en tu navegador. Es una pieza de divulgación de N3 Thinktech IA Laboratory y Potenttial Group, sin garantía de ningún tipo.</p>
+      </div>
     </div>
 
     <div class="footer-actions">
-      <button class="btn-pdf" onclick="downloadPDF()">â¬‡ Descargar PDF resumen</button>
-      <button class="btn-ghost" onclick="restart()">â†º Hacer otra evaluaciÃ³n</button>
+      <button class="btn-pdf" onclick="downloadPDF()">⬇ Descargar PDF resumen</button>
+      <button class="btn-ghost" onclick="restart()">↺ Hacer otra evaluación</button>
     </div>
   </div>
 
-  <div class="credit"><strong style="color:var(--red-bright)">N3 GEO Test Â· v1.3</strong><br>Desarrollado por <a href="https://n3labs.potenttial.site/" target="_blank" rel="noopener" style="color:var(--text-faint); text-decoration:underline;">N3 Labs</a></div>
+  <div class="credit"><strong style="color:var(--red-bright)">N3 GEO Test · v1.3</strong><br>Desarrollado por <a href="https://n3labs.potenttial.site/" target="_blank" rel="noopener" style="color:var(--text-faint); text-decoration:underline;">N3 Labs</a></div>
 
 </div>
 
@@ -535,24 +546,24 @@
 /* ---------------- DATA ---------------- */
 const CRITERIA = [
   {name:'Neuroescritura (contenido para humanos e IA a la vez)', min:20, max:80, special:true,
-   scanMsg:'Evaluando Neuroescritura: contenido diseÃ±ado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempoâ€¦'},
-  {name:'Contenido estructurado y jerarquÃ­a', min:40, max:80},
+   scanMsg:'Evaluando Neuroescritura: contenido diseñado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempo…'},
+  {name:'Contenido estructurado y jerarquía', min:40, max:80},
   {name:'Datos estructurados (schema)', min:20, max:60},
   {name:'Respuesta directa / conversacional', min:30, max:70},
   {name:'Autoridad y confianza (E-E-A-T)', min:40, max:90},
   {name:'Citas y menciones de terceros', min:30, max:80},
   {name:'Frescura de contenido', min:40, max:90},
-  {name:'Accesibilidad tÃ©cnica para IA', min:30, max:80},
+  {name:'Accesibilidad técnica para IA', min:30, max:80},
   {name:'Presencia en grafo de conocimiento', min:20, max:70}
 ];
 
 const CRITERIA_NAME = [
   {name:'Neuroescritura (contenido sobre ti para humanos e IA a la vez)', min:20, max:80, special:true,
-   scanMsg:'Evaluando Neuroescritura: contenido sobre ti diseÃ±ado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempoâ€¦'},
+   scanMsg:'Evaluando Neuroescritura: contenido sobre ti diseñado para persuadir a personas y ser interpretado por modelos de lenguaje al mismo tiempo…'},
   {name:'Reconocimiento de nombre ante IA', min:25, max:85},
-  {name:'DiferenciaciÃ³n (evitar confusiÃ³n con homÃ³nimos)', min:25, max:80},
+  {name:'Diferenciación (evitar confusión con homónimos)', min:25, max:80},
   {name:'Cobertura y menciones de terceros', min:20, max:80},
-  {name:'Actualidad de la informaciÃ³n disponible', min:30, max:85},
+  {name:'Actualidad de la información disponible', min:30, max:85},
   {name:'Consistencia del mensaje entre fuentes', min:25, max:80}
 ];
 
@@ -560,35 +571,35 @@ const ENGINE_DEFS = [
   {name:'ChatGPT', metric:'similitud vectorial de embeddings', fmt:v=>v.toFixed(3), color:'#10A37F', initial:'Ch', url:'https://chatgpt.com'},
   {name:'Gemini', metric:'cobertura del grafo de entidades', fmt:v=>Math.round(v*100)+'%', color:'#4285F4', initial:'Ge', url:'https://gemini.google.com'},
   {name:'Copilot', metric:'densidad de citabilidad', fmt:v=>v.toFixed(3), color:'#0078D4', initial:'Co', url:'https://copilot.microsoft.com'},
-  {name:'Grok', metric:'seÃ±al conversacional en tiempo real', fmt:v=>v.toFixed(2)+'Ïƒ', color:'#333333', initial:'Gr', url:'https://grok.com'},
-  {name:'Claude', metric:'coherencia semÃ¡ntica estructural', fmt:v=>v.toFixed(3), color:'#CC785C', initial:'Cl', url:'https://claude.ai'},
-  {name:'Perplexity', metric:'profundidad de indexaciÃ³n', fmt:v=>Math.round(v*100)+'%', color:'#20808D', initial:'Pe', url:'https://www.perplexity.ai'},
+  {name:'Grok', metric:'señal conversacional en tiempo real', fmt:v=>v.toFixed(2)+'σ', color:'#333333', initial:'Gr', url:'https://grok.com'},
+  {name:'Claude', metric:'coherencia semántica estructural', fmt:v=>v.toFixed(3), color:'#CC785C', initial:'Cl', url:'https://claude.ai'},
+  {name:'Perplexity', metric:'profundidad de indexación', fmt:v=>Math.round(v*100)+'%', color:'#20808D', initial:'Pe', url:'https://www.perplexity.ai'},
   {name:'Meta AI', metric:'presencia en el grafo social', fmt:v=>Math.round(v*100)+'%', color:'#0866FF', initial:'M', url:'https://www.meta.ai'},
   {name:'Otras plataformas de IA', metric:'afinidad promedio con modelos generalistas', fmt:v=>v.toFixed(3), color:'#5b6579', initial:'+', url:null}
 ];
 
 const MARKETS = {
-  'mx':     {label:'MÃ©xico', language:'EspaÃ±ol', bias:{ChatGPT:8, Gemini:4, Copilot:-4, Grok:-2, Claude:0, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
-  'co':     {label:'Colombia', language:'EspaÃ±ol', bias:{ChatGPT:7, Gemini:3, Copilot:-5, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':6, 'Otras plataformas de IA':4}},
-  'pa':     {label:'PanamÃ¡', language:'EspaÃ±ol', bias:{ChatGPT:6, Gemini:3, Copilot:-4, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
-  'es':     {label:'EspaÃ±a', language:'EspaÃ±ol', bias:{ChatGPT:6, Gemini:6, Copilot:-2, Grok:-3, Claude:1, Perplexity:1, 'Meta AI':3, 'Otras plataformas de IA':2}},
-  'us-en':  {label:'Estados Unidos', language:'InglÃ©s', bias:{ChatGPT:5, Gemini:5, Copilot:4, Grok:2, Claude:3, Perplexity:3, 'Meta AI':2, 'Otras plataformas de IA':-2}},
-  'us-es':  {label:'Estados Unidos (hispano)', language:'EspaÃ±ol', bias:{ChatGPT:7, Gemini:4, Copilot:0, Grok:-1, Claude:1, Perplexity:2, 'Meta AI':4, 'Otras plataformas de IA':1}},
-  'br':     {label:'Brasil', language:'PortuguÃ©s', bias:{ChatGPT:6, Gemini:5, Copilot:-3, Grok:-2, Claude:-1, Perplexity:1, 'Meta AI':7, 'Otras plataformas de IA':5}},
-  'global': {label:'Global / sin definir', language:'MultilingÃ¼e', bias:{ChatGPT:3, Gemini:3, Copilot:0, Grok:0, Claude:0, Perplexity:0, 'Meta AI':2, 'Otras plataformas de IA':0}}
+  'mx':     {label:'México', language:'Español', bias:{ChatGPT:8, Gemini:4, Copilot:-4, Grok:-2, Claude:0, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
+  'co':     {label:'Colombia', language:'Español', bias:{ChatGPT:7, Gemini:3, Copilot:-5, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':6, 'Otras plataformas de IA':4}},
+  'pa':     {label:'Panamá', language:'Español', bias:{ChatGPT:6, Gemini:3, Copilot:-4, Grok:-3, Claude:-1, Perplexity:2, 'Meta AI':5, 'Otras plataformas de IA':3}},
+  'es':     {label:'España', language:'Español', bias:{ChatGPT:6, Gemini:6, Copilot:-2, Grok:-3, Claude:1, Perplexity:1, 'Meta AI':3, 'Otras plataformas de IA':2}},
+  'us-en':  {label:'Estados Unidos', language:'Inglés', bias:{ChatGPT:5, Gemini:5, Copilot:4, Grok:2, Claude:3, Perplexity:3, 'Meta AI':2, 'Otras plataformas de IA':-2}},
+  'us-es':  {label:'Estados Unidos (hispano)', language:'Español', bias:{ChatGPT:7, Gemini:4, Copilot:0, Grok:-1, Claude:1, Perplexity:2, 'Meta AI':4, 'Otras plataformas de IA':1}},
+  'br':     {label:'Brasil', language:'Portugués', bias:{ChatGPT:6, Gemini:5, Copilot:-3, Grok:-2, Claude:-1, Perplexity:1, 'Meta AI':7, 'Otras plataformas de IA':5}},
+  'global': {label:'Global / sin definir', language:'Multilingüe', bias:{ChatGPT:3, Gemini:3, Copilot:0, Grok:0, Claude:0, Perplexity:0, 'Meta AI':2, 'Otras plataformas de IA':0}}
 };
 
 const CATEGORIES = [
   {label:'Hoteles y Resorts', keywords:['hotel','resort','hospedaje','suites','autograph','marriott','hyatt','hilton']},
-  {label:'AerolÃ­neas y Viajes', keywords:['airlines','vuelo','viaje','travel','tour','aerolinea']},
+  {label:'Aerolíneas y Viajes', keywords:['airlines','vuelo','viaje','travel','tour','aerolinea']},
   {label:'Banca y Finanzas', keywords:['banco','bank','finan','credito','fintech']},
   {label:'Seguros', keywords:['seguro','insurance','aseguradora']},
   {label:'E-commerce / Retail', keywords:['shop','tienda','store','mercado','retail','ecommerce']},
   {label:'Salud y Bienestar', keywords:['salud','clinica','hospital','health','medic','wellness']},
-  {label:'Bienes RaÃ­ces', keywords:['inmobiliaria','realestate','realty','bienesraices','propiedades','inmuebles']},
-  {label:'Restaurantes y GastronomÃ­a', keywords:['restaurant','food','gastro','menu','comida','cocina']},
-  {label:'TecnologÃ­a / SaaS', keywords:['software','tech','app','saas','cloud','labs']},
-  {label:'EducaciÃ³n', keywords:['edu','universidad','school','academy','curso','instituto']},
+  {label:'Bienes Raíces', keywords:['inmobiliaria','realestate','realty','bienesraices','propiedades','inmuebles']},
+  {label:'Restaurantes y Gastronomía', keywords:['restaurant','food','gastro','menu','comida','cocina']},
+  {label:'Tecnología / SaaS', keywords:['software','tech','app','saas','cloud','labs']},
+  {label:'Educación', keywords:['edu','universidad','school','academy','curso','instituto']},
   {label:'Automotriz', keywords:['auto','car','llanta','vehiculo','motors']}
 ];
 
@@ -605,7 +616,7 @@ function detectCategoryFromText(name){
   for(const cat of CATEGORIES){
     if(cat.keywords.some(k => hay.includes(k))) return cat.label;
   }
-  return 'Marca personal / ReputaciÃ³n digital';
+  return 'Marca personal / Reputación digital';
 }
 
 /* ---------------- SEEDED RANDOM ---------------- */
@@ -664,7 +675,7 @@ function parseInput(raw){
   if(!v) return null;
   const u = normalizeUrl(v);
   if(u) return {mode:'url', u};
-  // Not a valid URL/domain â€” treat as a brand or person's name.
+  // Not a valid URL/domain — treat as a brand or person's name.
   if(v.length < 2 || v.length > 80) return null;
   return {mode:'name', name:v};
 }
@@ -718,18 +729,18 @@ function runScan(){
 
   const scanPanel = document.getElementById('scanPanel');
   scanPanel.classList.add('active');
-  document.getElementById('scanUrl').textContent = `${subjectLabel} Â· ${market.label} (${market.language})`;
+  document.getElementById('scanUrl').textContent = `${subjectLabel} · ${market.label} (${market.language})`;
   const log = document.getElementById('scanLog');
   log.innerHTML = '';
 
   let delay = 0;
   const phase1Header = document.createElement('div');
   phase1Header.className = 'scan-phase';
-  phase1Header.textContent = mode === 'url' ? 'Fase 1 Â· Lectura de criterios GEO' : 'Fase 1 Â· SeÃ±ales de relevancia ante IA';
+  phase1Header.textContent = mode === 'url' ? 'Fase 1 · Lectura de criterios GEO' : 'Fase 1 · Señales de relevancia ante IA';
   log.appendChild(phase1Header);
 
   criteriaSet.forEach((c, i)=>{
-    const msg = c.scanMsg || `Analizando "${c.name}"â€¦`;
+    const msg = c.scanMsg || `Analizando "${c.name}"…`;
     setTimeout(()=> addScanItem(log, msg, null, c.special), delay);
     delay += 560;
   });
@@ -738,19 +749,19 @@ function runScan(){
   setTimeout(()=>{
     const phase2Header = document.createElement('div');
     phase2Header.className = 'scan-phase';
-    phase2Header.textContent = 'Fase 2 Â· Modelado matemÃ¡tico por motor de IA';
+    phase2Header.textContent = 'Fase 2 · Modelado matemático por motor de IA';
     log.appendChild(phase2Header);
     window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
   }, delay);
   delay += 300;
 
   engineScores.forEach((e)=>{
-    setTimeout(()=> addScanItem(log, `${e.name} Â· ${e.metricLabel}`, e.metricValue, false), delay);
+    setTimeout(()=> addScanItem(log, `${e.name} · ${e.metricLabel}`, e.metricValue, false), delay);
     delay += 640;
   });
 
   delay += 200;
-  setTimeout(()=> addScanItem(log, 'Consolidando resultados y ponderando criteriosâ€¦', null, false), delay);
+  setTimeout(()=> addScanItem(log, 'Consolidando resultados y ponderando criterios…', null, false), delay);
   delay += 900;
 
   setTimeout(()=> showResult(), delay);
@@ -765,7 +776,7 @@ function addScanItem(log, text, metric, isSpecial){
   window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
   setTimeout(()=>{
     row.classList.add('done');
-    row.querySelector('.scan-icon').innerHTML = '<span class="check">âœ“</span>';
+    row.querySelector('.scan-icon').innerHTML = '<span class="check">✓</span>';
   }, 480);
 }
 
@@ -777,11 +788,11 @@ function showResult(){
   result.classList.add('active');
 
   const modeTag = mode === 'url'
-    ? (currentResult.specific ? '<span class="page-tag">pÃ¡gina especÃ­fica</span>' : '<span class="page-tag">dominio Â· home</span>')
-    : '<span class="page-tag">ðŸ”Ž marca / nombre</span>';
-  document.getElementById('resultUrl').innerHTML = `${currentResult.subject}${modeTag} <span class="market-badge">ðŸ“ ${currentResult.market.label} Â· ${currentResult.market.language}</span>`;
+    ? (currentResult.specific ? '<span class="page-tag">página específica</span>' : '<span class="page-tag">dominio · home</span>')
+    : '<span class="page-tag">🔎 marca / nombre</span>';
+  document.getElementById('resultUrl').innerHTML = `${currentResult.subject}${modeTag} <span class="market-badge">📍 ${currentResult.market.label} · ${currentResult.market.language}</span>`;
   document.getElementById('avgScore').textContent = avg;
-  document.getElementById('criteriaHeading').textContent = mode === 'url' ? 'PuntuaciÃ³n por criterio GEO' : 'PuntuaciÃ³n por criterio de relevancia';
+  document.getElementById('criteriaHeading').textContent = mode === 'url' ? 'Puntuación por criterio GEO' : 'Puntuación por criterio de relevancia';
 
   const sfPct = Math.max(2, Math.min(98, avg));
   setTimeout(()=>{ document.getElementById('sfMarker').style.left = `calc(${sfPct}% - 1px)`; }, 150);
@@ -792,7 +803,7 @@ function showResult(){
     const row = document.createElement('div');
     row.className = 'bar-row' + (c.special ? ' special' : '');
     const label = c.special
-      ? `<span>ðŸ§¬ ${c.name} <span class="special-tag">nuevo</span></span>`
+      ? `<span>🧬 ${c.name} <span class="special-tag">nuevo</span></span>`
       : `<span>${c.name}</span>`;
     row.innerHTML = `<div class="bar-label">${label}<b>${scores[i]}</b></div><div class="bar-track"><div class="bar-fill" id="bar${i}"></div></div>`;
     barsGrid.appendChild(row);
@@ -806,8 +817,8 @@ function showResult(){
   document.getElementById('lecturaText').textContent = buildLectura(scores, avg, currentResult, engineScores);
 
   document.getElementById('engineSubtitle').textContent = mode === 'url'
-    ? `PuntuaciÃ³n estimada por plataforma, calibrada para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para entrar y comprobarlo tÃº mismo con tus propias bÃºsquedas.`
-    : `QuÃ© tan relevante es "${currentResult.subject}" para cada plataforma, calibrado para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para preguntarle tÃº mismo.`;
+    ? `Puntuación estimada por plataforma, calibrada para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para entrar y comprobarlo tú mismo con tus propias búsquedas.`
+    : `Qué tan relevante es "${currentResult.subject}" para cada plataforma, calibrado para ${currentResult.market.label} (${currentResult.market.language}). Usa el enlace de cada tarjeta para preguntarle tú mismo.`;
 
   const engineGrid = document.getElementById('engineGrid');
   engineGrid.innerHTML = '';
@@ -815,11 +826,11 @@ function showResult(){
     const card = document.createElement('div');
     card.className = 'engine-card';
     const linkText = mode === 'url'
-      ? 'PregÃºntale a esta IA cuÃ¡l es la mejor marca de tu categorÃ­a en tu geografÃ­a â†’'
-      : `PregÃºntale a esta IA quiÃ©n es "${currentResult.subject}" â†’`;
+      ? 'Pregúntale a esta IA cuál es la mejor marca de tu categoría en tu geografía →'
+      : `Pregúntale a esta IA quién es "${currentResult.subject}" →`;
     const linkHTML = e.url
       ? `<a class="engine-link" href="${e.url}" target="_blank" rel="noopener">${linkText}</a>`
-      : `<span class="engine-link" style="opacity:.6">Sin plataforma Ãºnica para verificar</span>`;
+      : `<span class="engine-link" style="opacity:.6">Sin plataforma única para verificar</span>`;
     card.innerHTML = `
       <div class="e-top">
         <span class="engine-logo" style="--c:${e.color}">${e.initial}</span>
@@ -837,8 +848,8 @@ function showResult(){
   }, 150);
 
   document.getElementById('compIntro').textContent = mode === 'url'
-    ? `Sector detectado: ${currentResult.category}. Se identificaron 3 competidores directos en esta categorÃ­a â€” por ahora, solo se muestra su promedio general.`
-    : `CategorÃ­a detectada: ${currentResult.category}. Se identificaron 3 marcas o nombres similares en este espacio â€” por ahora, solo se muestra su promedio general.`;
+    ? `Sector detectado: ${currentResult.category}. Se identificaron 3 competidores directos en esta categoría — por ahora, solo se muestra su promedio general.`
+    : `Categoría detectada: ${currentResult.category}. Se identificaron 3 marcas o nombres similares en este espacio — por ahora, solo se muestra su promedio general.`;
   document.getElementById('compYourAvg').textContent = avg;
   const compGrid = document.getElementById('compGrid');
   compGrid.innerHTML = '';
@@ -846,7 +857,7 @@ function showResult(){
     const card = document.createElement('div');
     card.className = 'comp-card';
     card.innerHTML = `
-      <div class="comp-label">ðŸ”’ Competidor detectado #${i+1}</div>
+      <div class="comp-label">🔒 Competidor detectado #${i+1}</div>
       <div class="comp-score">${score}<span>/100</span></div>
       <div class="comp-fake-bars">
         <div class="fb" style="width:${40+((score*7+i*13)%50)}%"></div>
@@ -866,23 +877,23 @@ function buildLectura(scores, avg, result, engineScores){
   scores.forEach((s,i)=>{ if(s>scores[best]) best=i; if(s<scores[worst]) worst=i; });
   const bestC = criteriaSet[best].name.toLowerCase();
   const worstC = criteriaSet[worst].name.toLowerCase();
-  const subject = result.mode === 'name' ? 'Esta marca o nombre' : (result.specific ? 'Esta pÃ¡gina' : 'La marca');
+  const subject = result.mode === 'name' ? 'Esta marca o nombre' : (result.specific ? 'Esta página' : 'La marca');
   const market = result.market;
 
   let level;
-  if(avg < 40) level = `${subject} todavÃ­a es prÃ¡cticamente invisible para los motores de respuesta con IA.`;
-  else if(avg < 60) level = `${subject} tiene seÃ±ales dispersas: algo la hace visible para la IA, pero de forma inconsistente.`;
-  else if(avg < 80) level = `${subject} tiene una base sÃ³lida de visibilidad ante IA, aunque con brechas puntuales.`;
-  else level = `${subject} ya muestra seÃ±ales fuertes de visibilidad ante motores de respuesta con IA.`;
+  if(avg < 40) level = `${subject} todavía es prácticamente invisible para los motores de respuesta con IA.`;
+  else if(avg < 60) level = `${subject} tiene señales dispersas: algo la hace visible para la IA, pero de forma inconsistente.`;
+  else if(avg < 80) level = `${subject} tiene una base sólida de visibilidad ante IA, aunque con brechas puntuales.`;
+  else level = `${subject} ya muestra señales fuertes de visibilidad ante motores de respuesta con IA.`;
 
   let marketLine = '';
   if(engineScores && engineScores.length){
     let eBest=0, eWorst=0;
     engineScores.forEach((e,i)=>{ if(e.score>engineScores[eBest].score) eBest=i; if(e.score<engineScores[eWorst].score) eWorst=i; });
-    marketLine = ` Calibrado para ${market.label} (${market.language}): en este mercado, ${engineScores[eBest].name} tiende a pesar mÃ¡s en las respuestas de IA, mientras que ${engineScores[eWorst].name} tiene hoy menor presencia relativa.`;
+    marketLine = ` Calibrado para ${market.label} (${market.language}): en este mercado, ${engineScores[eBest].name} tiende a pesar más en las respuestas de IA, mientras que ${engineScores[eWorst].name} tiene hoy menor presencia relativa.`;
   }
 
-  return `${level} El punto mÃ¡s fuerte detectado es ${bestC}, mientras que ${worstC} aparece como la seÃ±al mÃ¡s dÃ©bil dentro de los ${criteriaSet.length === 9 ? 'nueve' : 'seis'} criterios evaluados.${marketLine}`;
+  return `${level} El punto más fuerte detectado es ${bestC}, mientras que ${worstC} aparece como la señal más débil dentro de los ${criteriaSet.length === 9 ? 'nueve' : 'seis'} criterios evaluados.${marketLine}`;
 }
 
 /* ---------------- PDF ---------------- */
@@ -912,7 +923,7 @@ function downloadPDF(){
   function drawFooter(){
     doc.setDrawColor(225,225,225); doc.line(margin, pageH-40, pageW-margin, pageH-40);
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(232,50,59);
-    doc.text('N3 GEO Test Â· v1.3', margin, pageH-26);
+    doc.text('N3 GEO Test · v1.3', margin, pageH-26);
     doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(140,140,140);
     doc.text(contact, pageW-margin, pageH-26, {align:'right'});
   }
@@ -935,26 +946,26 @@ function downloadPDF(){
   drawHeader();
   y = 76;
 
-  heading('N3 GEO Test â€” Resultado', 19, [10,10,10]);
+  heading('N3 GEO Test — Resultado', 19, [10,10,10]);
   body(`${currentResult.mode === 'url' ? 'Sitio evaluado' : 'Marca / nombre evaluado'}: ${currentResult.subject}`, 10.5);
   body(`Mercado / idioma objetivo: ${currentResult.market.label} (${currentResult.market.language})`, 10.5);
   y += 2;
 
   heading(`Promedio general: ${currentResult.avg} / 100`, 15, [232,50,59]);
 
-  heading(currentResult.mode === 'url' ? 'PuntuaciÃ³n por criterio GEO' : 'PuntuaciÃ³n por criterio de relevancia', 12.5, [10,10,10]);
+  heading(currentResult.mode === 'url' ? 'Puntuación por criterio GEO' : 'Puntuación por criterio de relevancia', 12.5, [10,10,10]);
   currentResult.criteriaSet.forEach((c,i)=>{
     checkPage(16);
     const isSpecial = c.special;
     doc.setFont('helvetica','bold'); doc.setFontSize(10);
     doc.setTextColor(isSpecial?232:60, isSpecial?50:60, isSpecial?59:60);
-    const lines = doc.splitTextToSize(`${c.name}${isSpecial?'  (habilidad clave)':''} â€” ${currentResult.scores[i]}/100`, maxW);
+    const lines = doc.splitTextToSize(`${c.name}${isSpecial?'  (habilidad clave)':''} — ${currentResult.scores[i]}/100`, maxW);
     doc.text(lines, margin, y);
     y += lines.length*13 + 3;
   });
 
   y += 6;
-  heading('Lectura rÃ¡pida', 12.5, [10,10,10]);
+  heading('Lectura rápida', 12.5, [10,10,10]);
   body(document.getElementById('lecturaText').textContent, 10.5);
 
   y += 4;
@@ -962,40 +973,40 @@ function downloadPDF(){
   currentResult.engineScores.forEach(e=>{
     checkPage(14);
     doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(50,50,50);
-    doc.text(`${e.name} â€” ${e.score}/100`, margin, y); y += 15;
+    doc.text(`${e.name} — ${e.score}/100`, margin, y); y += 15;
   });
 
   y += 6;
-  heading('CÃ³mo te comparas con tu competencia', 12.5, [10,10,10]);
+  heading('Cómo te comparas con tu competencia', 12.5, [10,10,10]);
   const compNoun = currentResult.mode === 'url' ? 'competidores directos' : 'marcas o nombres similares';
-  body(`CategorÃ­a detectada: ${currentResult.category}. Se identificaron 3 ${compNoun} â€” por ahora, solo se muestra su promedio general.`, 10);
+  body(`Categoría detectada: ${currentResult.category}. Se identificaron 3 ${compNoun} — por ahora, solo se muestra su promedio general.`, 10);
   checkPage(16);
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(232,50,59);
-  doc.text(`Competidor detectado #1 â€” ${currentResult.competitors[0]}/100 (desglose bloqueado)`, margin, y); y += 15;
-  doc.text(`Competidor detectado #2 â€” ${currentResult.competitors[1]}/100 (desglose bloqueado)`, margin, y); y += 15;
-  doc.text(`Competidor detectado #3 â€” ${currentResult.competitors[2]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.text(`Competidor detectado #1 — ${currentResult.competitors[0]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.text(`Competidor detectado #2 — ${currentResult.competitors[1]}/100 (desglose bloqueado)`, margin, y); y += 15;
+  doc.text(`Competidor detectado #3 — ${currentResult.competitors[2]}/100 (desglose bloqueado)`, margin, y); y += 15;
   doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(50,50,50);
-  doc.text(`Tu promedio â€” ${currentResult.avg}/100`, margin, y); y += 18;
+  doc.text(`Tu promedio — ${currentResult.avg}/100`, margin, y); y += 18;
 
   y += 6;
   heading('Para cerrar', 12.5, [10,10,10]);
-  body('La IA no es "alguien", es "algo" que simula serlo (teorÃ­a Creaxoma, Engel Fonseca). Por eso hoy hay que escribir para tu SPH (Sistema de Pensamiento Humano) y para el SPA (Sistema de Pensamiento Artificial) de la IA a la vez. La IA existe hace mÃ¡s de 68 aÃ±os, pero apenas ahora empezÃ³ a comportarse como alguien: por eso la FobIA es real, aunque tambiÃ©n absurda.', 9.5, [90,90,90]);
+  body('La IA no es "alguien", es "algo" que simula serlo (teoría Creaxoma, Engel Fonseca). Por eso hoy hay que escribir para tu SPH (Sistema de Pensamiento Humano) y para el SPA (Sistema de Pensamiento Artificial) de la IA a la vez. La IA existe hace más de 68 años, pero apenas ahora empezó a comportarse como alguien: por eso la FobIA es real, aunque también absurda.', 9.5, [90,90,90]);
   checkPage(28);
   doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(33,140,199);
-  doc.textWithLink('ðŸ“– Leer: Creaxoma â€” la IA es algo creado por alguien', margin, y, {url:'https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/'});
+  doc.textWithLink('📖 Leer: Creaxoma — la IA es algo creado por alguien', margin, y, {url:'https://neuronamagazine.com/creaxoma-para-entender-que-la-ia-es-algo-creado-por-alguien/'});
   y += 14;
-  doc.textWithLink('ðŸ“– Leer: SPH + SPA â€” complementa tu pensamiento con la IA', margin, y, {url:'https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/'});
+  doc.textWithLink('📖 Leer: SPH + SPA — complementa tu pensamiento con la IA', margin, y, {url:'https://neuronamagazine.com/ia-para-complementar-sph-sistemas-de-pensamiento-humano-con-spa-sistemas-de-pensamiento-artificial/'});
   y += 14;
-  doc.textWithLink('ðŸŽ¬ Ver: FobIA â€” Engel Fonseca (YouTube)', margin, y, {url:'https://www.youtube.com/shorts/Nwz1k6YWdII'});
+  doc.textWithLink('🎬 Ver: FobIA — Engel Fonseca (YouTube)', margin, y, {url:'https://www.youtube.com/shorts/Nwz1k6YWdII'});
   y += 18;
 
   y += 6;
   checkPage(70);
   doc.setFillColor(250,235,235); doc.rect(margin, y-14, maxW, 62, 'F');
   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(20,20,20);
-  doc.text('Este es un diagnÃ³stico preliminar, no un plan de acciÃ³n.', margin+12, y+6);
+  doc.text('Este es un diagnóstico preliminar, no un plan de acción.', margin+12, y+6);
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(70,70,70);
-  const ctaLines = doc.splitTextToSize('Para interpretar estas seÃ±ales y diseÃ±ar la estrategia, habla con un especialista de N3.', maxW-24);
+  const ctaLines = doc.splitTextToSize('Para interpretar estas señales y diseñar la estrategia, habla con un especialista de N3.', maxW-24);
   doc.text(ctaLines, margin+12, y+22);
   doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(232,50,59);
   doc.textWithLink('n3labs.potenttial.site/#contacto', margin+12, y+42, {url:'https://n3labs.potenttial.site/#contacto'});
