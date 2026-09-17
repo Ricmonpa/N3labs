@@ -72,7 +72,7 @@ export default function Nav() {
             {t.prompter.navLabel}
           </a>
           <a
-            href="/geo"
+            href="/geotest.html"
             className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
           >
             <Radar size={13} />
@@ -134,7 +134,7 @@ export default function Nav() {
                 {t.prompter.navLabel}
               </a>
               <a
-                href="/geo"
+                href="/geotest.html"
                 onClick={() => setOpen(false)}
                 className="text-red-400 font-semibold text-base flex items-center gap-1.5"
               >

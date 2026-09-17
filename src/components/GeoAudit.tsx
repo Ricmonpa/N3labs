@@ -26,10 +26,6 @@ const PROMPTER_KEY = "n3-prompter-access";
 const copy = {
   es: {
     badge: "Diagnóstico GEO · N3",
-    hookTitle: "¿Apenas te suena el tema?",
-    hookText:
-      "Empieza por el ejercicio orientativo: en 30 segundos verás cómo se ve un diagnóstico de visibilidad en IA y por qué importa. Sus cifras son ilustrativas; el diagnóstico real de tu sitio es el de esta página.",
-    hookCta: "Ver el ejercicio orientativo",
     title: "¿Las IAs pueden leer tu sitio?",
     subtitle:
       "Revisamos tu página en vivo: si ChatGPT, Claude, Perplexity y Google tienen permiso y acceso, si el contenido se ve sin JavaScript, y si tus datos estructurados dicen quién eres. Cada resultado viene con su evidencia.",
@@ -90,10 +86,6 @@ const copy = {
   },
   en: {
     badge: "GEO Audit · N3",
-    hookTitle: "New to this?",
-    hookText:
-      "Start with the illustrative walkthrough: in 30 seconds you'll see what an AI visibility diagnosis looks like and why it matters. Its numbers are for illustration only; the real audit of your site is the one on this page.",
-    hookCta: "See the walkthrough",
     title: "Can AI read your website?",
     subtitle:
       "We check your page live: whether ChatGPT, Claude, Perplexity and Google are allowed in and can reach it, whether content shows without JavaScript, and whether your structured data says who you are. Every result comes with its evidence.",
@@ -306,18 +298,7 @@ export default function GeoAudit() {
             <h1 className="text-[clamp(2rem,5vw,3.2rem)] font-black text-white leading-tight mb-4">{c.title}</h1>
             <p className="text-zinc-400 text-base font-light leading-relaxed max-w-2xl">{c.subtitle}</p>
 
-            <a
-              href="/geotest.html"
-              className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 hover:border-red-500/40 transition-colors"
-            >
-              <span className="text-sm font-semibold text-white">{c.hookTitle}</span>
-              <span className="flex-1 min-w-[12rem] text-xs text-zinc-400">{c.hookText}</span>
-              <span className="inline-flex items-center gap-1 text-sm text-red-400 whitespace-nowrap">
-                {c.hookCta} <ArrowRight size={14} />
-              </span>
-            </a>
-
-            <form onSubmit={run} className="mt-4 glass rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
+            <form onSubmit={run} className="mt-8 glass rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-3">
               <label htmlFor="geo-url" className="sr-only">
                 URL
               </label>
