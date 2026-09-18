@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Demo del buscador de compatibilidad de llantas Avante: por vehiculo o por medida." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Compatibilidad Avante" />
+  <meta property="og:description" content="Demo del buscador de compatibilidad de llantas Avante: por vehiculo o por medida." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    :root { color-scheme: light dark; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+  </style>
+<title>Compatibilidad Avante</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #eef1f6;
+    --surface: #ffffff;
+    --surface-2: #e7ecf4;
+    --ink: #0f1726;
+    --ink-2: #47536a;
+    --ink-3: #79859b;
+    --line: #d5dce8;
+    --line-2: #bfc9da;
+    --blue: #003087;
+    --blue-ink: #003087;
+    --blue-soft: #e4eaf7;
+    --red: #ba0c2f;
+    --ok: #12664a;
+    --ok-bg: #dcefe6;
+    --warn: #8a5a00;
+    --warn-bg: #faecce;
+    --chrome: #dfe4ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0a0f18;
+      --surface: #131a26;
+      --surface-2: #1c2533;
+      --ink: #e8edf6;
+      --ink-2: #a6b1c4;
+      --ink-3: #77839a;
+      --line: #28323f;
+      --line-2: #3a4655;
+      --blue: #82a5ea;
+      --blue-ink: #a9c4f5;
+      --blue-soft: #18233a;
+      --red: #f2708c;
+      --ok: #7fd3ab;
+      --ok-bg: #123329;
+      --warn: #e8c069;
+      --warn-bg: #382c12;
+      --chrome: #1a2230;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0a0f18;
+    --surface: #131a26;
+    --surface-2: #1c2533;
+    --ink: #e8edf6;
+    --ink-2: #a6b1c4;
+    --ink-3: #77839a;
+    --line: #28323f;
+    --line-2: #3a4655;
+    --blue: #82a5ea;
+    --blue-ink: #a9c4f5;
+    --blue-soft: #18233a;
+    --red: #f2708c;
+    --ok: #7fd3ab;
+    --ok-bg: #123329;
+    --warn: #e8c069;
+    --warn-bg: #382c12;
+    --chrome: #1a2230;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* faux browser chrome */
+  .chrome {
+    background: var(--chrome);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 1px solid var(--line);
+  }
+  .dots { display: flex; gap: 5px; flex: none; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); display: block; }
+  .addr {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink-3);
+  }
+  .addr b { color: var(--blue-ink); font-weight: 600; }
+
+  /* site header */
+  .site {
+    background: var(--blue);
+    padding: 13px 16px;
+  }
+  .site-in {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+  }
+  .brand-sub {
+    font-family: "Archivo", sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b9c9ea;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; padding-block: 22px 40px; }
+
+  /* search module */
+  .finder { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .tabs { display: flex; border-bottom: 1px solid var(--line); }
+  .tab {
+    flex: 1;
+    background: var(--surface-2);
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 13px 10px;
+    font-family: "Archivo", sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink-3);
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"] { background: var(--surface); color: var(--blue-ink); border-bottom-color: var(--red); }
+  .tab:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+
+  .panel { padding: 18px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 680px) { .grid4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 380px) { .grid4 { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .field label {
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  select, .sizeinput {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14.5px;
+    padding: 10px 11px;
+    border: 1.5px solid var(--line-2);
+    border-radius: 3px;
+    background: var(--ground);
+    color: var(--ink);
+    width: 100%;
+    min-width: 0;
+  }
+  select:disabled { opacity: .45; }
+  select:focus-visible, .sizeinput:focus-visible { outline: 3px solid var(--blue); outline-offset: 1px; }
+  .sizeinput { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 20px; letter-spacing: .02em; max-width: 260px; }
+
+  .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .preset {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    padding: 6px 9px;
+    border: 1px solid var(--line-2);
+    background: transparent;
+    color: var(--ink-2);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .preset:hover { border-color: var(--blue); color: var(--blue-ink); }
+  .preset:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+
+  /* result */
+  .result { margin-top: 20px; }
+  .oem {
+    background: var(--blue-soft);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--blue);
+    border-radius: 4px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .oem-label {
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .oem h1 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: clamp(18px, 3.4vw, 22px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 3px 0 0;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .oem-size {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: clamp(22px, 5vw, 28px);
+    color: var(--blue-ink);
+    white-space: nowrap;
+  }
+
+  h2 {
+    font-family: "Archivo", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 28px 0 10px;
+    color: var(--ink);
+  }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; min-width: 500px; }
+  th {
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-align: left;
+    padding: 10px 13px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  td { padding: 10px 13px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  tr:last-child td { border-bottom: none; }
+  td.m { font-family: "IBM Plex Mono", monospace; font-weight: 600; white-space: nowrap; }
+  td.n { font-family: "IBM Plex Mono", monospace; text-align: right; white-space: nowrap; color: var(--ink-2); }
+  .step { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+  .verdict {
+    display: inline-block;
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .v-ok { background: var(--ok-bg); color: var(--ok); }
+  .v-warn { background: var(--warn-bg); color: var(--warn); }
+
+  .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; }
+  .check { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 11px 13px; }
+  .check dt {
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 3px;
+  }
+  .check dd { margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600; }
+
+  .stock { border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  .prod {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .prod:last-child { border-bottom: none; }
+  .prod-name { font-weight: 600; font-size: 14.5px; }
+  .prod-meta { font-size: 12.5px; color: var(--ink-3); }
+  .prod-price { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 16px; white-space: nowrap; }
+
+  .cta {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 13px 22px;
+    border-radius: 3px;
+    text-decoration: none;
+    margin-top: 18px;
+  }
+  .cta:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+  .empty { color: var(--ink-3); font-size: 14.5px; padding: 18px 2px; }
+  .tiny { font-size: 11.5px; color: var(--ink-3); margin-top: 26px; border-top: 1px solid var(--line); padding-top: 12px; }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="chrome">
+  <div class="dots"><i></i><i></i><i></i></div>
+  <div class="addr">grupoavante.org<b id="addr">/compatibilidad/mazda/3/2021/i-sport</b></div>
+</div>
+
+<header class="site">
+  <div class="site-in">
+    <div class="brand">AVANTE</div>
+    <div class="brand-sub">Compatibilidad de llantas</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="finder">
+    <div class="tabs" role="tablist">
+      <button class="tab" id="tab-veh" role="tab" aria-selected="true" aria-controls="p-veh" type="button">Buscar por vehículo</button>
+      <button class="tab" id="tab-size" role="tab" aria-selected="false" aria-controls="p-size" type="button">Buscar por medida</button>
+    </div>
+
+    <div class="panel" id="p-veh" role="tabpanel" aria-labelledby="tab-veh">
+      <div class="grid4">
+        <div class="field">
+          <label for="f-brand">Marca</label>
+          <select id="f-brand"></select>
+        </div>
+        <div class="field">
+          <label for="f-model">Modelo</label>
+          <select id="f-model"></select>
+        </div>
+        <div class="field">
+          <label for="f-year">Año</label>
+          <select id="f-year"></select>
+        </div>
+        <div class="field">
+          <label for="f-version">Versión</label>
+          <select id="f-version"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p-size" role="tabpanel" aria-labelledby="tab-size" hidden>
+      <div class="field">
+        <label for="f-size">Medida en el costado de tu llanta</label>
+        <input class="sizeinput" id="f-size" value="205/55R16" spellcheck="false" />
+      </div>
+      <div class="presets">
+        <button class="preset" data-s="195/65R15" type="button">195/65R15</button>
+        <button class="preset" data-s="225/45R17" type="button">225/45R17</button>
+        <button class="preset" data-s="265/65R17" type="button">265/65R17</button>
+        <button class="preset" data-s="235/60R18" type="button">235/60R18</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result">
+    <div class="oem">
+      <div>
+        <div class="oem-label" id="oem-label">Medida original</div>
+        <h1 id="title">Mazda 3 2021 i Sport</h1>
+      </div>
+      <div class="oem-size" id="oem-size">205/60 R16</div>
+    </div>
+
+    <h2>Medidas compatibles</h2>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Medida</th>
+            <th>Rin</th>
+            <th style="text-align:right">Diámetro</th>
+            <th style="text-align:right">Diferencia</th>
+            <th>Veredicto</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <h2>Revisa antes de montar</h2>
+    <dl class="checks">
+      <div class="check"><dt>Índice de carga</dt><dd id="c-load">91 o superior</dd></div>
+      <div class="check"><dt>Índice de velocidad</dt><dd id="c-speed">V o superior</dd></div>
+      <div class="check"><dt>Ancho de rin</dt><dd id="c-rim">5.5" – 7.0"</dd></div>
+      <div class="check"><dt>Velocímetro</dt><dd id="c-speedo">+0.4%</dd></div>
+    </dl>
+
+    <h2 id="stock-title">Llantas Avante en 205/60 R16</h2>
+    <div class="stock" id="stock"></div>
+
+    <a class="cta" href="#" onclick="return false;">Cotiza tus llantas con el tío Avante</a>
+
+    <p class="tiny">Demo con catálogo de ejemplo. Las equivalencias son orientativas; la instalación la valida un técnico.</p>
+  </div>
+
+</div>
+
+<script>
+(function () {
+
+  var FITMENT = [
+    { b: 'Chevrolet', m: 'Aveo',    y: [2020, 2021, 2022], v: [['LS', '185/65R15'], ['Premier', '195/55R16']] },
+    { b: 'Honda',     m: 'Civic',   y: [2020, 2021, 2022], v: [['i-Style', '215/55R16'], ['Turbo', '235/40R18']] },
+    { b: 'Kia',       m: 'Rio',     y: [2020, 2021, 2022], v: [['LX', '185/65R15'], ['EX', '205/45R17']] },
+    { b: 'Mazda',     m: '3 Sedán', y: [2020, 2021, 2022], v: [['i Sport', '205/60R16'], ['s Grand Touring', '215/45R18']] },
+    { b: 'Mazda',     m: 'CX-5',    y: [2020, 2021, 2022], v: [['i Sport', '225/65R17'], ['Signature', '225/55R19']] },
+    { b: 'Nissan',    m: 'Versa',   y: [2020, 2021, 2022, 2023], v: [['Sense', '185/65R15'], ['Advance', '205/50R17']] },
+    { b: 'Nissan',    m: 'March',   y: [2020, 2021, 2022], v: [['Sense', '185/65R15'], ['Advance', '185/60R15']] },
+    { b: 'Nissan',    m: 'X-Trail', y: [2020, 2021, 2022], v: [['Sense', '225/65R17'], ['Exclusive', '225/60R18']] },
+    { b: 'Toyota',    m: 'Corolla', y: [2020, 2021, 2022, 2023], v: [['Base', '205/55R16'], ['SE', '225/40R18']] },
+    { b: 'Toyota',    m: 'Hilux',   y: [2020, 2021, 2022], v: [['Chasis Cabina', '205/70R15'], ['SR', '265/65R17']] },
+    { b: 'Volkswagen', m: 'Jetta',  y: [2020, 2021, 2022, 2023], v: [['Trendline', '205/60R16'], ['Comfortline', '205/55R17'], ['R-Line', '225/45R18']] },
+    { b: 'Volkswagen', m: 'Vento',  y: [2020, 2021, 2022], v: [['Starline', '185/60R15'], ['Comfortline', '195/55R16']] }
+  ];
+
+  var STOCK = [
+    { n: 'Michelin Primacy 4',       m: '4 en sucursal Revolución', p: 2890 },
+    { n: 'Bridgestone Turanza T005', m: '6 en sucursal Lincoln',    p: 3150 },
+    { n: 'Pirelli Cinturato P7',     m: 'Entrega en 24 horas',      p: 3420 }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function parse(txt) {
+    var m = String(txt).match(/(\d{3})\s*[\/\-\s]\s*(\d{2})\s*[\/\-\s]?\s*R?\s*(\d{2})/i);
+    if (!m) return null;
+    var w = +m[1], a = +m[2], r = +m[3];
+    if (w < 125 || w > 395 || a < 20 || a > 90 || r < 12 || r > 26) return null;
+    return { w: w, a: a, r: r };
+  }
+  function dia(t) { return t.r * 25.4 + 2 * (t.w * t.a / 100); }
+  function label(t) { return t.w + '/' + t.a + ' R' + t.r; }
+  function compact(t) { return t.w + '/' + t.a + 'R' + t.r; }
+
+  function slugify(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  function candidates(base) {
+    var d0 = dia(base), out = [], byStep = {};
+    for (var r = base.r - 1; r <= base.r + 2; r++) {
+      if (r < 12 || r > 26) continue;
+      for (var w = 135; w <= 355; w += 10) {
+        for (var a = 25; a <= 85; a += 5) {
+          if (w === base.w && a === base.a && r === base.r) continue;
+          var t = { w: w, a: a, r: r };
+          var pct = (dia(t) - d0) / d0 * 100;
+          if (Math.abs(pct) > 3) continue;
+          t.pct = pct; t.d = dia(t); t.step = r - base.r;
+          out.push(t);
+        }
+      }
+    }
+    out.sort(function (x, y) {
+      if (x.step !== y.step) return x.step - y.step;
+      return Math.abs(x.pct) - Math.abs(y.pct);
+    });
+    return out.filter(function (t) {
+      byStep[t.step] = (byStep[t.step] || 0) + 1;
+      return byStep[t.step] <= 3;
+    });
+  }
+
+  function stepName(n) {
+    if (n === 0) return 'Mismo rin';
+    if (n < 0) return 'Minus ' + (-n);
+    return 'Plus ' + n;
+  }
+  function verdict(pct) {
+    var a = Math.abs(pct);
+    if (a <= 1) return ['Ideal', 'v-ok'];
+    if (a <= 2) return ['Segura', 'v-ok'];
+    return ['Al límite', 'v-warn'];
+  }
+  function rimRange(w) {
+    var lo = w * 0.68 / 25.4, hi = w * 0.86 / 25.4;
+    return (Math.round(lo * 2) / 2).toFixed(1) + '" – ' + (Math.round(hi * 2) / 2).toFixed(1) + '"';
+  }
+  function loadIndex(w, r) {
+    if (w >= 255 || r >= 18) return '102 o superior';
+    if (w >= 225) return '94 o superior';
+    if (w >= 195) return '91 o superior';
+    return '86 o superior';
+  }
+  function speedIndex(a) {
+    if (a <= 45) return 'W o superior';
+    if (a <= 55) return 'V o superior';
+    return 'H o superior';
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function money(n) { return '$' + n.toLocaleString('es-MX') + ' MXN'; }
+
+  function render(base, ctx) {
+    var d0 = dia(base), list = candidates(base);
+
+    $('oem-label').textContent = ctx.vehicle ? 'Medida original de fábrica' : 'Medida consultada';
+    $('title').textContent = ctx.title;
+    $('oem-size').textContent = label(base);
+    $('addr').textContent = ctx.slug;
+    $('stock-title').textContent = 'Llantas Avante en ' + label(base);
+
+    $('rows').innerHTML = list.map(function (t) {
+      var v = verdict(t.pct);
+      return '<tr>' +
+        '<td class="m">' + esc(label(t)) + '</td>' +
+        '<td class="step">' + stepName(t.step) + '</td>' +
+        '<td class="n">' + t.d.toFixed(1) + ' mm</td>' +
+        '<td class="n">' + (t.pct >= 0 ? '+' : '') + t.pct.toFixed(2) + '%</td>' +
+        '<td><span class="verdict ' + v[1] + '">' + v[0] + '</span></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" class="empty">Sin medidas compatibles dentro del 3% de tolerancia.</td></tr>';
+
+    $('c-load').textContent = loadIndex(base.w, base.r);
+    $('c-speed').textContent = speedIndex(base.a);
+    $('c-rim').textContent = rimRange(base.w);
+    if (list.length) {
+      var real = 100 * (list[0].d / d0);
+      $('c-speedo').textContent = (real >= 100 ? '+' : '') + (real - 100).toFixed(1) + '%';
+    } else {
+      $('c-speedo').textContent = '—';
+    }
+
+    $('stock').innerHTML = STOCK.map(function (p) {
+      return '<div class="prod"><div>' +
+        '<div class="prod-name">' + esc(p.n) + ' ' + esc(compact(base)) + '</div>' +
+        '<div class="prod-meta">' + esc(p.m) + '</div></div>' +
+        '<div class="prod-price">' + money(p.p) + '</div></div>';
+    }).join('');
+  }
+
+  /* ---------- vehicle finder ---------- */
+
+  function fill(sel, items, current) {
+    sel.innerHTML = items.map(function (i) {
+      return '<option value="' + esc(i) + '">' + esc(i) + '</option>';
+    }).join('');
+    if (current && items.indexOf(current) !== -1) sel.value = current;
+    sel.disabled = items.length === 0;
+  }
+
+  function uniq(a) { return a.filter(function (v, i) { return a.indexOf(v) === i; }); }
+
+  function brands() { return uniq(FITMENT.map(function (f) { return f.b; })).sort(); }
+  function models(b) { return FITMENT.filter(function (f) { return f.b === b; }).map(function (f) { return f.m; }); }
+  function entry(b, m) {
+    return FITMENT.filter(function (f) { return f.b === b && f.m === m; })[0];
+  }
+
+  function cascade(level) {
+    var b = $('f-brand').value;
+    if (level <= 1) fill($('f-model'), models(b));
+    var e = entry(b, $('f-model').value);
+    if (!e) return;
+    if (level <= 2) fill($('f-year'), e.y.slice().reverse().map(String));
+    if (level <= 3) fill($('f-version'), e.v.map(function (x) { return x[0]; }));
+    showVehicle();
+  }
+
+  function showVehicle() {
+    var b = $('f-brand').value, m = $('f-model').value, y = $('f-year').value, vn = $('f-version').value;
+    var e = entry(b, m);
+    if (!e) return;
+    var row = e.v.filter(function (x) { return x[0] === vn; })[0] || e.v[0];
+    var t = parse(row[1]);
+    if (!t) return;
+    render(t, {
+      vehicle: true,
+      title: b + ' ' + m + ' ' + y + ' ' + row[0],
+      slug: '/compatibilidad/' + slugify(b) + '/' + slugify(m) + '/' + y + '/' + slugify(row[0])
+    });
+  }
+
+  function showSize() {
+    var t = parse($('f-size').value);
+    if (!t) return;
+    render(t, {
+      vehicle: false,
+      title: 'Equivalencias para ' + label(t),
+      slug: '/equivalencias/' + t.w + '-' + t.a + '-r' + t.r
+    });
+  }
+
+  /* ---------- wiring ---------- */
+
+  fill($('f-brand'), brands());
+  $('f-brand').value = 'Mazda';
+  fill($('f-model'), models('Mazda'));
+  $('f-model').value = '3 Sedán';
+  var mz = entry('Mazda', '3 Sedán');
+  fill($('f-year'), mz.y.slice().reverse().map(String));
+  $('f-year').value = '2021';
+  fill($('f-version'), mz.v.map(function (x) { return x[0]; }));
+
+  $('f-brand').addEventListener('change', function () { cascade(1); });
+  $('f-model').addEventListener('change', function () { cascade(2); });
+  $('f-year').addEventListener('change', showVehicle);
+  $('f-version').addEventListener('change', showVehicle);
+  $('f-size').addEventListener('input', showSize);
+
+  Array.prototype.forEach.call(document.querySelectorAll('.preset'), function (btn) {
+    btn.addEventListener('click', function () {
+      $('f-size').value = btn.getAttribute('data-s');
+      showSize();
+    });
+  });
+
+  function selectTab(which) {
+    var veh = which === 'veh';
+    $('tab-veh').setAttribute('aria-selected', String(veh));
+    $('tab-size').setAttribute('aria-selected', String(!veh));
+    $('p-veh').hidden = !veh;
+    $('p-size').hidden = veh;
+    if (veh) { showVehicle(); } else { showSize(); }
+  }
+  $('tab-veh').addEventListener('click', function () { selectTab('veh'); });
+  $('tab-size').addEventListener('click', function () { selectTab('size'); });
+
+  showVehicle();
+})();
+</script>
+</body>
+</html>

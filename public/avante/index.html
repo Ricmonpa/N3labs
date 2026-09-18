@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Propuesta para Avante: hub de compatibilidad de llantas optimizado para motores generativos." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="La pregunta que Avante no está contestando" />
+  <meta property="og:description" content="Propuesta para Avante: hub de compatibilidad de llantas optimizado para motores generativos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    :root { color-scheme: light dark; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+  </style>
+<title>La pregunta que Avante no está contestando</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #f4f6fa;
+    --surface: #ffffff;
+    --surface-2: #e9edf5;
+    --ink: #0e1626;
+    --ink-2: #48546b;
+    --ink-3: #7a8699;
+    --line: #d6dde9;
+    --blue: #003087;
+    --blue-ink: #003087;
+    --blue-deep: #001c4f;
+    --blue-pale: #e3eaf7;
+    --red: #ba0c2f;
+    --on-dark: #ffffff;
+    --on-dark-2: #a9bde3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #090e17;
+      --surface: #121924;
+      --surface-2: #1b2330;
+      --ink: #e9eef7;
+      --ink-2: #a8b3c6;
+      --ink-3: #78849a;
+      --line: #27313f;
+      --blue: #82a5ea;
+      --blue-ink: #a9c4f5;
+      --blue-deep: #060c1a;
+      --blue-pale: #16223a;
+      --red: #f2708c;
+      --on-dark: #ffffff;
+      --on-dark-2: #9fb4da;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #090e17;
+    --surface: #121924;
+    --surface-2: #1b2330;
+    --ink: #e9eef7;
+    --ink-2: #a8b3c6;
+    --ink-3: #78849a;
+    --line: #27313f;
+    --blue: #82a5ea;
+    --blue-ink: #a9c4f5;
+    --blue-deep: #060c1a;
+    --blue-pale: #16223a;
+    --red: #f2708c;
+    --on-dark: #ffffff;
+    --on-dark-2: #9fb4da;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero { background: var(--blue-deep); color: var(--on-dark); }
+  .hero-in {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 20px;
+    padding-block: 52px 46px;
+  }
+  .kicker {
+    font-family: "Archivo", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--on-dark-2);
+    margin: 0 0 18px;
+  }
+  .hero h1 {
+    font-family: "Archivo", system-ui, sans-serif;
+    font-weight: 900;
+    font-size: clamp(31px, 6.6vw, 52px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+    margin: 0 0 20px;
+    color: var(--on-dark);
+  }
+  .hero h1 em { font-style: normal; color: #ff8fa5; }
+  .hero p {
+    font-size: clamp(16.5px, 2.4vw, 19px);
+    line-height: 1.55;
+    color: #d3ddf1;
+    max-width: 56ch;
+    margin: 0 0 28px;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--red);
+    color: #fff;
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    padding: 15px 26px;
+    border-radius: 3px;
+    text-decoration: none;
+  }
+  .cta:hover { background: #d4123b; }
+  .cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .cta .arrow { font-family: "IBM Plex Mono", monospace; font-weight: 400; }
+  .cta-note { font-size: 13px; color: var(--on-dark-2); margin: 12px 0 0; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 0 20px; padding-block: 44px 64px; }
+
+  section { margin-bottom: 46px; }
+  section:last-of-type { margin-bottom: 0; }
+
+  h2 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: clamp(21px, 3.6vw, 27px);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0 0 14px;
+  }
+  h3 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    margin: 0 0 6px;
+  }
+  p { max-width: 62ch; margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+  .lead { font-size: 17.5px; color: var(--ink-2); }
+  strong { font-weight: 600; }
+  code {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  .pull {
+    border-left: 4px solid var(--red);
+    padding: 4px 0 4px 18px;
+    margin: 0 0 20px;
+    font-family: "Archivo", sans-serif;
+    font-weight: 600;
+    font-size: clamp(18px, 3vw, 21px);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    max-width: 52ch;
+  }
+
+  /* phases */
+  .phases { display: flex; flex-direction: column; gap: 14px; }
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .phase-n {
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--on-dark);
+    background: var(--blue);
+    padding: 5px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .phase-2 .phase-n { background: var(--ink-3); }
+  .phase .url {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--blue-ink);
+    background: var(--blue-pale);
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    word-break: break-all;
+  }
+  .phase p { margin-bottom: 0; font-size: 15px; }
+
+  /* geo list */
+  .geo { display: flex; flex-direction: column; gap: 18px; counter-reset: g; }
+  .geo > div { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+  .geo > div::before {
+    counter-increment: g;
+    content: counter(g);
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--blue-ink);
+    border: 1.5px solid var(--line);
+    border-radius: 2px;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    flex: none;
+    margin-top: 1px;
+  }
+  .geo p { font-size: 15px; margin-bottom: 0; }
+
+  /* timeline */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; min-width: 380px; }
+  th {
+    font-family: "Archivo", sans-serif;
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-3); text-align: left;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  td.n { font-family: "IBM Plex Mono", monospace; text-align: right; white-space: nowrap; color: var(--ink-2); }
+  .total { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 16px; margin-top: 12px; }
+
+  /* asks */
+  ol.asks { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; }
+  ol.asks li { padding-left: 4px; }
+  ol.asks p { margin: 0; font-size: 15px; }
+
+  .closing {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--red);
+    border-radius: 5px;
+    padding: 26px 22px;
+    margin-top: 46px;
+    text-align: center;
+  }
+  .closing h2 { margin-bottom: 10px; }
+  .closing p { margin-left: auto; margin-right: auto; }
+  .closing .cta { margin-top: 8px; }
+
+  .fine {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    max-width: 64ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <p class="kicker">Propuesta · Avante Llantas y Rines</p>
+    <h1>Tus clientes ya preguntan qué llanta les queda. <em>Se lo está contestando otro.</em></h1>
+    <p>Un hub de compatibilidad con el inventario real de Avante, construido para que ChatGPT, Perplexity y Google AI lo citen como fuente — y para que cada consulta termine en una cotización.</p>
+    <a class="cta" href="/avante/demo" target="_blank" rel="noopener">Probar el mini demo <span class="arrow">&rarr;</span></a>
+    <p class="cta-note">Funciona: mete un coche o una medida y calcula de verdad.</p>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <h2>La oportunidad</h2>
+    <p class="lead">«¿Qué llanta le queda a mi Mazda 3 2021?» es una pregunta de alguien que está por comprar llantas. Hoy la contestan calculadoras genéricas, en pulgadas, sin precios en pesos y sin decir dónde comprarlas.</p>
+    <p class="pull">Avante puede contestarla mejor que nadie, porque Avante sí tiene el inventario.</p>
+    <p>Y el momento importa: cada vez más gente hace esa pregunta en un chat de IA en vez de en un buscador. Esas respuestas citan fuentes. Quien sea la fuente hoy, se queda con la categoría.</p>
+  </section>
+
+  <section>
+    <h2>Qué construimos</h2>
+    <p class="lead">Una página web por cada medida y por cada vehículo, con sus equivalencias válidas y las llantas que Avante tiene disponibles en esa medida, con precio y existencias.</p>
+    <p>Cientos de páginas, cada una con su propia dirección, generadas solas desde una sola plantilla. El cliente entra por donde quiera: por su coche, como en un buscador de refacciones, o por la medida que trae grabada en el costado de la llanta.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-n">FASE 1</div>
+        <div>
+          <h3>Por medida</h3>
+          <span class="url">grupoavante.org/equivalencias/205-55-r16</span>
+          <p>Alrededor de 800 páginas. Cobertura total desde el primer día, cálculo exacto y sin depender de ningún proveedor de datos. Es lo que entregamos completo.</p>
+        </div>
+      </div>
+      <div class="phase phase-2">
+        <div class="phase-n">FASE 2</div>
+        <div>
+          <h3>Por vehículo</h3>
+          <span class="url">grupoavante.org/compatibilidad/mazda/3/2021/i-sport</span>
+          <p>Marca, modelo, año y versión. La versión no es opcional: un Mazda 3 2021 calza 205/60 R16 o 215/45 R18 según el equipamiento, y aquí equivocarse significa una llanta mal montada. Por eso necesita una base de medidas de fábrica, que hay que curar o licenciar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Por qué la citaría una IA</h2>
+    <p>Tres cosas, en orden de peso real:</p>
+    <div class="geo">
+      <div><p><strong>Texto que se puede extraer.</strong> La respuesta completa en el primer párrafo, encabezados que son la pregunta tal cual, tablas de verdad, pesos y milímetros escritos. Los motores extraen texto, no diseño.</p></div>
+      <div><p><strong>Ser la fuente, no nada más tenerla.</strong> Una API pública sin llave y la tabla completa descargable con atribución a Avante. A un motor que puede consultar tus datos le conviene nombrarte; a uno que solo puede leerte, a veces.</p></div>
+      <div><p><strong>Datos estructurados.</strong> Producto, precio y disponibilidad marcados en el código de cada página, para que aparezcan en resultados enriquecidos.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tiempos</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Bloque</th><th style="text-align:right">Días</th></tr></thead>
+        <tbody>
+          <tr><td>Motor de cálculo y validaciones de seguridad</td><td class="n">3–4</td></tr>
+          <tr><td>Generación de páginas y plantilla</td><td class="n">3–4</td></tr>
+          <tr><td>Inventario VTEX en vivo</td><td class="n">2</td></tr>
+          <tr><td>Capa de indexación y datos estructurados</td><td class="n">3</td></tr>
+          <tr><td>Medición de resultados</td><td class="n">1–2</td></tr>
+          <tr><td>Marca, dominio y despliegue</td><td class="n">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="total">Fase 1 completa: 3 semanas.</p>
+    <p>Fase 2 son una o dos semanas más de desarrollo sobre el mismo motor. El tiempo real depende de cuántos modelos decida cubrir Avante y de dónde salgan esos datos.</p>
+  </section>
+
+  <section>
+    <h2>Qué necesitamos de Avante</h2>
+    <ol class="asks">
+      <li><p><strong>Dónde lo publicamos.</strong> ¿Se puede colgar de <code>grupoavante.org</code> desde VTEX, o vamos a subdominio? Colgarlo del dominio principal le suma autoridad en vez de repartirla.</p></li>
+      <li><p><strong>Alcance de la fase 2.</strong> ¿Curamos a mano los modelos más vendidos, o cotizamos una base de datos licenciada?</p></li>
+      <li><p><strong>Aviso legal.</strong> El texto que aclara que la equivalencia es orientativa y que la instalación la valida un técnico.</p></li>
+      <li><p><strong>Metas a 90 días.</strong> Fijarlas juntos. No hay referencia previa de la categoría para ponerlas por nuestra cuenta.</p></li>
+    </ol>
+  </section>
+
+  <div class="closing">
+    <h2>Míralo funcionando</h2>
+    <p>Una página real, con el cálculo real. Mete tu coche o la medida de tu llanta.</p>
+    <a class="cta" href="/avante/demo" target="_blank" rel="noopener">Probar el mini demo <span class="arrow">&rarr;</span></a>
+  </div>
+
+  <p class="fine">Sobre el demo: las equivalencias se calculan en vivo con la fórmula real de diámetro y la tolerancia de 3%. El catálogo de vehículos es una muestra curada de doce modelos del mercado mexicano, pendiente de validar contra ficha técnica — es exactamente la base de datos que la fase 2 tiene que resolver. Los productos, precios e índices de carga y velocidad son de ejemplo: en producción el inventario sale del catálogo de Avante y los índices, de la ficha de cada llanta.</p>
+
+</main>
+</body>
+</html>
