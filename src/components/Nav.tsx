@@ -76,7 +76,7 @@ export default function Nav() {
             className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
           >
             <Radar size={13} />
-            GEO
+            Scan GEO
           </a>
         </nav>
 
@@ -139,7 +139,7 @@ export default function Nav() {
                 className="text-red-400 font-semibold text-base flex items-center gap-1.5"
               >
                 <Radar size={14} />
-                GEO
+                Scan GEO
               </a>
               <a
                 href={ENGEL_CALENDLY}
