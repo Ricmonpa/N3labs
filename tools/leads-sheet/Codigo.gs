@@ -1,31 +1,42 @@
 /**
  * Apps Script detrás de NEXT_PUBLIC_LEADS_ENDPOINT (src/lib/leads.ts).
- * Hoja: "PROMPTER LEADS" (Drive de ricardo.m@potenttial.com).
+ * Archivo: "PROMPTER LEADS" (Drive de ricardo.m@potenttial.com).
  *
- * Qué hace con cada registro que llega del sitio:
- *   1. lo agrega como fila, respetando las columnas que ya tiene la hoja;
- *   2. nos avisa por correo a los dos cuando viene del diagnóstico GEO.
+ * Cada registro que llega del sitio:
+ *   1. se guarda en la pestaña que le toca según de dónde vino;
+ *   2. si vino del diagnóstico GEO, nos avisa por correo a los dos.
  *
- * Cómo actualizarlo (una sola vez):
+ * Pestañas:
+ *   - Prompter  → la primera pestaña, la de siempre, con sus columnas de siempre.
+ *   - GEO       → pestaña nueva "GEO LEADS". Si no existe, el script la crea sola
+ *                 la primera vez, con sus propias columnas (incluye sitio y puntaje).
+ *
+ * Cómo instalarlo (una sola vez):
  *   1. Abre la hoja → Extensiones → Apps Script.
  *   2. Reemplaza todo el contenido del archivo por este.
  *   3. Guardar (Ctrl+S).
  *   4. Implementar → Administrar implementaciones → ✏️ → Versión: Nueva versión → Implementar.
  *      (Usa la MISMA implementación para que la URL /exec no cambie.)
  *   5. La primera vez te pedirá autorizar el envío de correo: acepta.
- *
- * Columnas: escribe solo en las que ya existen en la fila 1. Hoy son
- * Fecha | Nombre | Correo | Idioma | Origen | Timestamp.
- * Si quieres ver el sitio auditado y el puntaje, agrega a mano los
- * encabezados "Sitio" y "Puntaje" (y si quieres "Campaña", "Referrer",
- * "Landing") y se llenarán solos de ahí en adelante.
  */
 
-/** A quién le avisamos de cada registro nuevo. */
+/** A quién le avisamos de cada registro GEO. */
 var NOTIFICAR = ["rmmoncada5@gmail.com", "e.fonseca@potenttial.com"];
 
 /** Solo avisar de estos orígenes; deja [] para que avise de todos. */
 var AVISAR_SOLO_DE = ["geo-audit"];
+
+/** Orígenes que van a su propia pestaña. Lo demás se queda en la primera. */
+var PESTANAS = {
+  "geo-audit": "GEO LEADS"
+};
+
+var COLUMNAS_GEO = [
+  "Fecha", "Nombre", "Correo", "Sitio", "Puntaje",
+  "Idioma", "Procedencia", "Campaña", "Referrer", "Landing", "Timestamp"
+];
+
+var COLUMNAS_POR_DEFECTO = ["Fecha", "Nombre", "Correo", "Idioma", "Origen", "Timestamp"];
 
 /** Si el script NO está pegado dentro de la hoja, pon aquí su id. */
 var SHEET_ID = "";
@@ -43,9 +54,23 @@ function doPost(e) {
   }
 }
 
-function hoja() {
-  var ss = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
-  return ss.getSheets()[0];
+function libro() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
+/** La pestaña que le toca a este lead; la crea con encabezados si hace falta. */
+function hoja(lead) {
+  var ss = libro();
+  var nombre = PESTANAS[String(lead.source)];
+  if (!nombre) return ss.getSheets()[0];
+
+  var sheet = ss.getSheetByName(nombre);
+  if (!sheet) {
+    sheet = ss.insertSheet(nombre);
+    sheet.getRange(1, 1, 1, COLUMNAS_GEO.length).setValues([COLUMNAS_GEO]).setFontWeight("bold");
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
 }
 
 /** Valor para cada encabezado posible. Lo que no esté en la fila 1 se ignora. */
@@ -66,15 +91,13 @@ function columnas(lead) {
   };
 }
 
-var HEADERS_POR_DEFECTO = ["Fecha", "Nombre", "Correo", "Idioma", "Origen", "Timestamp"];
-
 function guardar(lead) {
-  var sheet = hoja();
-  var headers = HEADERS_POR_DEFECTO;
+  var sheet = hoja(lead);
+  var headers = COLUMNAS_POR_DEFECTO;
 
   if (sheet.getLastRow() > 0 && sheet.getLastColumn() > 0) {
     var fila1 = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-    // La hoja tiene una fila vacía arriba del encabezado real: usa la primera fila con texto.
+    // La hoja del prompter tiene una fila vacía arriba: usa la primera fila con texto.
     if (!fila1.join("")) fila1 = sheet.getRange(2, 1, 1, sheet.getLastColumn()).getValues()[0];
     if (fila1.join("")) headers = fila1;
   } else {
