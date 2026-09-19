@@ -72,7 +72,7 @@ function guardarGeo(d) {
 }
 
 function campana(d) {
-  return [d.utmSource, d.utmMedium, d.utmCampaign].filter(String).join(" / ");
+  return [d.utmSource, d.utmMedium, d.utmCampaign].filter(Boolean).join(" / ");
 }
 
 function avisar(d) {
