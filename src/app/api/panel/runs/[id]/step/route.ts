@@ -1,8 +1,8 @@
-import { after } from "next/server";
-import { internalStepToken, isInternalStep, requireApiSession } from "@/lib/panel/auth";
+import { isInternalStep, requireApiSession } from "@/lib/panel/auth";
 import { NotConfiguredError } from "@/lib/panel/db";
 import { fail, ok, UUID } from "@/lib/panel/http";
-import { getRun, leaseRun, progress, workRun } from "@/lib/panel/store";
+import { getRun, progress } from "@/lib/panel/store";
+import { kickRun } from "@/lib/panel/worker";
 
 // The batch runs after the response is sent; web-search calls can take a minute or more.
 export const maxDuration = 300;
@@ -21,19 +21,7 @@ export async function POST(request: Request, ctx: RouteContext<"/api/panel/runs/
       if (session instanceof Response) return session;
     }
 
-    const leased = await leaseRun(id);
-    if (leased) {
-      const origin = new URL(request.url).origin;
-      after(async () => {
-        if (!(await workRun(leased))) return;
-        await fetch(`${origin}/api/panel/runs/${id}/step`, {
-          method: "POST",
-          headers: { "x-panel-step": internalStepToken(id) },
-          signal: AbortSignal.timeout(15_000),
-        }).catch((err) => console.warn(`geo run ${id}: could not chain next batch`, err));
-      });
-    }
-
+    const leased = await kickRun(id, new URL(request.url).origin);
     const run = await getRun(id);
     if (!run) return fail(404, "not_found");
     return ok({ busy: !leased, status: run.status, total: run.total, ...(await progress(id)) });

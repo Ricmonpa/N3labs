@@ -8,9 +8,9 @@ import Footer from "@/components/Footer";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Diagnóstico GEO · ¿Las IAs pueden leer tu sitio? | N3",
+  title: "Diagnóstico GEO completo · ¿Las IAs te leen y te recomiendan? | N3",
   description:
-    "Herramienta gratuita de N3: revisa en vivo si ChatGPT, Claude, Perplexity y Google pueden leer tu sitio, con evidencia de cada resultado.",
+    "Diagnóstico gratuito de N3: revisa en vivo si ChatGPT, Claude, Perplexity y Google pueden leer tu sitio, y si Gemini te recomienda frente a tu competencia.",
   path: "/geo",
 });
 

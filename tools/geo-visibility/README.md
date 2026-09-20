@@ -1,8 +1,9 @@
 # Estudio de visibilidad en IA (v2 del diagnóstico GEO)
 
-Herramienta interna de N3. Hace las preguntas de un cliente a ChatGPT, Claude, Perplexity y Gemini
-(con búsqueda web), varias veces, y mide si mencionan y citan a la marca. No es pública: cada
-corrida cuesta dinero.
+Herramienta de N3. Hace las preguntas de un cliente a ChatGPT, Claude, Perplexity y Gemini
+(con búsqueda web), varias veces, y mide si mencionan y citan a la marca. El estudio completo es
+interno (cada corrida cuesta dinero); al público solo le llega una versión ligera, con topes (ver
+"Embudo público").
 
 **El uso normal es el panel en línea: `/panel` del sitio.** Esta carpeta es la versión de terminal,
 útil para pruebas. Las dos usan el mismo motor, que vive en `src/lib/geo-visibility/`.
@@ -19,8 +20,32 @@ Variables de entorno del proyecto en Vercel:
 - Opcionales: `PANEL_MAX_CALLS` (tope por corrida, 1500 por defecto), `PANEL_SESSION_SECRET` y los
   `*_MODEL` de `.env.example`.
 
-Las tablas se crean solas la primera vez. Una corrida avanza mientras su página está abierta; si se
-cierra, se pausa y continúa al volver.
+- Opcional: `GEO_SCAN_DAILY_CAP` (diagnósticos públicos por día para todos, 40 por defecto).
+
+Las tablas se crean solas la primera vez. Las corridas avanzan en el servidor, en tandas que se
+encadenan solas: se puede cerrar la página o bloquear el celular y siguen.
+
+## Embudo público
+
+1. **Anzuelo** — `/geotest.html` (página de Engel, link "Scan GEO" del menú). Ejercicio orientativo,
+   sin motor real. Su botón lleva a `/geo`.
+2. **Diagnóstico completo** — `/geo`. Un solo formulario: sitio + nombre + correo. Entrega junto:
+   - Parte 1, ¿te pueden leer?: revisión técnica en vivo (`src/lib/geo/audit.ts`), en segundos.
+   - Parte 2, ¿te recomiendan?: estudio ligero en Gemini (`src/lib/panel/scan.ts`): el panel arma
+     marca, competidores y preguntas desde la URL; 12 preguntas (10 sin nombre de marca + 2 con
+     nombre) × 2 repeticiones = 24 llamadas, unos US$0.10. Tarda alrededor de un minuto.
+
+   El lead va a la hoja "PROMPTER LEADS", pestaña "GEO LEADS", y avisa por correo a Ricardo y
+   Engel (`tools/leads-sheet/Codigo.gs`). El estudio queda en el panel como cualquier otro, con
+   autor `scan:<correo>`.
+
+   Topes: 3 diagnósticos por correo o IP al día; `GEO_SCAN_DAILY_CAP` para todos; un sitio ya
+   medido en las últimas 24 h devuelve el mismo resultado sin volver a gastar.
+
+Lo que se vende después es el estudio completo desde el panel: cuatro motores, más preguntas,
+seguimiento mensual. La llamada se agenda desde el final del diagnóstico.
+
+La propuesta de Avante vive aparte en `public/avante/` (`/avante` y `/avante/demo`, sin indexar).
 
 ## Preparar (terminal)
 

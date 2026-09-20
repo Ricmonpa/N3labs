@@ -53,6 +53,22 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
     created_at timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY (run_id, key)
   )`;
+  // Public scans from /geo: who asked, for which site, and the run that answers it.
+  await sql`CREATE TABLE IF NOT EXISTS geo_scans (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    token text NOT NULL,
+    status text NOT NULL DEFAULT 'preparing',
+    run_id uuid REFERENCES geo_runs(id) ON DELETE SET NULL,
+    error text,
+    domain text NOT NULL,
+    url text NOT NULL,
+    name text NOT NULL,
+    email text NOT NULL,
+    ip text NOT NULL,
+    lang text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )`;
+  await sql`CREATE INDEX IF NOT EXISTS geo_scans_recent_idx ON geo_scans (created_at DESC)`;
 }
 
 /** Tagged-template SQL client; creates the tables on first use. */
