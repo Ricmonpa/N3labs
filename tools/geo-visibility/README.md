@@ -28,8 +28,14 @@ encadenan solas: se puede cerrar la página o bloquear el celular y siguen.
 ## Embudo público
 
 1. **Anzuelo** — `/geotest.html` (página de Engel, link "Scan GEO" del menú). Ejercicio orientativo,
-   sin motor real. Su botón lleva a `/geo`.
-2. **Diagnóstico completo** — `/geo`. Un solo formulario: sitio + nombre + correo. Entrega junto:
+   sin motor real.
+2. **Llamada** — el botón "Agendar mi diagnóstico completo" lleva a `/#agendar` (Calendly de Engel o
+   Ricardo). El diagnóstico completo se cotiza y se corre desde el panel.
+
+**Apagado desde el 21 sep 2026 (se cobra, no se regala):** `/geo` redirige al anzuelo y el estudio
+público solo corre con `GEO_PUBLIC_SCAN=on`. El código se queda por si vuelve. Así funcionaba:
+
+- **Diagnóstico completo gratis** — `/geo`. Un solo formulario: sitio + nombre + correo. Entrega junto:
    - Parte 1, ¿te pueden leer?: revisión técnica en vivo (`src/lib/geo/audit.ts`), en segundos.
    - Parte 2, ¿te recomiendan?: estudio ligero en Gemini (`src/lib/panel/scan.ts`): el panel arma
      marca, competidores y preguntas desde la URL; 12 preguntas (10 sin nombre de marca + 2 con
