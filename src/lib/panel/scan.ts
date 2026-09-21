@@ -75,7 +75,8 @@ export async function startScan(
   if (!site) throw new ScanError("invalid_url");
   const email = input.email.trim().toLowerCase();
   if (!EMAIL.test(email)) throw new ScanError("invalid_email");
-  if (!process.env.GEMINI_API_KEY) throw new ScanError("unavailable");
+  // Off unless explicitly enabled: the full diagnosis is sold, not given away.
+  if (process.env.GEO_PUBLIC_SCAN !== "on" || !process.env.GEMINI_API_KEY) throw new ScanError("unavailable");
 
   const sql = await db();
 

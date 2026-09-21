@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
     { path: "/", priority: 1 },
-    { path: "/geo", priority: 0.8 },
+    { path: "/geotest.html", priority: 0.8 },
     { path: "/prompter", priority: 0.8 },
     { path: "/iaready.html", priority: 0.6 },
   ];

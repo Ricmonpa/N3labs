@@ -61,6 +61,15 @@ export default function Calendly() {
     document.body.appendChild(s);
   }, []);
 
+  // Links like /#agendar (from the GEO hook) land here; the browser's own jump can fire
+  // before the page settles, so do it once more after mount.
+  useEffect(() => {
+    const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    if (!target) return;
+    const timer = setTimeout(() => target.scrollIntoView({ block: "start" }), 150);
+    return () => clearTimeout(timer);
+  }, []);
+
   // (Re)initialize the inline widget when script is ready or partner changes
   useEffect(() => {
     if (!loaded || !containerRef.current || !window.Calendly) return;
@@ -72,7 +81,7 @@ export default function Calendly() {
   }, [loaded, active]);
 
   return (
-    <div className="mt-12">
+    <div id="agendar" className="mt-12 scroll-mt-24">
       {/* Partner selector */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
