@@ -67,16 +67,35 @@ function lite(study: Study): Study {
   return { ...study, prompts: picked, runs: RUNS, engines: ["gemini"] };
 }
 
+/** Codes that unlock /scan-geo for a prospect, from GEO_SCAN_CODES (separados por coma). */
+export function validCode(code?: string | null) {
+  const codes = (process.env.GEO_SCAN_CODES ?? "")
+    .split(",")
+    .map((c) => c.trim().toLowerCase())
+    .filter(Boolean);
+  const given = (code ?? "").trim().toLowerCase();
+  return !!given && codes.includes(given);
+}
+
+/** True when anyone can run a scan without an invite code. */
+export function scanOpenToEveryone() {
+  return process.env.GEO_PUBLIC_SCAN === "on";
+}
+
+export function scanAllowed(code?: string | null) {
+  return !!process.env.GEMINI_API_KEY && (scanOpenToEveryone() || validCode(code));
+}
+
 export async function startScan(
-  input: { url: string; name: string; email: string; lang: "es" | "en"; ip: string },
+  input: { url: string; name: string; email: string; lang: "es" | "en"; ip: string; code?: string },
   origin: string,
 ) {
   const site = domainOf(input.url.trim());
   if (!site) throw new ScanError("invalid_url");
   const email = input.email.trim().toLowerCase();
   if (!EMAIL.test(email)) throw new ScanError("invalid_email");
-  // Off unless explicitly enabled: the full diagnosis is sold, not given away.
-  if (process.env.GEO_PUBLIC_SCAN !== "on" || !process.env.GEMINI_API_KEY) throw new ScanError("unavailable");
+  // The full diagnosis is sold: only an invite code (or GEO_PUBLIC_SCAN=on) runs it.
+  if (!scanAllowed(input.code)) throw new ScanError("unavailable");
 
   const sql = await db();
 

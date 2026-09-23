@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/opengraph-image": ["./src/app/Inter-*.ttf"],
     "/panel/opengraph-image": ["./src/app/Inter-*.ttf"],
+    "/scan-geo/opengraph-image": ["./src/app/Inter-*.ttf"],
   },
   async redirects() {
     // The full GEO diagnosis is paid now: the hook leads to booking a call instead.

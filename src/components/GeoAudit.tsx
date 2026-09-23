@@ -422,7 +422,7 @@ function Visibility({ scan, c }: { scan: ScanState; c: Copy }) {
   );
 }
 
-export default function GeoAudit() {
+export default function GeoAudit({ scanCode }: { scanCode?: string } = {}) {
   const { lang } = useLanguage();
   const c = copy[lang];
 
@@ -487,7 +487,7 @@ export default function GeoAudit() {
       const res = await fetch("/api/geo/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: auditedUrl, name, email, lang }),
+        body: JSON.stringify({ url: auditedUrl, name, email, lang, code: scanCode }),
       });
       const data = await res.json();
       if (!res.ok) {
