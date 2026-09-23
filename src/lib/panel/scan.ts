@@ -2,7 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { after } from "next/server";
 import type { Report } from "@/lib/geo-visibility/report.ts";
-import type { Study, StudyPrompt } from "@/lib/geo-visibility/types.ts";
+import type { Study } from "@/lib/geo-visibility/types.ts";
 import { internalStepToken } from "./auth";
 import { db } from "./db";
 import { getInvite, inviteUsable, useInvite } from "./invites";
@@ -11,9 +11,10 @@ import { suggestStudy } from "./suggest";
 import { kickRun } from "./worker";
 
 /**
- * Public visibility scan behind /geo: a light study (Gemini only, a dozen questions, two
- * repetitions) drafted from the visitor's URL and run in the background. The full study
- * (four engines, more questions, monthly) is what N3 sells.
+ * Public visibility scan behind /scan-geo: el mismo tamaño que un estudio del panel
+ * (26 preguntas × 3 repeticiones) pero en un solo motor, armado desde la URL del visitante
+ * y corrido en segundo plano. Lo que N3 vende es el estudio en los cuatro motores, con
+ * seguimiento mensual.
  */
 
 export class ScanError extends Error {
@@ -46,8 +47,8 @@ const DAILY_CAP = Number(process.env.GEO_SCAN_DAILY_CAP ?? 40);
 const REUSE_HOURS = 24;
 const PREPARE_TIMEOUT_MIN = 5;
 
-const LITE = { category: 5, problem: 4, comparison: 1, brand: 2 } as const;
-const RUNS = 2;
+/** Mismo tamaño que un estudio del panel: 26 preguntas × 3 repeticiones = 78 respuestas. */
+const RUNS = 3;
 
 function domainOf(raw: string) {
   try {
@@ -59,13 +60,9 @@ function domainOf(raw: string) {
   }
 }
 
-/** A dozen questions, mostly the kind where the client doesn't name the brand. */
+/** Todas las preguntas propuestas, en un solo motor (el único con llave hoy). */
 function lite(study: Study): Study {
-  const picked: StudyPrompt[] = [];
-  for (const [type, n] of Object.entries(LITE)) {
-    picked.push(...study.prompts.filter((p) => p.type === type).slice(0, n));
-  }
-  return { ...study, prompts: picked, runs: RUNS, engines: ["gemini"] };
+  return { ...study, runs: RUNS, engines: ["gemini"] };
 }
 
 /** Codes that unlock /scan-geo for a prospect, from GEO_SCAN_CODES (separados por coma). */

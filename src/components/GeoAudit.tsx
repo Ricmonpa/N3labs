@@ -83,8 +83,14 @@ const copy = {
     scanPreparing: "Leyendo tu sitio y armando las preguntas que haría tu cliente…",
     scanPreparingHint: "Buscamos en la web qué vendes y quién es tu competencia. Menos de un minuto.",
     scanRunning: "Preguntándole a Gemini lo que preguntaría tu cliente",
-    scanRunningHint: "Cada pregunta va dos veces, porque la IA no siempre responde igual. Puedes quedarte aquí: el resultado aparece solo.",
+    scanRunningHint: "Cada pregunta va tres veces, porque la IA no siempre responde igual. Puedes quedarte aquí: el resultado aparece solo.",
     answers: "respuestas",
+    buildingTitle: "Estamos armando tu diagnóstico",
+    buildingHint: "Las dos partes se entregan juntas, para que veas el panorama completo. Le hacemos 78 preguntas reales a la IA, así que toma entre 4 y 7 minutos.",
+    buildingStep1: "Revisión técnica de tu sitio",
+    buildingStep1Done: "Lista",
+    buildingStep2: "Qué responde la IA sobre ti",
+    buildingLeave: "Puedes cerrar esta página y volver al mismo link: el estudio sigue corriendo en nuestro servidor.",
     scanFailed: "Esta parte no pudo correr ahora.",
     scanFailedHint: "Ya tenemos tus datos: el equipo de N3 la corre y te escribe con el resultado.",
     scanReasons: {
@@ -92,7 +98,7 @@ const copy = {
       busy: "Hoy tuvimos muchos diagnósticos.",
     } as Record<string, string>,
     sampleNote:
-      "Muestra con un motor (Gemini) y una docena de preguntas: es una foto de hoy, no un promedio. Por eso cada número trae su rango probable.",
+      "Muestra con un motor (Gemini): 26 preguntas, tres veces cada una. Es una foto de hoy, no un promedio, y por eso cada número trae su rango probable.",
     nextTitle: "Mídelo en los cuatro motores, cada mes",
     nextText:
       "El estudio de N3 mide ChatGPT, Claude, Perplexity y Gemini con más preguntas y repeticiones, te dice qué fuentes consulta la IA antes de responder y te entrega el plan para aparecer.",
@@ -156,8 +162,14 @@ const copy = {
     scanPreparing: "Reading your site and writing the questions your customers would ask…",
     scanPreparingHint: "We search the web for what you sell and who you compete with. Under a minute.",
     scanRunning: "Asking Gemini what your customers would ask",
-    scanRunningHint: "Each question runs twice, because AI doesn't always answer the same way. You can stay here: the result shows up on its own.",
+    scanRunningHint: "Each question runs three times, because AI doesn't always answer the same way. You can stay here: the result shows up on its own.",
     answers: "answers",
+    buildingTitle: "We're putting your audit together",
+    buildingHint: "Both parts are delivered together, so you see the whole picture. We ask AI 78 real questions, so it takes 4 to 7 minutes.",
+    buildingStep1: "Technical check of your site",
+    buildingStep1Done: "Done",
+    buildingStep2: "What AI says about you",
+    buildingLeave: "You can close this page and come back to the same link: the study keeps running on our server.",
     scanFailed: "This part couldn't run right now.",
     scanFailedHint: "We have your details: the N3 team will run it and email you the result.",
     scanReasons: {
@@ -165,7 +177,7 @@ const copy = {
       busy: "We've had a lot of audits today.",
     } as Record<string, string>,
     sampleNote:
-      "A sample with one engine (Gemini) and a dozen questions: a snapshot of today, not an average. That's why every number comes with its likely range.",
+      "A sample with one engine (Gemini): 26 questions, three times each. A snapshot of today, not an average, which is why every number comes with its likely range.",
     nextTitle: "Measure it on all four engines, every month",
     nextText:
       "N3's study measures ChatGPT, Claude, Perplexity and Gemini with more questions and repetitions, shows which sources the AI checks before answering, and gives you the plan to show up.",
@@ -252,6 +264,49 @@ function CheckRow({ check, c }: { check: Check; c: Copy }) {
         </div>
       </div>
     </li>
+  );
+}
+
+/** Mientras corre el estudio: una sola pantalla, para que nadie crea que ya terminó. */
+function Building({ scan, c }: { scan: ScanState; c: Copy }) {
+  const running = scan.status === "running";
+  const ratio = running && scan.total ? scan.answered / scan.total : 0;
+  return (
+    <div className="glass rounded-2xl p-6 sm:p-8 border border-white/[0.06]" aria-live="polite">
+      <h2 className="text-lg font-bold text-white">{c.buildingTitle}</h2>
+      <p className="text-zinc-400 text-sm mt-1.5 leading-relaxed">{c.buildingHint}</p>
+
+      <div className="mt-6 flex items-start gap-3">
+        <CheckCircle2 size={18} className="text-emerald-400 shrink-0 mt-0.5" aria-hidden />
+        <div>
+          <p className="text-white text-sm font-semibold">{c.buildingStep1}</p>
+          <p className="text-zinc-500 text-sm">{c.buildingStep1Done}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-start gap-3">
+        <Loader2 size={18} className="animate-spin text-red-500 shrink-0 mt-0.5" aria-hidden />
+        <div className="min-w-0 flex-1">
+          <p className="text-white text-sm font-semibold">{c.buildingStep2}</p>
+          <p className="text-zinc-400 text-sm mt-0.5 leading-relaxed">
+            {running ? c.scanRunningHint : scan.status === "preparing" ? c.scanPreparingHint : c.scanStarting}
+          </p>
+          <div className="mt-4 h-2 rounded-full bg-white/[0.06] overflow-hidden">
+            <div
+              className={`h-full rounded-full bg-red-600 transition-all duration-700 ${running ? "" : "w-1/12 animate-pulse"}`}
+              style={running ? { width: `${Math.max(ratio * 100, 4)}%` } : undefined}
+            />
+          </div>
+          {running && (
+            <p className="mt-2 text-xs text-zinc-500 tabular-nums">
+              {scan.answered} / {scan.total} {c.answers}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <p className="mt-6 text-xs text-zinc-500 leading-relaxed">{c.buildingLeave}</p>
+    </div>
   );
 }
 
@@ -434,6 +489,8 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
   const [report, setReport] = useState<AuditReport | null>(null);
   const [scanRef, setScanRef] = useState<ScanRef | null>(null);
   const [scan, setScan] = useState<ScanState | null>(null);
+  // Las dos partes se entregan juntas: mientras el estudio corre, no se muestra nada del informe.
+  const waiting = !!scan && scan.status !== "done" && scan.status !== "failed";
 
   // Prefill from an earlier sign-up and pick up the last diagnosis after a reload.
   useEffect(() => {
@@ -658,7 +715,19 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
           </motion.div>
         )}
 
-        {report && (
+        {report && waiting && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-medium">
+              <Radar size={12} className="text-red-500" />
+              {c.badge}
+            </span>
+            <p className="mt-4 text-sm text-zinc-400">{c.resultFor}</p>
+            <p className="font-mono text-lg text-white break-all mb-6">{report.finalUrl}</p>
+            <Building scan={scan!} c={c} />
+          </motion.div>
+        )}
+
+        {report && !waiting && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-medium">
               <Radar size={12} className="text-red-500" />
