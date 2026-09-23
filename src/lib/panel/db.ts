@@ -69,6 +69,17 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
     created_at timestamptz NOT NULL DEFAULT now()
   )`;
   await sql`CREATE INDEX IF NOT EXISTS geo_scans_recent_idx ON geo_scans (created_at DESC)`;
+  // Links de un solo uso que el equipo comparte con un prospecto.
+  await sql`CREATE TABLE IF NOT EXISTS geo_invites (
+    token text PRIMARY KEY,
+    label text NOT NULL,
+    max_uses int NOT NULL DEFAULT 1,
+    uses int NOT NULL DEFAULT 0,
+    used_by text,
+    used_at timestamptz,
+    created_by text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )`;
 }
 
 /** Tagged-template SQL client; creates the tables on first use. */

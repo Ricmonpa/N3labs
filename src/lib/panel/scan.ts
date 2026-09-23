@@ -5,6 +5,7 @@ import type { Report } from "@/lib/geo-visibility/report.ts";
 import type { Study, StudyPrompt } from "@/lib/geo-visibility/types.ts";
 import { internalStepToken } from "./auth";
 import { db } from "./db";
+import { getInvite, inviteUsable, useInvite } from "./invites";
 import { createRun, createStudy, getRun, progress } from "./store";
 import { suggestStudy } from "./suggest";
 import { kickRun } from "./worker";
@@ -91,15 +92,16 @@ export function scanAllowed(code?: string | null) {
 }
 
 export async function startScan(
-  input: { url: string; name: string; email: string; lang: "es" | "en"; ip: string; code?: string },
+  input: { url: string; name: string; email: string; lang: "es" | "en"; ip: string; code?: string; invite?: string },
   origin: string,
 ) {
   const site = domainOf(input.url.trim());
   if (!site) throw new ScanError("invalid_url");
   const email = input.email.trim().toLowerCase();
   if (!EMAIL.test(email)) throw new ScanError("invalid_email");
-  // The full diagnosis is sold: only an invite code (or GEO_PUBLIC_SCAN=on) runs it.
-  if (!scanAllowed(input.code)) throw new ScanError("unavailable");
+  // Un link de invitación del panel siempre corre, aunque el acceso esté cerrado.
+  const invite = input.invite ? await getInvite(input.invite) : null;
+  if (!scanAllowed(input.code) && !inviteUsable(invite)) throw new ScanError("unavailable");
 
   const sql = await db();
 
@@ -121,6 +123,7 @@ export async function startScan(
     VALUES (${token}, ${site.domain}, ${site.url}, ${input.name.trim().slice(0, 120)}, ${email}, ${input.ip}, ${input.lang})
     RETURNING id`) as { id: string }[];
 
+  if (invite) await useInvite(invite.token, email);
   after(() => prepare(row.id, site.url, input.lang, email, origin));
   return { id: row.id, token };
 }

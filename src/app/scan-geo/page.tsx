@@ -8,6 +8,7 @@ import Nav from "@/components/Nav";
 import GeoAudit from "@/components/GeoAudit";
 import Footer from "@/components/Footer";
 import { ENGEL_CALENDLY } from "@/components/Calendly";
+import { getInvite, inviteUsable } from "@/lib/panel/invites";
 import { scanAllowed, scanOpenToEveryone } from "@/lib/panel/scan";
 
 const TITLE = "Scan GEO completo · N3";
@@ -90,13 +91,20 @@ export default async function ScanGeoPage({ searchParams }: PageProps<"/scan-geo
     "es";
 
   const code = typeof sp.c === "string" ? sp.c : "";
-  const allowed = scanAllowed(code);
+  const inviteToken = typeof sp.i === "string" ? sp.i : "";
+  // Un link del panel (?i=) corre aunque el acceso esté cerrado.
+  const invite = inviteToken ? await getInvite(inviteToken).catch(() => null) : null;
+  const allowed = scanAllowed(code) || inviteUsable(invite);
 
   return (
     <LanguageProvider initialLang={initialLang}>
       <main className="min-h-screen bg-[#06060c]">
         <Nav />
-        {allowed ? <GeoAudit scanCode={scanOpenToEveryone() ? undefined : code} /> : <Invitation />}
+        {allowed ? (
+          <GeoAudit scanCode={scanOpenToEveryone() ? undefined : code} invite={invite ? invite.token : undefined} />
+        ) : (
+          <Invitation />
+        )}
         <Footer />
       </main>
     </LanguageProvider>

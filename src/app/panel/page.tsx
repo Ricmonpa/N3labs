@@ -3,12 +3,14 @@ import { Plus } from "lucide-react";
 import Gate from "@/components/panel/Gate";
 import { RunList } from "@/components/panel/RunList";
 import DeleteStudyButton from "@/components/panel/DeleteStudyButton";
+import InviteLinks from "@/components/panel/InviteLinks";
+import { listInvites } from "@/lib/panel/invites";
 import { listRuns, listStudies } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
 
 async function Dashboard() {
-  const [studies, runs] = await Promise.all([listStudies(), listRuns(undefined, 10)]);
+  const [studies, runs, invites] = await Promise.all([listStudies(), listRuns(undefined, 10), listInvites()]);
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -51,6 +53,8 @@ async function Dashboard() {
           </div>
         )}
       </section>
+
+      <InviteLinks invites={invites} />
 
       {runs.length > 0 && (
         <section>
