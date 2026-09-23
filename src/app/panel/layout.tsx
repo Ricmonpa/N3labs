@@ -4,9 +4,17 @@ import Logo from "@/components/Logo";
 import LogoutButton from "@/components/panel/LogoutButton";
 import { getSession } from "@/lib/panel/auth";
 
+// El título y la descripción son los que se ven al compartir el link por WhatsApp.
+const TITLE = "Scan GEO completo · N3";
+const DESCRIPTION =
+  "Medimos si ChatGPT, Gemini, Claude y Perplexity recomiendan tu marca frente a tu competencia, con la evidencia de cada respuesta.";
+
 export const metadata: Metadata = {
-  title: "Panel GEO · N3",
+  title: TITLE,
+  description: DESCRIPTION,
   robots: { index: false, follow: false },
+  openGraph: { type: "website", siteName: "N3 Thinktech · IA Laboratory", locale: "es_MX", title: TITLE, description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
