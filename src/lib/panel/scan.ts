@@ -77,9 +77,13 @@ export function validCode(code?: string | null) {
   return !!given && codes.includes(given);
 }
 
-/** True when anyone can run a scan without an invite code. */
+/**
+ * /scan-geo está abierto: el link se comparte y funciona.
+ * Para cerrarlo a invitados, pon GEO_SCAN_REQUIRE_CODE=on y lista los códigos
+ * en GEO_SCAN_CODES; entonces solo corre con /scan-geo?c=<código>.
+ */
 export function scanOpenToEveryone() {
-  return process.env.GEO_PUBLIC_SCAN === "on";
+  return process.env.GEO_SCAN_REQUIRE_CODE !== "on";
 }
 
 export function scanAllowed(code?: string | null) {
