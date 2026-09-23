@@ -9,7 +9,8 @@ export const SITE_DESCRIPTION =
 // They become `sameAs` in the Organization JSON-LD. Only add real URLs.
 export const SAME_AS: string[] = [];
 
-const OG_IMAGE = { url: "/n3-logo.png", width: 560, height: 220, alt: "N3 Thinktech IA Laboratory" };
+// The shared card comes from src/app/opengraph-image.tsx (1200×630, generated).
+// Metadata here must not set `images`, or it would override that file.
 
 /** Per-page metadata with canonical URL and complete Open Graph (page fields replace the layout's). */
 export function pageMetadata({
@@ -32,9 +33,8 @@ export function pageMetadata({
       url: path,
       title,
       description,
-      images: [OG_IMAGE],
     },
-    twitter: { card: "summary", title, description, images: [OG_IMAGE.url] },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
