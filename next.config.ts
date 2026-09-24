@@ -16,12 +16,17 @@ const nextConfig: NextConfig = {
     return [
       { source: "/avante", destination: "/avante/index.html" },
       { source: "/avante/demo", destination: "/avante/demo/index.html" },
+      { source: "/autycom", destination: "/autycom/index.html" },
     ];
   },
   async headers() {
     return [
       {
         source: "/avante/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
+        source: "/autycom/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];
