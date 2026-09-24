@@ -1,0 +1,428 @@
+<title>Diagnóstico GEO Autycom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F5F3; --paper:#FFFFFF; --ink:#17212B; --ink-2:#4A5763; --ink-3:#7A8691;
+  --rule:#DCE0DE; --accent:#B8641A; --accent-soft:#F6E7D6;
+  --crit:#B3261E; --crit-soft:#FBE3E1; --warn:#9A6A00; --warn-soft:#FBF0D2; --ok:#2D6A3E; --ok-soft:#E1F0E4;
+  --brand:#1F5F8B; --bar:#AEB8C0; --code-bg:#1B252F; --code-ink:#E4E9ED;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#12181E; --paper:#19212A; --ink:#E6EAED; --ink-2:#AAB5BE; --ink-3:#7F8B95;
+    --rule:#2B3640; --accent:#E39A55; --accent-soft:#3A2A1B;
+    --crit:#F08A80; --crit-soft:#3B1D1B; --warn:#E3B84E; --warn-soft:#352C14; --ok:#7CC48E; --ok-soft:#1B3022;
+    --brand:#6FB2E0; --bar:#4B5864; --code-bg:#0D1318; --code-ink:#DDE4EA;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#12181E; --paper:#19212A; --ink:#E6EAED; --ink-2:#AAB5BE; --ink-3:#7F8B95;
+  --rule:#2B3640; --accent:#E39A55; --accent-soft:#3A2A1B;
+  --crit:#F08A80; --crit-soft:#3B1D1B; --warn:#E3B84E; --warn-soft:#352C14; --ok:#7CC48E; --ok-soft:#1B3022;
+  --brand:#6FB2E0; --bar:#4B5864; --code-bg:#0D1318; --code-ink:#DDE4EA;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:40px 80px}
+h1,h2,h3{font-family:Archivo,"IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3vw,28px);font-weight:700;margin-bottom:8px}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+.eyebrow{font:500 12px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.lede{font-size:18px;color:var(--ink-2);max-width:68ch}
+section{margin-top:56px;display:grid;gap:18px}
+.sub{color:var(--ink-2);max-width:68ch}
+header.top{display:grid;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:24px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--ink-3)}
+.meta b{color:var(--ink-2);font-weight:500}
+
+/* verdict */
+.verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.verdict>div{background:var(--paper);padding:20px;display:grid;gap:6px;align-content:start}
+.big{font:800 44px/1 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.big small{font-size:18px;font-weight:700;color:var(--ink-3)}
+.verdict .lab{font-size:14px;color:var(--ink-2)}
+.verdict .rng{font:12px/1.4 "IBM Plex Mono",monospace;color:var(--ink-3)}
+.c-crit{color:var(--crit)} .c-ok{color:var(--ok)} .c-warn{color:var(--warn)}
+@media (max-width:720px){.verdict{grid-template-columns:1fr}}
+
+/* chart */
+.chart{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:20px;display:grid;gap:12px}
+.row{display:grid;grid-template-columns:130px 1fr 110px;gap:12px;align-items:center;font-size:14px}
+.row .nm{font-weight:500}
+.row.me .nm{color:var(--brand);font-weight:600}
+.track{position:relative;height:18px;background:linear-gradient(to right,var(--rule) 1px,transparent 1px) 0 0/25% 100%;border-right:1px solid var(--rule)}
+.fill{position:absolute;left:0;top:3px;height:12px;background:var(--bar);border-radius:0 2px 2px 0}
+.row.me .fill{background:var(--brand)}
+.ci{position:absolute;top:8px;height:2px;background:var(--ink-2)}
+.ci::before,.ci::after{content:"";position:absolute;top:-4px;width:2px;height:10px;background:var(--ink-2)}
+.ci::before{left:0}.ci::after{right:0}
+.val{font:500 13px/1.3 "IBM Plex Mono",monospace;text-align:right;font-variant-numeric:tabular-nums}
+.val span{display:block;color:var(--ink-3);font-size:11px}
+.axis{display:grid;grid-template-columns:130px 1fr 110px;gap:12px;font:11px "IBM Plex Mono",monospace;color:var(--ink-3)}
+.axis .ticks{display:flex;justify-content:space-between}
+@media (max-width:560px){.row,.axis{grid-template-columns:92px 1fr 78px;gap:8px}.row{font-size:13px}}
+
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--rule);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:500 11px/1.4 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+tr:last-child td{border-bottom:0}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink-3)}
+.dots i.on{background:var(--brand);border-color:var(--brand)}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+blockquote{margin:0;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:16px;display:grid;gap:8px;font-size:14px}
+blockquote .q{font:12px/1.4 "IBM Plex Mono",monospace;color:var(--ink-3)}
+
+/* findings */
+.find{background:var(--paper);border:1px solid var(--rule);border-radius:4px;display:grid;grid-template-columns:auto 1fr;gap:0}
+.find .sev{writing-mode:vertical-rl;transform:rotate(180deg);font:600 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;padding:14px 8px;text-align:center}
+.sev.crit{background:var(--crit-soft);color:var(--crit)}
+.sev.high{background:var(--warn-soft);color:var(--warn)}
+.sev.med{background:var(--rule);color:var(--ink-2)}
+.find .body{padding:18px 20px;display:grid;gap:10px}
+.find .body p{color:var(--ink-2);font-size:15px}
+.find .fix{font-size:14px;color:var(--ink);border-top:1px dashed var(--rule);padding-top:10px}
+.find .fix b{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.find ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:15px;display:grid;gap:4px}
+code{font:13px "IBM Plex Mono",monospace;background:var(--accent-soft);padding:1px 5px;border-radius:3px;word-break:break-word}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{border:1px solid var(--rule);border-radius:4px;padding:12px;display:grid;gap:2px}
+.stat .k{font:700 26px/1 Archivo,sans-serif;font-variant-numeric:tabular-nums}
+.stat .d{font-size:13px;color:var(--ink-2)}
+.good{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:5px 10px;border-radius:99px;background:var(--ok-soft);color:var(--ok);font-weight:500}
+
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.phase{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:18px;display:grid;gap:10px;align-content:start}
+.phase ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:grid;gap:6px}
+.phase .when{font:500 12px "IBM Plex Mono",monospace;color:var(--accent)}
+@media (max-width:820px){.plan{grid-template-columns:1fr}}
+
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:4px;padding:16px;overflow-x:auto;font:12.5px/1.55 "IBM Plex Mono",ui-monospace,monospace;margin:0}
+details{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:14px 16px}
+summary{cursor:pointer;font-weight:600}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+details[open] summary{margin-bottom:12px}
+.fan{display:flex;flex-wrap:wrap;gap:8px}
+.fan span{font:13px "IBM Plex Mono",monospace;border:1px solid var(--rule);background:var(--paper);padding:6px 10px;border-radius:3px}
+.fan span b{color:var(--accent);font-weight:600;margin-right:6px}
+.note{font-size:13px;color:var(--ink-3);max-width:75ch}
+footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:20px;display:grid;gap:10px;font-size:13px;color:var(--ink-3)}
+footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">N3 Thinktech IA Laboratory · Diagnóstico GEO</div>
+  <h1>¿Las IAs le recomiendan Autycom a quien busca automatización industrial en México?</h1>
+  <p class="lede">Hoy casi no, y el propio sitio explica buena parte del porqué. Hicimos 78 preguntas reales a Gemini y revisamos autycom.com por dentro: portada, páginas de servicios, 60 fichas de producto y el sitio anterior, que sigue en línea.</p>
+  <div class="meta">
+    <span><b>Sitio:</b> autycom.com</span>
+    <span><b>Fecha:</b> 24 sep 2026</span>
+    <span><b>Motor medido:</b> Gemini con búsqueda web</span>
+    <span><b>Muestra:</b> 26 preguntas × 3 repeticiones = 78 respuestas</span>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">La respuesta corta</div>
+  <div class="verdict">
+    <div>
+      <div class="big c-crit">7<small> / 69</small></div>
+      <p class="lab">veces que Gemini menciona a Autycom cuando el comprador <b>no</b> dice su nombre.</p>
+      <p class="rng">10% · rango probable 5%–19%</p>
+    </div>
+    <div>
+      <div class="big c-crit">0<small> / 69</small></div>
+      <p class="lab">veces que enlaza a autycom.com en esas mismas respuestas. Cuando la menciona, lo hace de memoria y sin mandar al comprador al sitio.</p>
+      <p class="rng">0% · rango probable 0%–5%</p>
+    </div>
+    <div>
+      <div class="big c-ok">9<small> / 9</small></div>
+      <p class="lab">respuestas que la describen bien cuando se pregunta por Autycom por nombre, con link al sitio.</p>
+      <p class="rng">100% · rango probable 70%–100%</p>
+    </div>
+  </div>
+  <p class="sub">Gemini sí conoce a Autycom: sabe de sus sucursales, de su certificación Siemens y de sus pólizas de soporte. El problema es que, cuando alguien busca un distribuidor, un integrador o una refacción urgente, piensa primero en otros. Risoul aparece en 7 de cada 10 de esas respuestas.</p>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Participación frente a la competencia</div>
+    <h2>Quién aparece cuando el comprador no nombra a nadie</h2>
+    <p class="sub">Porcentaje de las 69 respuestas sin nombre de marca en que aparece cada empresa. La línea con topes marca el rango probable (intervalo de confianza del 95%).</p>
+  </div>
+  <div class="chart" role="img" aria-label="Menciones en Gemini: Risoul 68%, Grupo ABSA 26%, Industrias GSL 14%, Datatechnic 13%, Autycom 10%, Grupo Elecsa 6%, SDI Industrial 1%">
+    <div class="row"><span class="nm">Risoul</span><div class="track"><div class="fill" style="width:68%"></div><div class="ci" style="left:56%;width:22%"></div></div><div class="val">68%<span>56–78%</span></div></div>
+    <div class="row"><span class="nm">Grupo ABSA</span><div class="track"><div class="fill" style="width:26%"></div><div class="ci" style="left:17%;width:21%"></div></div><div class="val">26%<span>17–38%</span></div></div>
+    <div class="row"><span class="nm">Industrias GSL</span><div class="track"><div class="fill" style="width:14%"></div><div class="ci" style="left:8%;width:17%"></div></div><div class="val">14%<span>8–25%</span></div></div>
+    <div class="row"><span class="nm">Datatechnic</span><div class="track"><div class="fill" style="width:13%"></div><div class="ci" style="left:7%;width:16%"></div></div><div class="val">13%<span>7–23%</span></div></div>
+    <div class="row me"><span class="nm">Autycom</span><div class="track"><div class="fill" style="width:10%"></div><div class="ci" style="left:5%;width:14%"></div></div><div class="val">10%<span>5–19%</span></div></div>
+    <div class="row"><span class="nm">Grupo Elecsa</span><div class="track"><div class="fill" style="width:6%"></div><div class="ci" style="left:2%;width:12%"></div></div><div class="val">6%<span>2–14%</span></div></div>
+    <div class="row"><span class="nm">SDI Industrial</span><div class="track"><div class="fill" style="width:1%"></div><div class="ci" style="left:0%;width:8%"></div></div><div class="val">1%<span>0–8%</span></div></div>
+    <div class="axis"><span></span><div class="ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><span></span></div>
+  </div>
+  <p class="note">Los competidores los propuso Gemini investigando el mercado, y verificamos que sus dominios existen. Con 69 respuestas, Autycom, Datatechnic e Industrias GSL quedan estadísticamente empatados. Risoul está claramente arriba.</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Qué pregunta el comprador</th><th>Autycom aparece</th><th>Link a autycom.com</th></tr></thead>
+      <tbody>
+        <tr><td>Busca proveedor de lo que vende Autycom <span class="note">(10 preguntas)</span></td><td class="n">4 / 30</td><td class="n">0 / 30</td></tr>
+        <tr><td>Describe un problema concreto: paro de línea, migración, refacción urgente <span class="note">(10)</span></td><td class="n">3 / 30</td><td class="n">0 / 30</td></tr>
+        <tr><td>Compara tipos de proveedor <span class="note">(3)</span></td><td class="n">0 / 9</td><td class="n">0 / 9</td></tr>
+        <tr><td>Pregunta por Autycom por nombre <span class="note">(3)</span></td><td class="n">9 / 9</td><td class="n">9 / 9</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Donde más duele</div>
+    <h2>Necesidades que Autycom resuelve y en las que no aparece</h2>
+    <p class="sub">Cada punto es una de las tres repeticiones. En azul, las veces que Gemini mencionó a Autycom.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Pregunta que hizo el comprador</th><th>Autycom</th></tr></thead>
+      <tbody>
+        <tr><td>Tuvimos un paro de línea un fin de semana y necesitamos soporte de emergencia 24/7 para un PLC. ¿Qué compañía en México da ese servicio?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>Tenemos que migrar S7-300 a S7-1500 en una línea automotriz. ¿Qué empresa mexicana nos asesora con el equipo y la ingeniería?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>Buscamos un integrador que diseñe el CCM y haga el comisionamiento en planta. ¿Cuál recomiendas?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>¿Qué empresas en México están certificadas para diseñar e integrar tableros de control y electrificación?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>Nuestros técnicos necesitan capacitarse en PLC y diagnóstico de fallas. ¿Qué empresa da talleres certificados?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>¿Cuáles son los distribuidores en Monterrey y el norte con mayor stock de automatización?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>¿Cuáles son las tiendas en línea más confiables para comprar PLCs y variadores en México?</td><td><span class="dots"><i></i><i></i><i></i></span></td></tr>
+        <tr><td>¿Dónde conseguir módulos de E/S para S7-1200 y S7-1500 en México?</td><td><span class="dots"><i class="on"></i><i class="on"></i><i></i></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">Autycom tiene página para cada una de estas necesidades: soporte 24/7 con pólizas, retrofit, CCM como Project Partner de Siemens, capacitación ante la STPS y sucursal en Monterrey. Esas páginas no aparecen como fuente en ninguna respuesta.</p>
+
+  <div class="quotes">
+    <blockquote><span class="q">Cuando sí aparece · módulos S7-1200</span>“Distribuidor oficial Siemens muy fuerte en el norte y centro del país”<span class="note">Sin link. Lo dice de memoria.</span></blockquote>
+    <blockquote><span class="q">Cuando preguntan por nombre · opiniones</span>Gemini advierte que sus tarifas de ingeniería “se ubican en la media-alta del mercado” y que su fuerte es Siemens.<span class="note">Sin datos del sitio que lo matice, la IA llena el hueco sola.</span></blockquote>
+    <blockquote><span class="q">Cuando preguntan por nombre · qué es</span>Afirma que Autycom fue fundada en Monterrey. El sitio no dice cuándo ni dónde se fundó.<span class="note">Hay que confirmarlo con Autycom y publicarlo.</span></blockquote>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Qué busca la IA antes de responder</div>
+    <h2>Gemini hizo 125 búsquedas en Google para contestar</h2>
+    <p class="sub">Son las búsquedas que lanzó por su cuenta en las preguntas sin nombre de marca. El patrón se repite: <b>“distribuidor autorizado” + marca + “México”</b>, además de stock y entrega inmediata. Las fichas de Autycom se titulan solo con el número de parte, así que no responden a ninguna de estas búsquedas. En 31 de las 78 respuestas, Gemini ni siquiera buscó y contestó de memoria.</p>
+  </div>
+  <div class="fan">
+    <span><b>6×</b>distribuidores autorizados siemens automatizacion mexico</span>
+    <span><b>2×</b>distribuidores autorizados omron mexico</span>
+    <span><b>2×</b>principales distribuidores material electrico automatizacion mexico</span>
+    <span>distribuidor autorizado festo mexico inventario entrega inmediata</span>
+    <span>comprar plc variadores de frecuencia mexico distribuidores en linea</span>
+    <span>empresas tableros de control certificados UL 508A Mexico</span>
+    <span>cursos capacitacion plc variadores empresas mexico</span>
+    <span>distribuidores autorizados abb mexico automatizacion industrial</span>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Sitio que Gemini cita cuando Autycom no aparece</th><th>Respuestas</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>siemens.com</td><td class="n">13</td><td class="note">fabricante</td></tr>
+        <tr><td>dirind.com</td><td class="n">10</td><td class="note">directorio industrial</td></tr>
+        <tr><td>risoul.com.mx</td><td class="n">9</td><td class="note">competidor</td></tr>
+        <tr><td>plcmonterrey.com</td><td class="n">9</td><td></td></tr>
+        <tr><td>abt-automation.com</td><td class="n">8</td><td></td></tr>
+        <tr><td>festo.com · datatechnic.com.mx · industriasgsl.com · norcontrol.com.mx</td><td class="n">7 c/u</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Estar en las listas de distribuidores de Siemens, Festo y Omron, y en directorios como dirind.com, pesa tanto como arreglar el propio sitio: son las páginas en las que Gemini ya confía.</p>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Revisión técnica del sitio</div>
+    <h2>Los síntomas, del más grave al menor</h2>
+    <p class="sub">Calificación de la revisión técnica automática de N3: <b>69 / 100 (Mejorable)</b>. Lo que sigue va más allá de esa revisión: lo encontramos revisando el catálogo ficha por ficha.</p>
+  </div>
+
+  <article class="find"><div class="sev crit">Crítico</div><div class="body">
+    <h3>El sitio anterior sigue vivo y más de 1,000 direcciones de producto dan error</h3>
+    <p>El sitio viejo, <code>autycom.com.mx</code> (WordPress), sigue publicado con su tienda. Declara como dirección oficial <code>www.autycom.com</code>, que ahora es el sitio nuevo, y su mapa lista 1,000 fichas con direcciones descriptivas como <code>/producto/contactor-siemens-3nw6110-1-siemens/</code>. Probamos 7 de ellas en el sitio nuevo: <b>las 7 responden error 500</b>. Todo lo que Google y las IAs habían aprendido de esas fichas apunta a páginas rotas.</p>
+    <p>Además, Gemini cita el sitio viejo en las 9 respuestas sobre Autycom, igual que al nuevo. La autoridad de la marca está partida entre dos sitios.</p>
+    <p class="fix"><b>Arreglo</b>Redirigir cada dirección vieja (301) a su ficha nueva, cruzando por número de parte, y retirar autycom.com.mx o redirigirlo completo.</p>
+  </div></article>
+
+  <article class="find"><div class="sev crit">Crítico</div><div class="body">
+    <h3>Cero datos estructurados en todo el sitio</h3>
+    <p>Ni la portada, ni las páginas de servicios, ni una sola de las 60 fichas revisadas tiene JSON-LD. Para las máquinas, autycom.com no declara que es una empresa ni que tiene 5 sucursales, y tampoco que vende productos con precio, marca, existencia y moneda. Hermos, SDI Industrial e Industrias GSL sí lo declaran. Curiosamente, el sitio viejo también lo tenía.</p>
+    <p class="fix"><b>Arreglo</b>Organization con sus 5 sucursales y perfiles oficiales; Product + Offer en cada ficha; BreadcrumbList; Service en cada solución. Van ejemplos listos al final.</p>
+  </div></article>
+
+  <article class="find"><div class="sev crit">Crítico</div><div class="body">
+    <h3>Las fichas de producto están vacías por dentro</h3>
+    <p>Muestra de 60 fichas repartidas en el catálogo de 933 productos:</p>
+    <div class="stats">
+      <div class="stat"><span class="k">60 / 60</span><span class="d">con título y H1 = solo el número de parte (<code>3RT2017-1AK61 - Autycom</code>)</span></div>
+      <div class="stat"><span class="k">26 / 60</span><span class="d">sin foto propia: 20 comparten la misma imagen genérica y 6 no tienen ninguna</span></div>
+      <div class="stat"><span class="k">24 / 60</span><span class="d">con descripción de menos de 10 palabras. La mediana es de 12</span></div>
+      <div class="stat"><span class="k">8 / 60</span><span class="d">con texto corrupto: <code>relÃƒÂ©</code> en vez de “relé”, también en la descripción que ve Google</span></div>
+    </div>
+    <ul>
+      <li>En Saleor, los campos <b>título SEO</b> y <b>descripción SEO</b> existen pero están vacíos.</li>
+      <li>La “categoría” de cada producto es la marca (“Siemens”), no el tipo de producto (PLC, contactor, variador…).</li>
+      <li>De 13 campos técnicos, 10 están vacíos; las dimensiones dicen <code>0x0x0 cm</code>. La ficha técnica manda al comprador al sitio de Siemens.</li>
+      <li>Las fotos se sirven desde un almacenamiento de pruebas (<code>autycom-stage-staticfiles</code>), no desde uno de producción.</li>
+    </ul>
+    <p class="fix"><b>Arreglo</b>Generar en masa, desde el catálogo, títulos descriptivos (“Siemens SIMATIC S7-1200 CPU 1214C DC/DC/relé · 6ES7214-1HG40-0XB0”), descripciones SEO, categorías reales y especificaciones. También corregir la codificación del texto y cargar fotos reales.</p>
+  </div></article>
+
+  <article class="find"><div class="sev high">Alto</div><div class="body">
+    <h3>Las páginas de servicios se llaman todas “Autycom”</h3>
+    <p>Proyectos, Soporte 24/7, Capacitación, Electrificación, Nosotros, Blog y Contacto tienen el mismo título de 7 letras y la misma descripción de la tienda. Para una IA, no hay nada que distinga la página de pólizas 24/7 de la de contacto. Justo son las necesidades en que Autycom no aparece.</p>
+    <p class="fix"><b>Arreglo</b>Título y descripción propios en cada página. Además, agregar a cada servicio preguntas frecuentes, alcance, zonas que atiende, tiempos de respuesta y casos con cifras.</p>
+  </div></article>
+
+  <article class="find"><div class="sev high">Alto</div><div class="body">
+    <h3>La identidad de la empresa no está escrita en ninguna parte</h3>
+    <ul>
+      <li>Las 5 sucursales (Chihuahua, Saltillo, Querétaro, Puebla y Monterrey) solo aparecen como texto en Contacto.</li>
+      <li>El sitio nuevo no enlaza a ninguna red social. El viejo sí enlazaba a Facebook, LinkedIn y YouTube.</li>
+      <li>No dice año de fundación, tamaño del equipo ni sectores atendidos con cifras. Las certificaciones Siemens aparecen como logos, sin texto que las IAs puedan leer bien.</li>
+      <li>Portada: título de 7 caracteres y 3 encabezados principales (H1) compitiendo.</li>
+    </ul>
+    <p class="fix"><b>Arreglo</b>Una página “Nosotros” con los hechos verificables. Declararlos también en datos estructurados, con los perfiles oficiales (sameAs).</p>
+  </div></article>
+
+  <article class="find"><div class="sev med">Medio</div><div class="body">
+    <h3>Detalles que restan</h3>
+    <ul>
+      <li>Todas las direcciones llevan <code>/default-channel/es/</code>, y la portada redirige con un 307 temporal. Las fichas usan números internos (<code>/products/12831/</code>) en vez de nombres.</li>
+      <li>La versión en inglés repite las 933 fichas con la interfaz traducida y la descripción en español.</li>
+      <li>El blog tiene 2 artículos y ninguna fecha legible por máquina.</li>
+      <li>La imagen para compartir es un SVG con dirección relativa. Redes y agentes no la muestran.</li>
+    </ul>
+  </div></article>
+
+  <div>
+    <p class="eyebrow" style="margin-bottom:8px">Lo que ya está bien</p>
+    <div class="good">
+      <span class="chip">Deja entrar a los bots de ChatGPT, Claude, Perplexity y Gemini</span>
+      <span class="chip">El contenido se lee sin ejecutar JavaScript</span>
+      <span class="chip">Sitemap y direcciones canónicas</span>
+      <span class="chip">Versiones de idioma declaradas</span>
+      <span class="chip">HTTPS</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Qué haríamos</div>
+    <h2>Medir, corregir y volver a medir</h2>
+    <p class="sub">No prometemos “salir primero en ChatGPT”. Prometemos corregir lo que hoy le impide a las IAs recomendar a Autycom y demostrar el cambio con las mismas preguntas, mes a mes.</p>
+  </div>
+  <div class="plan">
+    <div class="phase"><span class="when">Primero</span><h3>Dejar de perder lo que ya se tenía</h3>
+      <ul><li>Redirecciones 301 del sitio viejo y de las direcciones que hoy dan error</li><li>Datos estructurados de empresa, sucursales, productos y servicios</li><li>Títulos y descripciones propios en portada y servicios</li><li>Corregir el texto corrupto</li></ul></div>
+    <div class="phase"><span class="when">Después</span><h3>Catálogo que las IAs entiendan</h3>
+      <ul><li>Títulos descriptivos y descripciones SEO para las 933 fichas, generados desde su catálogo en Saleor</li><li>Categorías por tipo de producto</li><li>Especificaciones completas y fotos reales</li></ul></div>
+    <div class="phase"><span class="when">Continuo</span><h3>Contenido y fuentes</h3>
+      <ul><li>Guías que respondan las preguntas donde hoy no aparece: migración S7-300 → S7-1500, paros de línea, CCM</li><li>Presencia en las listas de distribuidores de Siemens, Festo y Omron, y en directorios industriales</li><li>Medición mensual en ChatGPT, Claude, Perplexity y Gemini</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Para el equipo técnico de Autycom</div>
+    <h2>Cómo se ven los datos estructurados con sus datos reales</h2>
+  </div>
+  <details>
+    <summary>Ficha de producto: Product + Offer (ejemplo con 6ES7214-1HG40-0XB0)</summary>
+<pre>{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Siemens SIMATIC S7-1200 CPU 1214C DC/DC/relé",
+  "sku": "6ES7214-1HG40-0XB0",
+  "mpn": "6ES7214-1HG40-0XB0",
+  "brand": { "@type": "Brand", "name": "Siemens" },
+  "category": "Controladores lógicos programables (PLC)",
+  "description": "CPU compacta SIMATIC S7-1200 1214C, DC/DC/relé. E/S integradas: 14 DI 24 V DC, 10 DO relé 2 A, 2 AI 0-10 V DC. Alimentación 20,4-28,8 V DC. Memoria 150 KB.",
+  "url": "https://autycom.com/default-channel/es/products/12831/",
+  "offers": {
+    "@type": "Offer",
+    "price": "9554.06",
+    "priceCurrency": "MXN",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": { "@id": "https://autycom.com/#organizacion" }
+  }
+}</pre>
+    <p class="note" style="margin-top:10px">Se genera solo desde Saleor para las 933 fichas. La imagen se agrega cuando cada producto tenga foto propia.</p>
+  </details>
+  <details>
+    <summary>Empresa y sucursales: Organization + LocalBusiness</summary>
+<pre>{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://autycom.com/#organizacion",
+  "name": "Autycom",
+  "url": "https://autycom.com/",
+  "description": "Distribuidor autorizado e integrador de automatización industrial en México: Siemens, Omron, Festo y ABB. Proyectos, soporte técnico 24/7, capacitación y tableros de electrificación.",
+  "sameAs": [
+    "https://www.facebook.com/autycom/",
+    "https://www.linkedin.com/company/autycom",
+    "https://www.youtube.com/channel/UC50iy9OGfDLhno9Eu4YdNwQ"
+  ],
+  "department": [
+    { "@type": "LocalBusiness", "name": "Autycom Monterrey",
+      "telephone": "+52 81 4041 6214",
+      "address": { "@type": "PostalAddress", "streetAddress": "Retorno 4 #2520, Burócratas Federales",
+        "postalCode": "64380", "addressLocality": "Monterrey", "addressRegion": "NL", "addressCountry": "MX" } },
+    { "@type": "LocalBusiness", "name": "Autycom Querétaro",
+      "telephone": "+52 442 215 8809",
+      "address": { "@type": "PostalAddress", "streetAddress": "Senda Eterna #186, Fracc. Milenio III",
+        "postalCode": "76060", "addressLocality": "Querétaro", "addressRegion": "QRO", "addressCountry": "MX" } },
+    { "@type": "LocalBusiness", "name": "Autycom Puebla",
+      "telephone": "+52 222 429 5636",
+      "address": { "@type": "PostalAddress", "streetAddress": "Blvd. Esteban de Antuñano 2702, Col. Reforma",
+        "postalCode": "72160", "addressLocality": "Puebla", "addressRegion": "PUE", "addressCountry": "MX" } },
+    { "@type": "LocalBusiness", "name": "Autycom Chihuahua",
+      "telephone": "+52 614 394 8423",
+      "address": { "@type": "PostalAddress", "streetAddress": "Bosque de Yuridia 1819, Sicomoros",
+        "postalCode": "31205", "addressLocality": "Chihuahua", "addressRegion": "CHIH", "addressCountry": "MX" } },
+    { "@type": "LocalBusiness", "name": "Autycom Coahuila",
+      "address": { "@type": "PostalAddress", "streetAddress": "Sauce #350 Piso 1, Col. Jardín",
+        "postalCode": "25240", "addressLocality": "Saltillo", "addressRegion": "COAH", "addressCountry": "MX" } }
+  ]
+}</pre>
+    <p class="note" style="margin-top:10px">Direcciones y teléfonos tomados de su página de Contacto. Los perfiles sociales vienen del sitio anterior: hay que confirmar que siguen activos.</p>
+  </details>
+</section>
+
+<footer>
+  <p><b>Método y límites</b></p>
+  <ul>
+    <li>26 preguntas escritas como las haría un comprador en México (23 sin el nombre de la marca y 3 con él), cada una repetida 3 veces en Gemini (gemini-3.8-flash) con búsqueda web, por su API. La app que ve el usuario puede responder distinto.</li>
+    <li>Esta medición es solo de Gemini. El estudio completo suma ChatGPT, Claude y Perplexity.</li>
+    <li>“Menciona” = el nombre aparece en la respuesta. “Cita” = la respuesta enlaza a autycom.com. Cada respuesta cruda quedó guardada para auditar cualquier cifra.</li>
+    <li>Revisión técnica hecha en vivo el 24 sep 2026. Revisamos 60 fichas de las 933 en español, repartidas por todo el catálogo, además de 7 direcciones del sitio anterior.</li>
+    <li>Google AI Overviews y Copilot no tienen API para medir esto y no están incluidos.</li>
+  </ul>
+  <p>N3 Thinktech IA Laboratory · n3labs.potenttial.site</p>
+</footer>
+</div>

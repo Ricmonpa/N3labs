@@ -1,0 +1,201 @@
+{
+  "name": "Autycom",
+  "brand": {
+    "name": "Autycom",
+    "aliases": [
+      "AUTYCOM",
+      "Autycom México",
+      "Autycom Industrial"
+    ],
+    "domains": [
+      "autycom.com"
+    ]
+  },
+  "competitors": [
+    {
+      "name": "Industrias GSL",
+      "domains": [
+        "industriasgsl.com"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Grupo Elecsa",
+      "domains": [
+        "elecsa.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Risoul",
+      "domains": [
+        "risoul.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Datatechnic",
+      "domains": [
+        "datatechnic.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "SDI Industrial",
+      "domains": [
+        "sdindustrial.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Grupo ABSA",
+      "domains": [
+        "grupoabsa.com"
+      ],
+      "aliases": []
+    }
+  ],
+  "market": {
+    "country": "MX",
+    "city": "México",
+    "region": "México",
+    "timezone": "America/Mexico_City",
+    "language": "es-MX"
+  },
+  "runs": 3,
+  "engines": [
+    "gemini"
+  ],
+  "prompts": [
+    {
+      "id": "c1",
+      "type": "category",
+      "text": "¿Cuáles son los mejores distribuidores autorizados de automatización industrial en México?"
+    },
+    {
+      "id": "c2",
+      "type": "category",
+      "text": "¿Dónde puedo comprar equipo y refacciones Siemens para control industrial en México con entrega rápida?"
+    },
+    {
+      "id": "c3",
+      "type": "category",
+      "text": "¿Qué empresas en México venden componentes neumáticos Festo con inventario para entrega inmediata?"
+    },
+    {
+      "id": "c4",
+      "type": "category",
+      "text": "¿Cuáles son las tiendas en línea más confiables para cotizar y comprar PLCs y variadores de frecuencia en México?"
+    },
+    {
+      "id": "c5",
+      "type": "category",
+      "text": "¿Quiénes son los principales distribuidores de marcas de automatización como Omron, Siemens y ABB en el país?"
+    },
+    {
+      "id": "c6",
+      "type": "category",
+      "text": "¿Qué proveedores en México ofrecen suministro de equipo de control y desarrollo de proyectos de ingeniería de automatización?"
+    },
+    {
+      "id": "c7",
+      "type": "category",
+      "text": "¿Dónde conseguir módulos de entradas y salidas para PLC Simatic S7-1200 y S7-1500 en México?"
+    },
+    {
+      "id": "c8",
+      "type": "category",
+      "text": "¿Qué empresas en México están certificadas para diseñar e integrar tableros de control y electrificación industrial?"
+    },
+    {
+      "id": "c9",
+      "type": "category",
+      "text": "¿Dónde puedo contratar cursos de capacitación industrial en PLC y variadores para personal de mantenimiento en México?"
+    },
+    {
+      "id": "c10",
+      "type": "category",
+      "text": "¿Cuáles son los distribuidores en Monterrey y la zona norte con mayor stock de componentes para automatización y control de procesos?"
+    },
+    {
+      "id": "p1",
+      "type": "problem",
+      "text": "Se nos quemó un variador de frecuencia Siemens en plena producción en Querétaro, ¿qué proveedor en México tiene refacciones con entrega inmediata y soporte técnico urgente?"
+    },
+    {
+      "id": "p2",
+      "type": "problem",
+      "text": "Tenemos que migrar controladores obsoletos Siemens S7-300 a S7-1500 en una línea de ensamble automotriz, ¿qué empresa mexicana nos puede asesorar con el equipo y la ingeniería?"
+    },
+    {
+      "id": "p3",
+      "type": "problem",
+      "text": "Requiero cotizar por volumen contactores, clemas y relevadores para armar tableros de control con crédito empresarial en México, ¿a quién me recomiendas acudir?"
+    },
+    {
+      "id": "p4",
+      "type": "problem",
+      "text": "Nuestros técnicos de mantenimiento necesitan capacitarse en programación de PLC y diagnóstico de fallas en sitio, ¿qué empresa ofrece talleres certificados en México?"
+    },
+    {
+      "id": "p5",
+      "type": "problem",
+      "text": "Tuvimos un paro imprevisto de línea un fin de semana y necesitamos soporte técnico de emergencia 24/7 para un sistema PLC, ¿qué compañía en México da ese servicio presencial o remoto?"
+    },
+    {
+      "id": "p6",
+      "type": "problem",
+      "text": "Necesito cilindros neumáticos y electroválvulas Festo originales para reparar una celda robotizada esta misma semana, ¿dónde los consigo con stock garantizado en México?"
+    },
+    {
+      "id": "p7",
+      "type": "problem",
+      "text": "Buscamos un integrador en México que no solo nos venda el hardware Omron y ABB, sino que diseñe el centro de control de motores (CCM) y haga el comisionamiento en planta, ¿cuál recomiendas?"
+    },
+    {
+      "id": "p8",
+      "type": "problem",
+      "text": "Soy integrador de automatización y necesito un distribuidor en México que maneje precios especiales de mayoreo y catálogo en línea con existencia en tiempo real, ¿qué opciones hay?"
+    },
+    {
+      "id": "p9",
+      "type": "problem",
+      "text": "Queremos reducir el consumo de energía en nuestras bombas y compresores instalando variadores de velocidad, ¿a qué empresa en México podemos contactar para el suministro y la puesta en marcha?"
+    },
+    {
+      "id": "p10",
+      "type": "problem",
+      "text": "Tengo que renovar el sistema HMI y SCADA de una línea de empaque porque las pantallas actuales están descontinuadas, ¿quién me puede ayudar a hacer el retrofit en planta?"
+    },
+    {
+      "id": "x1",
+      "type": "comparison",
+      "text": "¿Qué conviene más al comprar equipo de control industrial en México: pedirlo en una tienda en línea con stock local o directamente con el fabricante?"
+    },
+    {
+      "id": "x2",
+      "type": "comparison",
+      "text": "Para actualizar el sistema de control de una fábrica, ¿es mejor contratar a un integrador independiente o a un distribuidor autorizado que también tenga área de ingeniería y soporte 24/7?"
+    },
+    {
+      "id": "x3",
+      "type": "comparison",
+      "text": "¿Cuáles son las ventajas y desventajas de comprar componentes de automatización en plataformas de e-commerce especializadas frente a distribuidores tradicionales por cotización telefónica?"
+    },
+    {
+      "id": "b1",
+      "type": "brand",
+      "text": "¿Qué es Autycom y qué reputación tiene como distribuidor de automatización industrial en México?"
+    },
+    {
+      "id": "b2",
+      "type": "brand",
+      "text": "¿Qué tan confiable es comprar PLCs y refacciones Siemens o Festo en la tienda en línea de Autycom?"
+    },
+    {
+      "id": "b3",
+      "type": "brand",
+      "text": "¿Cuáles son las opiniones y experiencia de trabajar con Autycom para proyectos de ingeniería y soporte técnico en planta?"
+    }
+  ]
+}

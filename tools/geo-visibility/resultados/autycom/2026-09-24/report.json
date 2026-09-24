@@ -1,0 +1,1555 @@
+{
+  "study": "Autycom",
+  "brand": {
+    "name": "Autycom",
+    "aliases": [
+      "AUTYCOM",
+      "Autycom México",
+      "Autycom Industrial"
+    ],
+    "domains": [
+      "autycom.com"
+    ]
+  },
+  "competitors": [
+    {
+      "name": "Industrias GSL",
+      "domains": [
+        "industriasgsl.com"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Grupo Elecsa",
+      "domains": [
+        "elecsa.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Risoul",
+      "domains": [
+        "risoul.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Datatechnic",
+      "domains": [
+        "datatechnic.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "SDI Industrial",
+      "domains": [
+        "sdindustrial.com.mx"
+      ],
+      "aliases": []
+    },
+    {
+      "name": "Grupo ABSA",
+      "domains": [
+        "grupoabsa.com"
+      ],
+      "aliases": []
+    }
+  ],
+  "types": [
+    "category",
+    "problem",
+    "comparison",
+    "brand"
+  ],
+  "simulated": false,
+  "generatedAt": "2026-09-24T18:57:50.816Z",
+  "market": {
+    "country": "MX",
+    "city": "México",
+    "region": "México",
+    "timezone": "America/Mexico_City",
+    "language": "es-MX"
+  },
+  "engines": [
+    {
+      "id": "gemini",
+      "model": "gemini-3.8-flash"
+    }
+  ],
+  "prompts": 26,
+  "runsPerPrompt": 3,
+  "responses": {
+    "ok": 78,
+    "failed": 0
+  },
+  "overall": {
+    "unbranded": {
+      "mention": {
+        "hits": 7,
+        "n": 69,
+        "rate": 0.10144927536231885,
+        "low": 0.050016002571615495,
+        "high": 0.19492095652867886
+      },
+      "citation": {
+        "hits": 0,
+        "n": 69,
+        "rate": 0,
+        "low": 0,
+        "high": 0.05273909414400562
+      },
+      "source": {
+        "hits": 0,
+        "n": 69,
+        "rate": 0,
+        "low": 0,
+        "high": 0.05273909414400562
+      }
+    },
+    "branded": {
+      "mention": {
+        "hits": 9,
+        "n": 9,
+        "rate": 1,
+        "low": 0.7008472464490407,
+        "high": 1
+      },
+      "citation": {
+        "hits": 9,
+        "n": 9,
+        "rate": 1,
+        "low": 0.7008472464490407,
+        "high": 1
+      },
+      "source": {
+        "hits": 9,
+        "n": 9,
+        "rate": 1,
+        "low": 0.7008472464490407,
+        "high": 1
+      }
+    }
+  },
+  "byEngine": {
+    "gemini": {
+      "unbranded": {
+        "mention": {
+          "hits": 7,
+          "n": 69,
+          "rate": 0.10144927536231885,
+          "low": 0.050016002571615495,
+          "high": 0.19492095652867886
+        },
+        "citation": {
+          "hits": 0,
+          "n": 69,
+          "rate": 0,
+          "low": 0,
+          "high": 0.05273909414400562
+        },
+        "source": {
+          "hits": 0,
+          "n": 69,
+          "rate": 0,
+          "low": 0,
+          "high": 0.05273909414400562
+        }
+      },
+      "branded": {
+        "mention": {
+          "hits": 9,
+          "n": 9,
+          "rate": 1,
+          "low": 0.7008472464490407,
+          "high": 1
+        },
+        "citation": {
+          "hits": 9,
+          "n": 9,
+          "rate": 1,
+          "low": 0.7008472464490407,
+          "high": 1
+        },
+        "source": {
+          "hits": 9,
+          "n": 9,
+          "rate": 1,
+          "low": 0.7008472464490407,
+          "high": 1
+        }
+      }
+    }
+  },
+  "shareOfVoice": [
+    {
+      "name": "Autycom",
+      "perEngine": {
+        "gemini": {
+          "hits": 7,
+          "n": 69,
+          "rate": 0.10144927536231885,
+          "low": 0.050016002571615495,
+          "high": 0.19492095652867886
+        }
+      },
+      "overall": {
+        "hits": 7,
+        "n": 69,
+        "rate": 0.10144927536231885,
+        "low": 0.050016002571615495,
+        "high": 0.19492095652867886
+      },
+      "mentions": 7,
+      "share": 0.07291666666666667
+    },
+    {
+      "name": "Industrias GSL",
+      "perEngine": {
+        "gemini": {
+          "hits": 10,
+          "n": 69,
+          "rate": 0.14492753623188406,
+          "low": 0.08067008672383712,
+          "high": 0.24663738592915235
+        }
+      },
+      "overall": {
+        "hits": 10,
+        "n": 69,
+        "rate": 0.14492753623188406,
+        "low": 0.08067008672383712,
+        "high": 0.24663738592915235
+      },
+      "mentions": 10,
+      "share": 0.10416666666666667
+    },
+    {
+      "name": "Grupo Elecsa",
+      "perEngine": {
+        "gemini": {
+          "hits": 4,
+          "n": 69,
+          "rate": 0.057971014492753624,
+          "low": 0.022772020303367495,
+          "high": 0.13979442524423166
+        }
+      },
+      "overall": {
+        "hits": 4,
+        "n": 69,
+        "rate": 0.057971014492753624,
+        "low": 0.022772020303367495,
+        "high": 0.13979442524423166
+      },
+      "mentions": 4,
+      "share": 0.041666666666666664
+    },
+    {
+      "name": "Risoul",
+      "perEngine": {
+        "gemini": {
+          "hits": 47,
+          "n": 69,
+          "rate": 0.6811594202898551,
+          "low": 0.5641565251834876,
+          "high": 0.7790539479527424
+        }
+      },
+      "overall": {
+        "hits": 47,
+        "n": 69,
+        "rate": 0.6811594202898551,
+        "low": 0.5641565251834876,
+        "high": 0.7790539479527424
+      },
+      "mentions": 47,
+      "share": 0.4895833333333333
+    },
+    {
+      "name": "Datatechnic",
+      "perEngine": {
+        "gemini": {
+          "hits": 9,
+          "n": 69,
+          "rate": 0.13043478260869565,
+          "low": 0.07016548568804834,
+          "high": 0.22968514911404272
+        }
+      },
+      "overall": {
+        "hits": 9,
+        "n": 69,
+        "rate": 0.13043478260869565,
+        "low": 0.07016548568804834,
+        "high": 0.22968514911404272
+      },
+      "mentions": 9,
+      "share": 0.09375
+    },
+    {
+      "name": "SDI Industrial",
+      "perEngine": {
+        "gemini": {
+          "hits": 1,
+          "n": 69,
+          "rate": 0.014492753623188406,
+          "low": 0.002562858644330375,
+          "high": 0.07763307335057362
+        }
+      },
+      "overall": {
+        "hits": 1,
+        "n": 69,
+        "rate": 0.014492753623188406,
+        "low": 0.002562858644330375,
+        "high": 0.07763307335057362
+      },
+      "mentions": 1,
+      "share": 0.010416666666666666
+    },
+    {
+      "name": "Grupo ABSA",
+      "perEngine": {
+        "gemini": {
+          "hits": 18,
+          "n": 69,
+          "rate": 0.2608695652173913,
+          "low": 0.17185419574593983,
+          "high": 0.3751079797142367
+        }
+      },
+      "overall": {
+        "hits": 18,
+        "n": 69,
+        "rate": 0.2608695652173913,
+        "low": 0.17185419574593983,
+        "high": 0.3751079797142367
+      },
+      "mentions": 18,
+      "share": 0.1875
+    }
+  ],
+  "averageBrandRank": 2.142857142857143,
+  "byType": [
+    {
+      "type": "category",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 4,
+            "n": 30,
+            "rate": 0.13333333333333333,
+            "low": 0.05309569424218104,
+            "high": 0.2968168394441695
+          },
+          "citation": {
+            "hits": 0,
+            "n": 30,
+            "rate": 0,
+            "low": 0,
+            "high": 0.113517091390478
+          },
+          "source": {
+            "hits": 0,
+            "n": 30,
+            "rate": 0,
+            "low": 0,
+            "high": 0.113517091390478
+          }
+        }
+      }
+    },
+    {
+      "type": "problem",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 3,
+            "n": 30,
+            "rate": 0.1,
+            "low": 0.03459925995971615,
+            "high": 0.25621441315266624
+          },
+          "citation": {
+            "hits": 0,
+            "n": 30,
+            "rate": 0,
+            "low": 0,
+            "high": 0.113517091390478
+          },
+          "source": {
+            "hits": 0,
+            "n": 30,
+            "rate": 0,
+            "low": 0,
+            "high": 0.113517091390478
+          }
+        }
+      }
+    },
+    {
+      "type": "comparison",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 9,
+            "rate": 0,
+            "low": 0,
+            "high": 0.2991527535509594
+          },
+          "citation": {
+            "hits": 0,
+            "n": 9,
+            "rate": 0,
+            "low": 0,
+            "high": 0.2991527535509594
+          },
+          "source": {
+            "hits": 0,
+            "n": 9,
+            "rate": 0,
+            "low": 0,
+            "high": 0.2991527535509594
+          }
+        }
+      }
+    },
+    {
+      "type": "brand",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 9,
+            "n": 9,
+            "rate": 1,
+            "low": 0.7008472464490407,
+            "high": 1
+          },
+          "citation": {
+            "hits": 9,
+            "n": 9,
+            "rate": 1,
+            "low": 0.7008472464490407,
+            "high": 1
+          },
+          "source": {
+            "hits": 9,
+            "n": 9,
+            "rate": 1,
+            "low": 0.7008472464490407,
+            "high": 1
+          }
+        }
+      }
+    }
+  ],
+  "byPrompt": [
+    {
+      "id": "c1",
+      "type": "category",
+      "text": "¿Cuáles son los mejores distribuidores autorizados de automatización industrial en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 1,
+            "n": 3,
+            "rate": 0.3333333333333333,
+            "low": 0.0614903152761605,
+            "high": 0.7923450448735121
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c2",
+      "type": "category",
+      "text": "¿Dónde puedo comprar equipo y refacciones Siemens para control industrial en México con entrega rápida?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c3",
+      "type": "category",
+      "text": "¿Qué empresas en México venden componentes neumáticos Festo con inventario para entrega inmediata?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c4",
+      "type": "category",
+      "text": "¿Cuáles son las tiendas en línea más confiables para cotizar y comprar PLCs y variadores de frecuencia en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c5",
+      "type": "category",
+      "text": "¿Quiénes son los principales distribuidores de marcas de automatización como Omron, Siemens y ABB en el país?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c6",
+      "type": "category",
+      "text": "¿Qué proveedores en México ofrecen suministro de equipo de control y desarrollo de proyectos de ingeniería de automatización?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c7",
+      "type": "category",
+      "text": "¿Dónde conseguir módulos de entradas y salidas para PLC Simatic S7-1200 y S7-1500 en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 2,
+            "n": 3,
+            "rate": 0.6666666666666666,
+            "low": 0.2076549551264879,
+            "high": 0.9385096847238394
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c8",
+      "type": "category",
+      "text": "¿Qué empresas en México están certificadas para diseñar e integrar tableros de control y electrificación industrial?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c9",
+      "type": "category",
+      "text": "¿Dónde puedo contratar cursos de capacitación industrial en PLC y variadores para personal de mantenimiento en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 1,
+            "n": 3,
+            "rate": 0.3333333333333333,
+            "low": 0.0614903152761605,
+            "high": 0.7923450448735121
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "c10",
+      "type": "category",
+      "text": "¿Cuáles son los distribuidores en Monterrey y la zona norte con mayor stock de componentes para automatización y control de procesos?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p1",
+      "type": "problem",
+      "text": "Se nos quemó un variador de frecuencia Siemens en plena producción en Querétaro, ¿qué proveedor en México tiene refacciones con entrega inmediata y soporte técnico urgente?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 1,
+            "n": 3,
+            "rate": 0.3333333333333333,
+            "low": 0.0614903152761605,
+            "high": 0.7923450448735121
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p2",
+      "type": "problem",
+      "text": "Tenemos que migrar controladores obsoletos Siemens S7-300 a S7-1500 en una línea de ensamble automotriz, ¿qué empresa mexicana nos puede asesorar con el equipo y la ingeniería?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p3",
+      "type": "problem",
+      "text": "Requiero cotizar por volumen contactores, clemas y relevadores para armar tableros de control con crédito empresarial en México, ¿a quién me recomiendas acudir?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p4",
+      "type": "problem",
+      "text": "Nuestros técnicos de mantenimiento necesitan capacitarse en programación de PLC y diagnóstico de fallas en sitio, ¿qué empresa ofrece talleres certificados en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p5",
+      "type": "problem",
+      "text": "Tuvimos un paro imprevisto de línea un fin de semana y necesitamos soporte técnico de emergencia 24/7 para un sistema PLC, ¿qué compañía en México da ese servicio presencial o remoto?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p6",
+      "type": "problem",
+      "text": "Necesito cilindros neumáticos y electroválvulas Festo originales para reparar una celda robotizada esta misma semana, ¿dónde los consigo con stock garantizado en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 1,
+            "n": 3,
+            "rate": 0.3333333333333333,
+            "low": 0.0614903152761605,
+            "high": 0.7923450448735121
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p7",
+      "type": "problem",
+      "text": "Buscamos un integrador en México que no solo nos venda el hardware Omron y ABB, sino que diseñe el centro de control de motores (CCM) y haga el comisionamiento en planta, ¿cuál recomiendas?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p8",
+      "type": "problem",
+      "text": "Soy integrador de automatización y necesito un distribuidor en México que maneje precios especiales de mayoreo y catálogo en línea con existencia en tiempo real, ¿qué opciones hay?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p9",
+      "type": "problem",
+      "text": "Queremos reducir el consumo de energía en nuestras bombas y compresores instalando variadores de velocidad, ¿a qué empresa en México podemos contactar para el suministro y la puesta en marcha?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 1,
+            "n": 3,
+            "rate": 0.3333333333333333,
+            "low": 0.0614903152761605,
+            "high": 0.7923450448735121
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "p10",
+      "type": "problem",
+      "text": "Tengo que renovar el sistema HMI y SCADA de una línea de empaque porque las pantallas actuales están descontinuadas, ¿quién me puede ayudar a hacer el retrofit en planta?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "x1",
+      "type": "comparison",
+      "text": "¿Qué conviene más al comprar equipo de control industrial en México: pedirlo en una tienda en línea con stock local o directamente con el fabricante?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "x2",
+      "type": "comparison",
+      "text": "Para actualizar el sistema de control de una fábrica, ¿es mejor contratar a un integrador independiente o a un distribuidor autorizado que también tenga área de ingeniería y soporte 24/7?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "x3",
+      "type": "comparison",
+      "text": "¿Cuáles son las ventajas y desventajas de comprar componentes de automatización en plataformas de e-commerce especializadas frente a distribuidores tradicionales por cotización telefónica?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "citation": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          },
+          "source": {
+            "hits": 0,
+            "n": 3,
+            "rate": 0,
+            "low": 0,
+            "high": 0.5615060804490177
+          }
+        }
+      }
+    },
+    {
+      "id": "b1",
+      "type": "brand",
+      "text": "¿Qué es Autycom y qué reputación tiene como distribuidor de automatización industrial en México?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "citation": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "source": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "b2",
+      "type": "brand",
+      "text": "¿Qué tan confiable es comprar PLCs y refacciones Siemens o Festo en la tienda en línea de Autycom?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "citation": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "source": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "b3",
+      "type": "brand",
+      "text": "¿Cuáles son las opiniones y experiencia de trabajar con Autycom para proyectos de ingeniería y soporte técnico en planta?",
+      "perEngine": {
+        "gemini": {
+          "mention": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "citation": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          },
+          "source": {
+            "hits": 3,
+            "n": 3,
+            "rate": 1,
+            "low": 0.43849391955098227,
+            "high": 1
+          }
+        }
+      }
+    }
+  ],
+  "citedWhenBrandIsNot": [
+    {
+      "domain": "siemens.com",
+      "runs": 13,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "dirind.com",
+      "runs": 10,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "risoul.com.mx",
+      "runs": 9,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "plcmonterrey.com",
+      "runs": 9,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "abt-automation.com",
+      "runs": 8,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "datatechnic.com.mx",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "festo.com",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "industriasgsl.com",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "norcontrol.com.mx",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "abb.com",
+      "runs": 6,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "elecsa.com.mx",
+      "runs": 6,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "inasa.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "automationmty.com.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "integradorabb.com.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "mci-automation.com",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "rockwellautomation.com",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "siemensmexico.com.mx",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "valleyintlsupply.com",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "ultatek.com",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "iasautomation.com.mx",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    }
+  ],
+  "topCitedDomains": [
+    {
+      "domain": "siemens.com",
+      "runs": 13,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "dirind.com",
+      "runs": 10,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "festo.com",
+      "runs": 10,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "autycom.com.mx",
+      "runs": 10,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "risoul.com.mx",
+      "runs": 9,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "plcmonterrey.com",
+      "runs": 9,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "abt-automation.com",
+      "runs": 8,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "datatechnic.com.mx",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "industriasgsl.com",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "facebook.com",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "norcontrol.com.mx",
+      "runs": 7,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "abb.com",
+      "runs": 6,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "elecsa.com.mx",
+      "runs": 6,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": true
+    },
+    {
+      "domain": "inasa.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "automationmty.com.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "integradorabb.com.mx",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "mci-automation.com",
+      "runs": 5,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "rockwellautomation.com",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "siemensmexico.com.mx",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    },
+    {
+      "domain": "valleyintlsupply.com",
+      "runs": 4,
+      "engines": [
+        "Gemini"
+      ],
+      "competitor": false
+    }
+  ],
+  "knownCostUsd": null,
+  "failures": []
+}

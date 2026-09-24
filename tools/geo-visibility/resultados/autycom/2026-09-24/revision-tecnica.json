@@ -1,0 +1,420 @@
+{
+  "input": "https://autycom.com/",
+  "finalUrl": "https://autycom.com/default-channel/es/",
+  "auditedAt": "2026-09-24T18:52:07.955Z",
+  "score": 69,
+  "grade": "Mejorable",
+  "limited": false,
+  "categories": [
+    {
+      "id": "access",
+      "label": "Acceso de los bots de IA",
+      "checks": [
+        {
+          "id": "robots-file",
+          "label": "Archivo robots.txt",
+          "status": "info",
+          "earned": 0,
+          "max": 0,
+          "detail": "robots.txt encontrado y evaluado.",
+          "evidence": "https://autycom.com/robots.txt → 200"
+        },
+        {
+          "id": "robots-OAI-SearchBot",
+          "label": "OAI-SearchBot puede rastrear esta página",
+          "status": "pass",
+          "earned": 4,
+          "max": 4,
+          "detail": "Permitido. OpenAI · ChatGPT Search puede leer y citar esta página.",
+          "evidence": "Grupo: * · Regla: Allow: /"
+        },
+        {
+          "id": "robots-Claude-SearchBot",
+          "label": "Claude-SearchBot puede rastrear esta página",
+          "status": "pass",
+          "earned": 4,
+          "max": 4,
+          "detail": "Permitido. Anthropic · Claude puede leer y citar esta página.",
+          "evidence": "Grupo: * · Regla: Allow: /"
+        },
+        {
+          "id": "robots-PerplexityBot",
+          "label": "PerplexityBot puede rastrear esta página",
+          "status": "pass",
+          "earned": 4,
+          "max": 4,
+          "detail": "Permitido. Perplexity puede leer y citar esta página.",
+          "evidence": "Grupo: * · Regla: Allow: /"
+        },
+        {
+          "id": "robots-Googlebot",
+          "label": "Googlebot puede rastrear esta página",
+          "status": "pass",
+          "earned": 4,
+          "max": 4,
+          "detail": "Permitido. Google · Search / AI Overviews puede leer y citar esta página.",
+          "evidence": "Grupo: * · Regla: Allow: /"
+        },
+        {
+          "id": "robots-Bingbot",
+          "label": "Bingbot puede rastrear esta página",
+          "status": "pass",
+          "earned": 4,
+          "max": 4,
+          "detail": "Permitido. Microsoft · Bing / Copilot puede leer y citar esta página.",
+          "evidence": "Grupo: * · Regla: Allow: /"
+        },
+        {
+          "id": "live-bots",
+          "label": "Respuesta real del servidor a los bots de IA",
+          "status": "pass",
+          "earned": 10,
+          "max": 10,
+          "detail": "Pedimos la página identificándonos como bots de búsqueda de IA y el servidor respondió normal.",
+          "evidence": "Navegador: 200 · OAI-SearchBot: 200 · PerplexityBot: 200 · Claude-SearchBot: 200"
+        }
+      ],
+      "earned": 30,
+      "max": 30
+    },
+    {
+      "id": "content",
+      "label": "Contenido legible sin JavaScript",
+      "checks": [
+        {
+          "id": "words",
+          "label": "Texto visible sin ejecutar JavaScript",
+          "status": "pass",
+          "earned": 12,
+          "max": 12,
+          "detail": "Hay suficiente texto en el HTML inicial. Los bots que no ejecutan JavaScript ven el contenido.",
+          "evidence": "974 palabras"
+        },
+        {
+          "id": "indexable",
+          "label": "La página permite ser indexada",
+          "status": "pass",
+          "earned": 5,
+          "max": 5,
+          "detail": "No hay instrucciones que bloqueen la indexación.",
+          "evidence": "index,follow"
+        },
+        {
+          "id": "https",
+          "label": "HTTPS",
+          "status": "pass",
+          "earned": 3,
+          "max": 3,
+          "detail": "La página se sirve con HTTPS.",
+          "evidence": "https://autycom.com/default-channel/es/"
+        }
+      ],
+      "earned": 20,
+      "max": 20
+    },
+    {
+      "id": "entity",
+      "label": "Entidad y datos estructurados",
+      "checks": [
+        {
+          "id": "jsonld",
+          "label": "Datos estructurados (JSON-LD)",
+          "status": "fail",
+          "earned": 0,
+          "max": 8,
+          "detail": "No hay JSON-LD. Los modelos leen el texto, pero los índices y grafos de conocimiento que deciden qué les llega usan estos datos para entender quién eres."
+        },
+        {
+          "id": "entity",
+          "label": "Identidad de la marca declarada",
+          "status": "fail",
+          "earned": 0,
+          "max": 6,
+          "detail": "No se declara quién está detrás del sitio (Organization, LocalBusiness o Person). Sin esto es más fácil que te confundan con otra marca."
+        },
+        {
+          "id": "sameas",
+          "label": "Perfiles oficiales enlazados (sameAs)",
+          "status": "fail",
+          "earned": 0,
+          "max": 3,
+          "detail": "No hay sameAs. Es la forma de decirle a las máquinas qué perfiles son tuyos."
+        },
+        {
+          "id": "opengraph",
+          "label": "Open Graph",
+          "status": "pass",
+          "earned": 3,
+          "max": 3,
+          "detail": "Metadatos que resumen la página para plataformas y agentes.",
+          "evidence": "og:title=\"Autycom\" · og:image ✓"
+        }
+      ],
+      "earned": 3,
+      "max": 20
+    },
+    {
+      "id": "structure",
+      "label": "Estructura del contenido",
+      "checks": [
+        {
+          "id": "title",
+          "label": "Título de la página",
+          "status": "warn",
+          "earned": 2,
+          "max": 4,
+          "detail": "7 caracteres (lo ideal es entre 10 y 70).",
+          "evidence": "Autycom"
+        },
+        {
+          "id": "description",
+          "label": "Meta descripción",
+          "status": "pass",
+          "earned": 3,
+          "max": 3,
+          "detail": "146 caracteres (lo ideal es entre 50 y 170).",
+          "evidence": "Distribuidor autorizado de automatización industrial en México. Marcas como Siemens, Omron y Festo, con precio, existencia y envío a todo el país."
+        },
+        {
+          "id": "h1",
+          "label": "Un solo encabezado principal (H1)",
+          "status": "warn",
+          "earned": 2,
+          "max": 4,
+          "detail": "Hay 3 H1. Con varios, el tema principal queda ambiguo.",
+          "evidence": "Compra equipo de automatización con respaldo, inventario y soporte experto. | Controladores PLC con entrega inmediata | Compra a mayoreo y cotiza en línea"
+        },
+        {
+          "id": "h2",
+          "label": "Secciones con subtítulos (H2)",
+          "status": "pass",
+          "earned": 3,
+          "max": 3,
+          "detail": "Las IAs recuperan fragmentos, no páginas enteras. Los subtítulos claros separan el contenido en bloques que se pueden citar solos.",
+          "evidence": "18 H2 · Compra por marca | Productos destacados | Ofertas de la semana"
+        },
+        {
+          "id": "canonical",
+          "label": "URL canónica",
+          "status": "pass",
+          "earned": 2,
+          "max": 2,
+          "detail": "Declara cuál es la versión oficial de la página.",
+          "evidence": "https://autycom.com/default-channel/es/"
+        },
+        {
+          "id": "lang",
+          "label": "Idioma declarado",
+          "status": "pass",
+          "earned": 2,
+          "max": 2,
+          "detail": "El idioma está declarado en la etiqueta <html> y el código es válido.",
+          "evidence": "lang=\"es\""
+        },
+        {
+          "id": "sitemap",
+          "label": "Sitemap",
+          "status": "pass",
+          "earned": 2,
+          "max": 2,
+          "detail": "Hay un sitemap para que los rastreadores encuentren todas las páginas.",
+          "evidence": "https://autycom.com/sitemap.xml"
+        }
+      ],
+      "earned": 16,
+      "max": 20
+    },
+    {
+      "id": "freshness",
+      "label": "Frescura",
+      "checks": [
+        {
+          "id": "freshness",
+          "label": "Fechas de publicación o actualización",
+          "status": "warn",
+          "earned": 0,
+          "max": 10,
+          "detail": "No encontramos fechas legibles por máquina. Las IAs prefieren información que pueden fechar."
+        }
+      ],
+      "earned": 0,
+      "max": 10
+    },
+    {
+      "id": "info",
+      "label": "Informativo (no suma puntos)",
+      "checks": [
+        {
+          "id": "llms-txt",
+          "label": "llms.txt",
+          "status": "info",
+          "earned": 0,
+          "max": 0,
+          "detail": "Es una propuesta de estándar. Ningún proveedor grande ha confirmado que lo use, así que no suma puntos: solo lo reportamos.",
+          "evidence": "no encontrado"
+        },
+        {
+          "id": "speed",
+          "label": "Tiempo de respuesta",
+          "status": "info",
+          "earned": 0,
+          "max": 0,
+          "detail": "Tiempo total hasta recibir el HTML, incluidas las redirecciones.",
+          "evidence": "916 ms"
+        }
+      ],
+      "earned": 0,
+      "max": 0
+    }
+  ],
+  "bots": [
+    {
+      "token": "OAI-SearchBot",
+      "owner": "OpenAI · ChatGPT Search",
+      "purpose": "search",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Claude-SearchBot",
+      "owner": "Anthropic · Claude",
+      "purpose": "search",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "PerplexityBot",
+      "owner": "Perplexity",
+      "purpose": "search",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Googlebot",
+      "owner": "Google · Search / AI Overviews",
+      "purpose": "search",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Bingbot",
+      "owner": "Microsoft · Bing / Copilot",
+      "purpose": "search",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "ChatGPT-User",
+      "owner": "OpenAI",
+      "purpose": "user",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Claude-User",
+      "owner": "Anthropic",
+      "purpose": "user",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Perplexity-User",
+      "owner": "Perplexity",
+      "purpose": "user",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "GPTBot",
+      "owner": "OpenAI",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "ClaudeBot",
+      "owner": "Anthropic",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Google-Extended",
+      "owner": "Google · Gemini",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "Applebot-Extended",
+      "owner": "Apple",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "CCBot",
+      "owner": "Common Crawl",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    },
+    {
+      "token": "meta-externalagent",
+      "owner": "Meta",
+      "purpose": "training",
+      "robots": {
+        "allowed": true,
+        "rule": "Allow: /",
+        "group": "*"
+      }
+    }
+  ],
+  "facts": {
+    "httpStatus": 200,
+    "responseMs": 916,
+    "words": 974,
+    "jsonLdTypes": [],
+    "llmsTxt": false,
+    "robotsStatus": 200
+  }
+}
