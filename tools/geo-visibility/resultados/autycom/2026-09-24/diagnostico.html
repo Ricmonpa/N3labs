@@ -129,7 +129,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <header class="top">
   <div class="eyebrow">N3 Thinktech IA Laboratory · Diagnóstico GEO</div>
   <h1>¿Las IAs le recomiendan Autycom a quien busca automatización industrial en México?</h1>
-  <p class="lede">Hoy casi no, y el propio sitio explica buena parte del porqué. Hicimos 78 preguntas reales a Gemini y revisamos autycom.com por dentro: portada, páginas de servicios, 60 fichas de producto y el sitio anterior, que sigue en línea.</p>
+  <p class="lede">Hoy casi no, y el propio sitio explica buena parte del porqué. Hicimos 78 preguntas reales a Gemini y revisamos autycom.com por dentro: portada, páginas de servicios, 60 fichas de producto y las casi 25,000 direcciones del sitio anterior, que sigue en línea.</p>
   <div class="meta">
     <span><b>Sitio:</b> autycom.com</span>
     <span><b>Fecha:</b> 24 sep 2026</span>
@@ -261,10 +261,15 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
   </div>
 
   <article class="find"><div class="sev crit">Crítico</div><div class="body">
-    <h3>El sitio anterior sigue vivo y más de 1,000 direcciones de producto dan error</h3>
-    <p>El sitio viejo, <code>autycom.com.mx</code> (WordPress), sigue publicado con su tienda. Declara como dirección oficial <code>www.autycom.com</code>, que ahora es el sitio nuevo, y su mapa lista 1,000 fichas con direcciones descriptivas como <code>/producto/contactor-siemens-3nw6110-1-siemens/</code>. Probamos 7 de ellas en el sitio nuevo: <b>las 7 responden error 500</b>. Todo lo que Google y las IAs habían aprendido de esas fichas apunta a páginas rotas.</p>
+    <h3>El sitio anterior sigue vivo y casi 25,000 direcciones de producto están rotas</h3>
+    <p>El sitio viejo, <code>autycom.com.mx</code> (WordPress), sigue publicado. Su mapa le entrega a Google <b>24,764 fichas de producto</b> con direcciones descriptivas como <code>/producto/contactor-siemens-3nw6110-1-siemens/</code>, todas escritas con el dominio <code>www.autycom.com</code>, que hoy es el sitio nuevo. Las probamos en el sitio nuevo:</p>
+    <div class="stats">
+      <div class="stat"><span class="k">890 / 1,000</span><span class="d">del primer mapa (revisado completo) responden error 500. Las otras 110 muestran la portada en lugar del producto</span></div>
+      <div class="stat"><span class="k">489 / 496</span><span class="d">en una muestra repartida entre las 24,764 dan error 500 (rango probable 97%–99%). Las 7 restantes muestran la portada</span></div>
+    </div>
+    <p>Ninguna de las direcciones que probamos lleva al producto. Todo lo que Google y las IAs habían aprendido de ese catálogo apunta a páginas rotas.</p>
     <p>Además, Gemini cita el sitio viejo en las 9 respuestas sobre Autycom, igual que al nuevo. La autoridad de la marca está partida entre dos sitios.</p>
-    <p class="fix"><b>Arreglo</b>Redirigir cada dirección vieja (301) a su ficha nueva, cruzando por número de parte, y retirar autycom.com.mx o redirigirlo completo.</p>
+    <p class="fix"><b>Arreglo</b>Redirigir cada dirección vieja (301) a su ficha nueva, cruzando por el número de parte que ya viene en la dirección. Los productos que ya no se venden van a su categoría o al buscador. Además, redirigir autycom.com.mx completo al sitio nuevo.</p>
   </div></article>
 
   <article class="find"><div class="sev crit">Crítico</div><div class="body">
@@ -420,7 +425,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <li>26 preguntas escritas como las haría un comprador en México (23 sin el nombre de la marca y 3 con él), cada una repetida 3 veces en Gemini (gemini-3.8-flash) con búsqueda web, por su API. La app que ve el usuario puede responder distinto.</li>
     <li>Esta medición es solo de Gemini. El estudio completo suma ChatGPT, Claude y Perplexity.</li>
     <li>“Menciona” = el nombre aparece en la respuesta. “Cita” = la respuesta enlaza a autycom.com. Cada respuesta cruda quedó guardada para auditar cualquier cifra.</li>
-    <li>Revisión técnica hecha en vivo el 24 sep 2026. Revisamos 60 fichas de las 933 en español, repartidas por todo el catálogo, además de 7 direcciones del sitio anterior.</li>
+    <li>Revisión técnica hecha en vivo el 24 sep 2026. Revisamos 60 fichas de las 933 en español, repartidas por todo el catálogo. Del sitio anterior probamos completas las 1,000 direcciones de su primer mapa y una de cada 50 del total (496 de 24,764).</li>
     <li>Google AI Overviews y Copilot no tienen API para medir esto y no están incluidos.</li>
   </ul>
   <p>N3 Thinktech IA Laboratory · n3labs.potenttial.site</p>
