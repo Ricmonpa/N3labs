@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IA Ready — Test por N3 Thinktech</title>
+<title>AI Ready — Test by N3 Thinktech</title>
 <link rel="icon" id="favicon" href="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -248,16 +248,16 @@ background:var(--bg-panel-2); color:var(--text); cursor:pointer; display:inline-
 <div class="wrap">
 <div class="brand">
 <img src="https://n3labs.potenttial.site/_next/image?url=%2Fn3-logo.png&w=384&q=75" alt="N3 Thinktech">
-<div class="tag">IA Laboratory · Test de diagnóstico</div>
-<a class="lang-switch" href="iaready-en.html" hreflang="en" lang="en">EN</a>
+<div class="tag">AI Laboratory · Diagnostic test</div>
+<a class="lang-switch" href="iaready.html" hreflang="es" lang="es">ES</a>
 </div>
 
 <!-- INTRO -->
 <div id="intro">
 <div class="hero">
-<div class="eyebrow"><span class="dot"></span> Elaborado por N3</div>
-<h1>¿Cuál es tu relación real<br>con la <span>IA</span>?</h1>
-<p>Un diagnóstico de 5 preguntas basado en la metodología <strong>Thinktech</strong> de Engel Fonseca. No mide cuánto sabes de tecnología: muestra el paradigma desde el que te relacionas con ella — y hacia dónde puedes moverlo tú mismo.</p>
+<div class="eyebrow"><span class="dot"></span> Created by N3</div>
+<h1>What's your real relationship<br>with <span>AI</span>?</h1>
+<p>A 5-question diagnostic based on Engel Fonseca's <strong>Thinktech</strong> methodology. It doesn't measure how much you know about technology: it shows the paradigm you relate to it from — and where you can move it yourself.</p>
 </div>
 
 <div class="levels-intro">
@@ -306,13 +306,13 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 </div>
 
 <div class="levels-grid">
-<div class="level-card" style="--lc:#8892a0"><div class="lc-name">IA Aware</div><div class="lc-desc">Ve la tecnología como algo ajeno. Evita ser principiante por miedo a no hacerlo perfecto.</div></div>
-<div class="level-card" style="--lc:#21c7ff"><div class="lc-name">IA Guided</div><div class="lc-desc">Usa la IA en tareas sueltas, pero aún no la integra a su flujo central de trabajo.</div></div>
-<div class="level-card" style="--lc:#ff9f43"><div class="lc-name">IA Driven</div><div class="lc-desc">Sabe que la IA es clave para su productividad y ya la aplica, pero todavía no escala su uso.</div></div>
-<div class="level-card" style="--lc:#8c6bff"><div class="lc-name">IA Ready</div><div class="lc-desc">Diseña sistemas con IA que crean valor que antes no existía, y forma a otros para escalarlo.</div></div>
+<div class="level-card" style="--lc:#8892a0"><div class="lc-name">AI Aware</div><div class="lc-desc">Sees technology as something foreign. Avoids being a beginner out of fear of not doing it perfectly.</div></div>
+<div class="level-card" style="--lc:#21c7ff"><div class="lc-name">AI Guided</div><div class="lc-desc">Uses AI for isolated tasks, but hasn't yet built it into their core workflow.</div></div>
+<div class="level-card" style="--lc:#ff9f43"><div class="lc-name">AI Driven</div><div class="lc-desc">Knows AI is key to their productivity and already applies it, but hasn't scaled its use yet.</div></div>
+<div class="level-card" style="--lc:#8c6bff"><div class="lc-name">AI Ready</div><div class="lc-desc">Designs AI systems that create value that didn't exist before, and trains others to scale it.</div></div>
 </div>
-<p class="levels-note">Vas a responder 5 preguntas rápidas. Tus respuestas te ubican en uno de estos 4 niveles — sin juzgar, solo para que veas con claridad dónde estás parado hoy.</p>
-<button class="start-btn" onclick="startChat()">Empezar el diagnóstico →</button>
+<p class="levels-note">You'll answer 5 quick questions. Your answers place you in one of these 4 levels — no judgment, just so you can see clearly where you stand today.</p>
+<button class="start-btn" onclick="startChat()">Start the diagnostic →</button>
 </div>
 
 </div>
@@ -323,8 +323,8 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 <div class="who">
 <div class="avatar">N3</div>
 <div>
-<div class="who-name">IA Ready · Bot de diagnóstico</div>
-<div class="who-status" id="chatStatus">en línea</div>
+<div class="who-name">AI Ready · Diagnostic bot</div>
+<div class="who-status" id="chatStatus">online</div>
 </div>
 </div>
 <div class="progress-track" id="progressTrack"></div>
@@ -336,7 +336,7 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 <div class="result" id="result">
 
 <div class="section" id="resultHeader">
-<h2><span class="n">01</span> Tu clasificación</h2>
+<h2><span class="n">01</span> Your classification</h2>
 <div class="badge-row">
 <div class="tier-badge" id="tierName"></div>
 <div class="tier-pill" id="tierPill"></div>
@@ -365,33 +365,33 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 </div>
 
 <div class="section">
-<h2><span class="n">02</span> Lo que respalda tu resultado</h2>
+<h2><span class="n">02</span> What backs up your result</h2>
 <div class="ref-grid" id="refGrid"></div>
 </div>
 
 <div class="section">
-<h2><span class="n">03</span> Tres decisiones semáforo</h2>
-<p class="semaphore-intro">Esto no es un juicio sobre ti — es autoconocimiento. Son tres decisiones singulares, del tipo que no se toman "a medias": una vez que las cruzas, ya no vuelves al punto de partida.</p>
+<h2><span class="n">03</span> Three traffic-light decisions</h2>
+<p class="semaphore-intro">This isn't a judgment of you — it's self-knowledge. These are three singular decisions, the kind you can't make "halfway": once you cross them, there's no going back to where you started.</p>
 <div id="semaphoreGrid"></div>
-<p class="semaphore-note">🔴 Freno que sueltas · 🟡 Compromiso que activas · 🟢 Paso que ya no se revierte.</p>
+<p class="semaphore-note">🔴 A brake you release · 🟡 A commitment you activate · 🟢 A step you can't undo.</p>
 </div>
 
 <div class="section">
-<h2><span class="n">04</span> Tres acciones para esta semana</h2>
+<h2><span class="n">04</span> Three actions for this week</h2>
 <div id="actionsGrid"></div>
 </div>
 
 <div class="section">
-<h2><span class="n">05</span> Una carta de tu yo del futuro</h2>
+<h2><span class="n">05</span> A letter from your future self</h2>
 <div class="letter" id="letterBox"></div>
 </div>
 
 <div class="footer-actions">
-<button class="btn primary" onclick="downloadPDF()">⬇ Descargar resultado en PDF</button>
-<button class="btn" onclick="restart()">↺ Repetir el test</button>
+<button class="btn primary" onclick="downloadPDF()">⬇ Download result as PDF</button>
+<button class="btn" onclick="restart()">↺ Retake the test</button>
 </div>
 
-<div class="credit">Test "IA Ready" · Elaborado por N3 Thinktech, basado en la metodología Thinktech de Engel Fonseca<br>n3labs.potenttial.site</div>
+<div class="credit">"AI Ready" Test · Created by N3 Thinktech, based on Engel Fonseca's Thinktech methodology<br>n3labs.potenttial.site</div>
 
 </div>
 </div>
@@ -400,159 +400,159 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 /* ---------------- DATA ---------------- */
 const LEVELS = [
 {
-id:'aware', name:'IA Aware', pill:'Nivel 1 de 4', color:'var(--aware)', hex:'#8892a0',
-paradigm:'Crees que "la tecnología no es lo tuyo". Evitas ser principiante por miedo a no hacerlo perfecto.',
-mindset:'Mentalidad de evitación tecnológica. Puede evolucionar hacia una curiosidad activa.',
-skillset:'Curiosidad pasiva. Te falta confianza digital. Necesitas desarrollar Curioxoma básico y alfabetización de IA.',
-toolset:'Conoces la IA superficialmente (ChatGPT básico). Falta aprender herramientas de productividad asistida.',
+id:'aware', name:'AI Aware', pill:'Level 1 of 4', color:'var(--aware)', hex:'#8892a0',
+paradigm:'You believe "technology just isn\'t my thing." You avoid being a beginner out of fear of not doing it perfectly.',
+mindset:'A tech-avoidant mindset. It can evolve into active curiosity.',
+skillset:'Passive curiosity. You lack digital confidence. You need to build basic Curioxoma and AI literacy.',
+toolset:'You know AI only on the surface (basic ChatGPT). You still need to learn AI-assisted productivity tools.',
 refs:[
-{kind:'Neurociencia', body:'El cerebro protege lo desconocido con la misma red que activa el miedo físico. Evitar la IA no es flojera: es una respuesta neurológica normal frente a lo nuevo, y se desactiva con exposición repetida y de bajo riesgo.', src:'Neurociencia del miedo y la novedad — amígdala y aversión a lo desconocido'},
-{kind:'Frase de película', body:'"Hazlo. O no lo hagas. No hay intento."', src:'Yoda, Star Wars'},
-{kind:'Frase célebre', body:'"No sobrevive el más fuerte de la especie, sino el que mejor se adapta al cambio."', src:'Atribuida a Charles Darwin'},
-{kind:'Dato duro', body:'Hace apenas un año, menos de 4 de cada 10 trabajadores contaban con herramientas de IA aprobadas por su empresa. Hoy ya son 6 de cada 10 a nivel global.', src:'Deloitte, "El estado de la IA en las empresas", 2026'}
+{kind:'Neuroscience', body:'The brain guards against the unknown with the same network that triggers physical fear. Avoiding AI isn\'t laziness: it\'s a normal neurological response to novelty, and it switches off with repeated, low-risk exposure.', src:'Neuroscience of fear and novelty — the amygdala and aversion to the unknown'},
+{kind:'Movie quote', body:'"Do. Or do not. There is no try."', src:'Yoda, Star Wars'},
+{kind:'Famous quote', body:'"It is not the strongest of the species that survives, but the one most adaptable to change."', src:'Attributed to Charles Darwin'},
+{kind:'Hard data', body:'Just a year ago, fewer than 4 in 10 workers had company-approved AI tools. Today it\'s 6 in 10 globally.', src:'Deloitte, "State of AI in the Enterprise", 2026'}
 ],
 decisions:[
-{c:'red', label:'Dejas de decir "yo no soy de tecnología". Esa frase sale hoy de tu vocabulario, sin excepción.'},
-{c:'yellow', label:'Eliges una tarea de tu semana y la haces acompañado de IA, aunque salga imperfecta, sin dar reversa.'},
-{c:'green', label:'Le dices a alguien de confianza "estoy empezando con esto". Declararlo en voz alta ya no se puede desdecir.'}
+{c:'red', label:'You stop saying "I\'m not a tech person." That phrase leaves your vocabulary today, no exceptions.'},
+{c:'yellow', label:'You pick one task from your week and do it alongside AI, even if it comes out imperfect — no backing out.'},
+{c:'green', label:'You tell someone you trust, "I\'m getting started with this." Once you say it out loud, you can\'t take it back.'}
 ],
-letter:`Todavía recuerdo la primera vez que evité abrir esa herramienta por miedo a verme torpe. Lo que no sabía entonces es que ese primer clic incómodo era el único paso que realmente costaba.
-Hoy, un año después, ya no evito lo nuevo — lo pruebo primero y pregunto después. No cambié de golpe: cambié eligiendo, semana tras semana, no huir de la incomodidad.
-Tú ya tienes las tres decisiones frente a ti. No te pido que lo domines hoy. Te pido que dejes de evitarlo hoy.`
+letter:`I still remember the first time I avoided opening that tool because I was afraid of looking clumsy. What I didn't know then is that that first awkward click was the only step that really cost anything.
+Today, a year later, I no longer avoid new things — I try first and ask later. I didn't change overnight: I changed by choosing, week after week, not to run from the discomfort.
+You already have the three decisions in front of you. I'm not asking you to master it today. I'm asking you to stop avoiding it today.`
 },
 {
-id:'guided', name:'IA Guided', pill:'Nivel 2 de 4', color:'var(--guided)', hex:'#21c7ff',
-paradigm:'Ves la IA como un accesorio, no como parte de tu flujo central de trabajo. Sigues atrapado en tareas repetitivas.',
-mindset:'Abierto a usar IA, pero no la integras del todo. Puede evolucionar hacia una mentalidad de eficiencia y mejora continua.',
-skillset:'Tienes habilidades básicas en prompts. Necesitas desarrollar automatización, análisis y pensamiento sistémico.',
-toolset:'Usas IA para tareas simples (resúmenes, ideas). Falta incorporarla en automatización y análisis.',
+id:'guided', name:'AI Guided', pill:'Level 2 of 4', color:'var(--guided)', hex:'#21c7ff',
+paradigm:'You see AI as an add-on, not as part of your core workflow. You\'re still stuck in repetitive tasks.',
+mindset:'Open to using AI, but not fully integrating it. It can evolve into a mindset of efficiency and continuous improvement.',
+skillset:'You have basic prompting skills. You need to develop automation, analysis and systems thinking.',
+toolset:'You use AI for simple tasks (summaries, ideas). You still need to bring it into automation and analysis.',
 refs:[
-{kind:'Neurociencia', body:'Automatizar una tarea repetitiva libera "ancho de banda" prefrontal: el cerebro solo sostiene atención plena unos 90–120 minutos antes de fatigarse, en ciclos llamados ritmos ultradianos.', src:'Ciclos ultradianos de atención y fatiga cognitiva'},
-{kind:'Frase de película', body:'Morpheus le ofrece a Neo elegir entre la píldora azul —seguir igual— y la roja —ver la verdad. No existe la opción de tomar las dos.', src:'The Matrix (paráfrasis)'},
-{kind:'Frase célebre', body:'"La mejor manera de predecir el futuro es crearlo."', src:'Peter Drucker'},
-{kind:'Dato duro', body:'Estudios citados por McKinsey y Goldman Sachs muestran que quienes usan IA con frecuencia ahorran entre 2 y 4 horas al día — casi un día laboral completo recuperado cada semana.', src:'McKinsey / Goldman Sachs, citado en reportes de productividad con IA, 2026'}
+{kind:'Neuroscience', body:'Automating a repetitive task frees up prefrontal "bandwidth": the brain can only sustain full attention for about 90–120 minutes before tiring, in cycles known as ultradian rhythms.', src:'Ultradian cycles of attention and cognitive fatigue'},
+{kind:'Movie quote', body:'Morpheus offers Neo a choice between the blue pill —stay the same— and the red pill —see the truth. Taking both is not an option.', src:'The Matrix (paraphrase)'},
+{kind:'Famous quote', body:'"The best way to predict the future is to create it."', src:'Peter Drucker'},
+{kind:'Hard data', body:'Studies cited by McKinsey and Goldman Sachs show that frequent AI users save between 2 and 4 hours a day — almost a full workday recovered every week.', src:'McKinsey / Goldman Sachs, cited in AI productivity reports, 2026'}
 ],
 decisions:[
-{c:'red', label:'Sacas la IA de "la pestaña aparte" y la metes dentro de tu flujo principal de trabajo, hoy mismo.'},
-{c:'yellow', label:'Eliges una tarea repetitiva de tu semana y la automatizas por completo antes del viernes. No "intentarlo": hacerlo.'},
-{c:'green', label:'Compartes tu primer flujo automatizado con alguien más. Ya no vuelves a resolverlo solo, en silencio.'}
+{c:'red', label:'You take AI out of "the side tab" and put it inside your main workflow, starting today.'},
+{c:'yellow', label:'You pick one repetitive task from your week and fully automate it before Friday. Not "try to": do it.'},
+{c:'green', label:'You share your first automated workflow with someone else. You never go back to solving it alone, in silence.'}
 ],
-letter:`Durante meses usé la IA como quien usa una calculadora: para lo simple, guardada en un cajón aparte. El cambio no vino de aprender más comandos, vino de dejar de tratarla como un extra.
-La primera tarea que automaticé por completo me dio más miedo que trabajo. Un año después, ese flujo sigue corriendo sin que yo lo piense, y ese tiempo lo invertí en cosas que antes no alcanzaba.
-Tú ya sabes cuál es esa tarea. Solo falta que dejes de posponerla.`
+letter:`For months I used AI the way you use a calculator: for simple things, tucked away in a separate drawer. The change didn't come from learning more commands — it came from no longer treating it as an extra.
+The first task I fully automated scared me more than it took work. A year later, that workflow is still running without me thinking about it, and I've invested that time in things I never used to get to.
+You already know which task it is. All that's left is to stop putting it off.`
 },
 {
-id:'driven', name:'IA Driven', pill:'Nivel 3 de 4', color:'var(--driven)', hex:'#ff9f43',
-paradigm:'Sabes que la IA es clave para productividad, innovación y simplificación del negocio, pero aún no escalas su uso.',
-mindset:'Mentalidad proactiva. Deseas resultados. Puede evolucionar hacia liderazgo innovador.',
-skillset:'Aplicas IA en operaciones. Necesitas fortalecer pensamiento predictivo, storytelling de datos y prototipado rápido.',
-toolset:'Utilizas múltiples herramientas (Notion AI, Copilot). Falta dominar APIs, prompt engineering y modelos propios.',
+id:'driven', name:'AI Driven', pill:'Level 3 of 4', color:'var(--driven)', hex:'#ff9f43',
+paradigm:'You know AI is key to productivity, innovation and simplifying the business, but you haven\'t scaled its use yet.',
+mindset:'A proactive mindset. You want results. It can evolve into innovative leadership.',
+skillset:'You apply AI in operations. You need to strengthen predictive thinking, data storytelling and rapid prototyping.',
+toolset:'You use multiple tools (Notion AI, Copilot). You still need to master APIs, prompt engineering and your own models.',
 refs:[
-{kind:'Neurociencia', body:'La dopamina no se libera al lograr la meta, sino al anticipar el progreso medible. Por eso medir con KPIs claros sostiene la motivación de quien ya usa IA todos los días.', src:'Neurociencia de la dopamina y la recompensa anticipada'},
-{kind:'Frase de película', body:'Tony Stark no solo usa su tecnología: la rediseña constantemente hasta que ella lo representa a él.', src:'Iron Man (paráfrasis)'},
-{kind:'Frase célebre', body:'"Sigue hambriento, sigue alocado."', src:'Steve Jobs'},
-{kind:'Dato duro', body:'Según el Barómetro Global de IA en el Empleo de PwC (2026), las empresas más expuestas a la IA son las que más rápido están aumentando salarios y plantillas: la IA no está reemplazando, está escalando el criterio.', src:'PwC, "AI Jobs Barometer", 2026'}
+{kind:'Neuroscience', body:'Dopamine isn\'t released when you reach the goal, but when you anticipate measurable progress. That\'s why measuring with clear KPIs sustains the motivation of someone who already uses AI every day.', src:'Neuroscience of dopamine and anticipated reward'},
+{kind:'Movie quote', body:'Tony Stark doesn\'t just use his technology: he constantly redesigns it until it represents him.', src:'Iron Man (paraphrase)'},
+{kind:'Famous quote', body:'"Stay hungry, stay foolish."', src:'Steve Jobs'},
+{kind:'Hard data', body:'According to PwC\'s Global AI Jobs Barometer (2026), the companies most exposed to AI are the ones increasing wages and headcount the fastest: AI isn\'t replacing judgment, it\'s scaling it.', src:'PwC, "AI Jobs Barometer", 2026'}
 ],
 decisions:[
-{c:'red', label:'Dejas de medir tu uso de IA "a ojo". Defines hoy los KPIs con los que vas a medir su impacto, aunque sean imperfectos.'},
-{c:'yellow', label:'Eliges un objetivo de negocio concreto y le aplicas IA de punta a punta en las próximas dos semanas, con dueño y fecha.'},
-{c:'green', label:'Empiezas a explorar un modelo o sistema propio para tu equipo. Dejas de "usar herramientas" y empiezas a diseñar tu stack.'}
+{c:'red', label:'You stop measuring your AI use "by eye." Today you define the KPIs you\'ll use to measure its impact, even if they\'re imperfect.'},
+{c:'yellow', label:'You pick one concrete business goal and apply AI to it end to end over the next two weeks, with an owner and a date.'},
+{c:'green', label:'You start exploring a model or system of your own for your team. You stop "using tools" and start designing your stack.'}
 ],
-letter:`Fui de las personas que ya usaba IA todos los días y aun así sentía que solo sumaba herramientas sin dirección. Lo que cambió mi año no fue una herramienta nueva: fue elegir un solo objetivo de negocio y llevarlo de punta a punta con IA, con una fecha real.
-Ese primer sistema con dueño y métrica me obligó a dejar de improvisar. Hoy lidero, no solo aplico.
-Tú ya tienes el objetivo en mente. Ponle nombre y fecha esta semana, no la que sigue.`
+letter:`I was one of those people who already used AI every day and still felt I was just piling up tools with no direction. What changed my year wasn't a new tool: it was choosing a single business goal and taking it end to end with AI, with a real deadline.
+That first system with an owner and a metric forced me to stop improvising. Today I lead, not just apply.
+You already have the goal in mind. Give it a name and a date this week, not next.`
 },
 {
-id:'ready', name:'IA Ready', pill:'Nivel 4 de 4', color:'var(--ready)', hex:'#8c6bff',
-paradigm:'Creas valor que antes no existía. Data-driven. Enseñas y lideras con pensamiento científico.',
-mindset:'Mentalidad científica y expansiva. Curiosidad profesionalizada. Piensas en impacto colectivo.',
-skillset:'Dominas Curioxoma, pensamiento científico y data storytelling. Enseñas, lideras y escalas con IA.',
-toolset:'Dominas AutoML, GPT-4 y workflows integrados. Diseñas sistemas personalizados de IA.',
+id:'ready', name:'AI Ready', pill:'Level 4 of 4', color:'var(--ready)', hex:'#8c6bff',
+paradigm:'You create value that didn\'t exist before. Data-driven. You teach and lead with scientific thinking.',
+mindset:'A scientific, expansive mindset. Professionalized curiosity. You think in terms of collective impact.',
+skillset:'You master Curioxoma, scientific thinking and data storytelling. You teach, lead and scale with AI.',
+toolset:'You master AutoML, GPT-4 and integrated workflows. You design custom AI systems.',
 refs:[
-{kind:'Neurociencia', body:'La neuroplasticidad no se detiene con la edad: cada sistema nuevo que diseñas reconfigura físicamente las mismas conexiones que usarás para diseñar el siguiente.', src:'Neuroplasticidad adulta y aprendizaje continuo'},
-{kind:'Frase de película', body:'En Interstellar, el avance no llega por dominar la tecnología existente, sino por diseñar sistemas que resuelven lo que antes parecía imposible.', src:'Interstellar (paráfrasis)'},
-{kind:'Frase célebre', body:'"La mejor forma de predecir el futuro es inventarlo."', src:'Alan Kay'},
-{kind:'Dato duro', body:'Según Randstad Research (Workmonitor 2026), más de 6 de cada 10 empresas ya reportan mayor eficiencia gracias a la IA — pero solo una fracción diseña sistemas propios. Ese es justo el terreno donde te encuentras tú.', src:'Randstad Research, "Workmonitor", 2026'}
+{kind:'Neuroscience', body:'Neuroplasticity doesn\'t stop with age: every new system you design physically rewires the very connections you\'ll use to design the next one.', src:'Adult neuroplasticity and lifelong learning'},
+{kind:'Movie quote', body:'In Interstellar, the breakthrough doesn\'t come from mastering existing technology, but from designing systems that solve what once seemed impossible.', src:'Interstellar (paraphrase)'},
+{kind:'Famous quote', body:'"The best way to predict the future is to invent it."', src:'Alan Kay'},
+{kind:'Hard data', body:'According to Randstad Research (Workmonitor 2026), more than 6 in 10 companies already report greater efficiency thanks to AI — but only a fraction design their own systems. That\'s exactly the ground you\'re standing on.', src:'Randstad Research, "Workmonitor", 2026'}
 ],
 decisions:[
-{c:'red', label:'Dejas de guardarte lo que sabes. Identificas hoy a la primera persona que vas a formar y le pones fecha esta semana.'},
-{c:'yellow', label:'Documentas por escrito un sistema que ya diseñaste con IA, para que sobreviva sin que tú estés presente.'},
-{c:'green', label:'Defines el próximo problema "imposible" que vas a resolver con IA en los próximos 90 días — y lo dices en voz alta ante alguien que te lo recuerde.'}
+{c:'red', label:'You stop keeping what you know to yourself. Today you identify the first person you\'ll train and set a date for this week.'},
+{c:'yellow', label:'You document in writing a system you\'ve already designed with AI, so it survives without you being there.'},
+{c:'green', label:'You define the next "impossible" problem you\'ll solve with AI in the next 90 days — and say it out loud to someone who will hold you to it.'}
 ],
-letter:`Llegué a un punto donde ya no se trataba de usar mejor la IA, sino de decidir qué hacer con lo que ya sabía. Documenté un sistema que solo vivía en mi cabeza y formé a la primera persona de mi equipo, aunque me tomó más tiempo que hacerlo yo mismo.
-Ese fue el punto de inflexión: dejé de ser el cuello de botella y empecé a escalar impacto, no solo resultados. Un año después, lo que diseñé sigue funcionando incluso en las semanas que no estoy.
-Tú ya sabes qué llevas guardado. Suéltalo esta semana.`
+letter:`I reached a point where it was no longer about using AI better, but about deciding what to do with what I already knew. I documented a system that only lived in my head and trained the first person on my team, even though it took longer than doing it myself.
+That was the turning point: I stopped being the bottleneck and started scaling impact, not just results. A year later, what I designed keeps working even in the weeks I'm not around.
+You already know what you're holding back. Let it go this week.`
 }
 ];
 
 const QUESTIONS = [
 {
-q:'Cuando alguien menciona "inteligencia artificial" en una junta de trabajo, ¿qué es lo primero que piensas?',
+q:'When someone mentions "artificial intelligence" in a work meeting, what\'s the first thing you think?',
 opts:[
-'Uf... eso no es lo mío.',
-'La uso para cosas simples, pero la veo como un extra.',
-'Es clave para mi productividad, ya la aplico seguido.',
-'Ya diseño soluciones con ella, no solo la uso.'
+'Ugh... that\'s not my thing.',
+'I use it for simple stuff, but I see it as an extra.',
+'It\'s key to my productivity; I already use it often.',
+'I already design solutions with it, not just use it.'
 ]
 },
 {
-q:'Tienes una tarea repetitiva y tediosa que se repite cada semana. ¿Qué haces con ella?',
+q:'You have a tedious, repetitive task that comes up every week. What do you do with it?',
 opts:[
-'La sigo haciendo a mano, ni se me ocurre delegarla.',
-'Sé que podría automatizarla, pero nunca doy el salto.',
-'Ya la automaticé con herramientas de IA.',
-'Diseñé un sistema para que ese problema ya ni exista.'
+'I keep doing it by hand; delegating it doesn\'t even cross my mind.',
+'I know I could automate it, but I never take the leap.',
+'I\'ve already automated it with AI tools.',
+'I designed a system so that problem doesn\'t even exist anymore.'
 ]
 },
 {
-q:'Un intento con una herramienta de IA te sale mal. ¿Cómo reaccionas?',
+q:'An attempt with an AI tool goes wrong. How do you react?',
 opts:[
-'Me frustro y lo dejo por la paz.',
-'Reintento con otro prompt, medio al azar.',
-'Ajusto mi enfoque usando lo que sí funcionó.',
-'Lo trato como experimento: documento qué aprendí.'
+'I get frustrated and give up.',
+'I try again with another prompt, more or less at random.',
+'I adjust my approach using what did work.',
+'I treat it as an experiment: I document what I learned.'
 ]
 },
 {
-q:'Alguien de tu equipo te pregunta cómo usas la IA en tu trabajo. ¿Qué le respondes?',
+q:'Someone on your team asks how you use AI in your work. What do you tell them?',
 opts:[
-'La verdad, no me siento capacitado para enseñarle nada.',
-'Le paso un par de tips sueltos que conozco.',
-'Ya lidero cómo mi equipo adopta la IA.',
-'Formo gente y diseño cómo escalarlo en toda el área.'
+'Honestly, I don\'t feel qualified to teach them anything.',
+'I pass along a couple of loose tips I know.',
+'I already lead how my team adopts AI.',
+'I train people and design how to scale it across the whole department.'
 ]
 },
 {
-q:'Piensas en tu relación con la IA dentro de un año. ¿Qué se te viene a la mente?',
+q:'Think about your relationship with AI a year from now. What comes to mind?',
 opts:[
-'Prefiero no pensarlo mucho, la verdad da algo de nervio.',
-'Quiero aprender más, pero no sé bien por dónde empezar.',
-'Tengo un plan claro para escalar cómo la uso.',
-'Ya estoy construyendo hoy lo que antes parecía imposible.'
+'I\'d rather not think about it much; honestly, it makes me a bit nervous.',
+'I want to learn more, but I\'m not sure where to start.',
+'I have a clear plan to scale how I use it.',
+'I\'m already building today what once seemed impossible.'
 ]
 }
 ];
 
 const ACTIONS = {
 aware:[
-{ttl:'Curso "AI For Everyone" (Andrew Ng)', desc:'Introducción sin código, pensada para quien recién empieza.', url:'https://www.coursera.org/learn/ai-for-everyone'},
-{ttl:'Libro "Atomic Habits" — James Clear', desc:'El método de micro-hábitos para sostener el cambio sin fuerza de voluntad.', url:'https://jamesclear.com/atomic-habits'},
-{ttl:'Centro de ayuda de ChatGPT para principiantes', desc:'Guía oficial paso a paso para dar los primeros pasos.', url:'https://help.openai.com/en/collections/3742473-chatgpt'}
+{ttl:'"AI For Everyone" course (Andrew Ng)', desc:'A no-code introduction designed for people just getting started.', url:'https://www.coursera.org/learn/ai-for-everyone'},
+{ttl:'"Atomic Habits" — James Clear', desc:'The micro-habit method for sustaining change without relying on willpower.', url:'https://jamesclear.com/atomic-habits'},
+{ttl:'ChatGPT help center for beginners', desc:'The official step-by-step guide to taking your first steps.', url:'https://help.openai.com/en/collections/3742473-chatgpt'}
 ],
 guided:[
-{ttl:'Prompting Guide (gratis)', desc:'Referencia práctica para pasar de prompts básicos a prompts que sí automatizan.', url:'https://www.promptingguide.ai/'},
-{ttl:'Zapier Learn — Automatiza tu trabajo', desc:'Casos reales de automatización con IA aplicados a tareas de oficina.', url:'https://zapier.com/resources/learn'},
-{ttl:'Stanford AI Index Report', desc:'Contexto anual de hacia dónde va la industria, para saber qué priorizar.', url:'https://aiindex.stanford.edu/'}
+{ttl:'Prompting Guide (free)', desc:'A practical reference for going from basic prompts to prompts that actually automate.', url:'https://www.promptingguide.ai/'},
+{ttl:'Zapier Learn — Automate your work', desc:'Real AI automation cases applied to everyday office tasks.', url:'https://zapier.com/resources/learn'},
+{ttl:'Stanford AI Index Report', desc:'Yearly context on where the industry is heading, so you know what to prioritize.', url:'https://aiindex.stanford.edu/'}
 ],
 driven:[
-{ttl:'PwC Global AI Jobs Barometer', desc:'Datos duros sobre cómo la IA cambia habilidades, sueldos y roles.', url:'https://www.pwc.com/gx/en/issues/artificial-intelligence/ai-jobs-barometer.html'},
-{ttl:'DeepLearning.AI — cursos para líderes', desc:'Formación aplicada para pasar de usuario a responsable de resultados.', url:'https://www.deeplearning.ai/'},
-{ttl:'Harvard Business Review — IA y ROI', desc:'Marcos para medir el impacto real de la IA en el negocio.', url:'https://hbr.org/topic/subject/ai-and-machine-learning'}
+{ttl:'PwC Global AI Jobs Barometer', desc:'Hard data on how AI is changing skills, wages and roles.', url:'https://www.pwc.com/gx/en/issues/artificial-intelligence/ai-jobs-barometer.html'},
+{ttl:'DeepLearning.AI — courses for leaders', desc:'Applied training to go from user to owner of results.', url:'https://www.deeplearning.ai/'},
+{ttl:'Harvard Business Review — AI and ROI', desc:'Frameworks for measuring AI\'s real impact on the business.', url:'https://hbr.org/topic/subject/ai-and-machine-learning'}
 ],
 ready:[
-{ttl:'Documentación de la API de Claude', desc:'Para prototipar y escalar sistemas propios de IA, no solo consumir herramientas.', url:'https://docs.claude.com'},
-{ttl:'Stanford HAI — investigación y liderazgo en IA', desc:'Comunidad y papers de referencia para quien ya diseña, no solo aplica.', url:'https://hai.stanford.edu/'},
-{ttl:'"Designing Machine Learning Systems" — Chip Huyen', desc:'Referencia para llevar sistemas de IA de prototipo a producción.', url:'https://huyenchip.com/'}
+{ttl:'Claude API documentation', desc:'For prototyping and scaling your own AI systems, not just consuming tools.', url:'https://docs.claude.com'},
+{ttl:'Stanford HAI — AI research and leadership', desc:'A community and reference papers for those who already design, not just apply.', url:'https://hai.stanford.edu/'},
+{ttl:'"Designing Machine Learning Systems" — Chip Huyen', desc:'A reference for taking AI systems from prototype to production.', url:'https://huyenchip.com/'}
 ]
 };
 
@@ -638,7 +638,7 @@ if(qIndex + 1 < QUESTIONS.length){
 setTimeout(()=> askQuestion(qIndex+1), 500);
 } else {
 updateProgress(QUESTIONS.length);
-document.getElementById('chatStatus').textContent = 'calculando tu resultado…';
+document.getElementById('chatStatus').textContent = 'calculating your result…';
 setTimeout(showResult, 900);
 }
 }
@@ -677,7 +677,7 @@ document.getElementById('tierToolset').textContent = level.toolset;
 const pct = (score/3)*100;
 const marker = document.getElementById('gaugeMarker');
 setTimeout(()=>{ marker.style.left = `calc(${pct}% - 1px)`; }, 100);
-document.getElementById('gaugeYou').textContent = `Estás aquí → ${level.name}`;
+document.getElementById('gaugeYou').textContent = `You are here → ${level.name}`;
 
 const refGrid = document.getElementById('refGrid');
 refGrid.innerHTML = '';
@@ -693,7 +693,7 @@ semGrid.innerHTML = '';
 level.decisions.forEach(d=>{
 const el = document.createElement('div');
 el.className = 'light ' + d.c;
-el.innerHTML = `<div class="bulb"></div><div><div class="lt">${d.c==='red'?'Freno a soltar':d.c==='yellow'?'Compromiso':'Avance sin retorno'}</div><div class="lb">${d.label}</div></div>`;
+el.innerHTML = `<div class="bulb"></div><div><div class="lt">${d.c==='red'?'Brake to release':d.c==='yellow'?'Commitment':'Point of no return'}</div><div class="lb">${d.label}</div></div>`;
 semGrid.appendChild(el);
 });
 
@@ -708,7 +708,7 @@ actGrid.appendChild(el);
 });
 
 document.getElementById('letterBox').innerHTML =
-`<div class="from">Carta de tu yo dentro de 12 meses · ${level.name} → lo que sigue</div>${level.letter.split('\n').map(p=>`<p>${p}</p>`).join('')}<div class="sig">— Tú, ya del otro lado.</div>`;
+`<div class="from">A letter from you, 12 months from now · ${level.name} → what comes next</div>${level.letter.split('\n').map(p=>`<p>${p}</p>`).join('')}<div class="sig">— You, from the other side.</div>`;
 }
 
 /* ---------------- PDF ---------------- */
@@ -752,14 +752,14 @@ doc.setTextColor(6,8,11);
 doc.text('N3', margin+7, y+3);
 doc.setFont('helvetica','bold'); doc.setFontSize(12);
 doc.setTextColor(20,20,20);
-doc.text('THINKTECH — IA LABORATORY', margin+34, y+3);
+doc.text('THINKTECH — AI LABORATORY', margin+34, y+3);
 y += 30;
 doc.setDrawColor(220,220,220);
 doc.line(margin, y, pageW-margin, y);
 y += 24;
 
-heading('Test IA Ready — Resultado', 20, [10,10,10]);
-body('Diagnóstico elaborado por N3, basado en la metodología Thinktech de Engel Fonseca.', 10);
+heading('AI Ready Test — Result', 20, [10,10,10]);
+body('Diagnostic created by N3, based on Engel Fonseca\'s Thinktech methodology.', 10);
 y += 4;
 
 const lvl = resultLevel;
@@ -771,16 +771,16 @@ label('Skillset', [33,199,255]); body(lvl.skillset);
 label('Toolset', [33,199,255]); body(lvl.toolset);
 y += 6;
 
-heading('Tres decisiones semáforo', 14, [10,10,10]);
+heading('Three traffic-light decisions', 14, [10,10,10]);
 const lightColors = {red:[255,77,94], yellow:[214,164,20], green:[46,160,90]};
-const lightNames = {red:'Freno a soltar', yellow:'Compromiso', green:'Avance sin retorno'};
+const lightNames = {red:'Brake to release', yellow:'Commitment', green:'Point of no return'};
 lvl.decisions.forEach(d=>{
 label(lightNames[d.c], lightColors[d.c]);
 body(d.label);
 });
 y += 6;
 
-heading('Tres acciones para esta semana', 14, [10,10,10]);
+heading('Three actions for this week', 14, [10,10,10]);
 ACTIONS[lvl.id].forEach((a,i)=>{
 checkPage(40);
 doc.setFont('helvetica','bold'); doc.setFontSize(11);
@@ -795,9 +795,9 @@ doc.textWithLink(a.url, margin, y, {url:a.url}); y += 18;
 });
 y += 4;
 
-heading('Carta de tu yo del futuro', 14, [92,60,220]);
+heading('A letter from your future self', 14, [92,60,220]);
 body(lvl.letter, 10.5);
-body('— Tú, ya del otro lado.', 10.5);
+body('— You, from the other side.', 10.5);
 
 checkPage(30);
 doc.setDrawColor(230,230,230);
@@ -805,9 +805,9 @@ doc.line(margin, y, pageW-margin, y);
 y += 16;
 doc.setFont('helvetica','normal'); doc.setFontSize(8.5);
 doc.setTextColor(140,140,140);
-doc.text('Test "IA Ready" · N3 Thinktech · n3labs.potenttial.site', margin, y);
+doc.text('"AI Ready" Test · N3 Thinktech · n3labs.potenttial.site', margin, y);
 
-doc.save('IA-Ready-N3-resultado.pdf');
+doc.save('AI-Ready-N3-result.pdf');
 }
 
 function restart(){
