@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { source: "/avante", destination: "/avante/index.html" },
       { source: "/avante/demo", destination: "/avante/demo/index.html" },
       { source: "/autycom", destination: "/autycom/index.html" },
+      { source: "/demo", destination: "/demo/index.html" },
     ];
   },
   async headers() {
@@ -27,6 +28,10 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/autycom/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
+        source: "/demo/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];

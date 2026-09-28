@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Demo interactiva: plataforma de tours en Panamá con reservas, pagos, agente IA y panel admin.">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Istmo Experiencias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F3F6F7; --surface:#FFFFFF; --surface-2:#EAF0F2; --ink:#0E2433; --muted:#566B78; --line:#D7E1E6;
+  --sea:#0F8F95; --sea-soft:#D3EEEF; --mola:#D22B3F; --mola-ink:#FFFFFF; --sun:#F2A900;
+  --ok:#1E8E5A; --ok-soft:#DDF3E7; --warn:#B7791F; --warn-soft:#FBEFD5; --bad:#B42335; --bad-soft:#F9DDE1; --info:#2463A6; --info-soft:#DCE9F7;
+  --bar:#0B1C27; --bar-ink:#DCE7EC; --bar-muted:#8BA3B0;
+  --shadow:0 1px 2px rgba(14,36,51,.06),0 8px 24px rgba(14,36,51,.08);
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#08141B; --surface:#0F202A; --surface-2:#152B37; --ink:#E4EEF2; --muted:#93A9B5; --line:#1F3845;
+    --sea:#34C3C4; --sea-soft:#123A40; --mola:#F0475B; --sun:#F5BA2E;
+    --ok:#4CC98A; --ok-soft:#113527; --warn:#E8B04E; --warn-soft:#3A2C10; --bad:#F2687A; --bad-soft:#3B141B; --info:#6FA8E8; --info-soft:#142C47;
+    --bar:#040C11; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#08141B; --surface:#0F202A; --surface-2:#152B37; --ink:#E4EEF2; --muted:#93A9B5; --line:#1F3845;
+  --sea:#34C3C4; --sea-soft:#123A40; --mola:#F0475B; --sun:#F5BA2E;
+  --ok:#4CC98A; --ok-soft:#113527; --warn:#E8B04E; --warn-soft:#3A2C10; --bad:#F2687A; --bad-soft:#3B141B; --info:#6FA8E8; --info-soft:#142C47;
+  --bar:#040C11; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--sea);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+
+/* demo bar */
+.demobar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bar);color:var(--bar-ink)}
+.demobar .wrap{display:flex;align-items:center;gap:16px;min-height:52px;flex-wrap:wrap;padding-block:6px}
+.demobar .tag{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bar-muted)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.tabs button{border:0;background:transparent;color:var(--bar-muted);padding:8px 12px;border-radius:8px;white-space:nowrap;font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center}
+.tabs button[aria-selected="true"]{background:#1A3342;color:#fff}
+.tabs button .lv{font:600 10px/1 var(--mono);padding:3px 5px;border-radius:4px;background:#24404F;color:#BFD3DC}
+.tabs button[aria-selected="true"] .lv{background:var(--mola);color:#fff}
+
+/* mola band: the one bold element */
+.mola{height:14px;background-color:var(--mola);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M0 0h28v14H0z' fill='%23D22B3F'/%3E%3Cpath d='M2 2h10v10H2z' fill='%23111'/%3E%3Cpath d='M4 4h6v6H4z' fill='%23F2A900'/%3E%3Cpath d='M6 6h2v2H6z' fill='%23111'/%3E%3Cpath d='M16 2h10v4H20v4h6v2H16z' fill='%230F8F95'/%3E%3C/svg%3E");background-size:28px 14px}
+
+/* site header */
+.site-h{background:var(--surface);border-bottom:1px solid var(--line)}
+.site-h .wrap{display:flex;align-items:center;gap:24px;min-height:68px}
+.logo{display:flex;align-items:center;gap:10px;font:800 24px/1 var(--display);letter-spacing:-.03em;background:none;border:0;padding:0}
+.logo svg{width:30px;height:30px}
+.site-h nav{display:flex;gap:20px;color:var(--muted);font-weight:500;flex:1}
+.site-h nav span{cursor:default}
+@media (max-width:760px){.site-h nav{display:none}.site-h .wrap{justify-content:space-between}}
+.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:transform .15s ease,background .15s}
+.btn:active{transform:translateY(1px)}
+.btn-mola{background:var(--mola);color:var(--mola-ink)}
+.btn-mola:hover{filter:brightness(1.06)}
+.btn-sea{background:var(--sea);color:#fff}
+.btn-ghost{background:var(--surface-2);color:var(--ink)}
+.btn-line{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn-wa{background:#1FAF5A;color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-block{width:100%}
+.spark{width:16px;height:16px}
+
+/* hero */
+.hero{padding-block:44px 28px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--sea)}
+.hero h1{font-size:clamp(36px,5.4vw,64px);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--mola)}
+.hero .lede{color:var(--muted);font-size:17px;max-width:48ch;margin-top:16px}
+.search{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;display:grid;grid-template-columns:1fr 1fr auto;gap:8px;box-shadow:var(--shadow)}
+@media (max-width:560px){.search{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px;padding:6px 10px}
+.field label,.lbl{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field select,.field input,.inp{border:0;background:transparent;padding:4px 0;font-weight:600;outline:none;width:100%}
+.inp-box{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;font-weight:500;width:100%}
+.inp-box:focus{border-color:var(--sea);outline:none}
+.mosaic{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:170px 170px;gap:10px}
+.mosaic .tile{border-radius:16px;overflow:hidden;position:relative}
+.mosaic .tile:first-child{grid-row:span 2}
+.mosaic .tile span{position:absolute;left:12px;bottom:12px;background:rgba(6,20,28,.62);color:#fff;font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+.scene{display:block;width:100%;height:100%}
+@media (max-width:520px){.mosaic{grid-template-rows:120px 120px}}
+
+.trust{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:22px;color:var(--muted);font-size:14px}
+.trust b{color:var(--ink)}
+
+/* catalog */
+.sec-h{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.sec-h h2{font-size:clamp(26px,3.2vw,36px);font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:940px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card .img{aspect-ratio:16/10;position:relative;max-width:100%}
+.badge{position:absolute;top:12px;left:12px;background:var(--surface);color:var(--ink);font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px}
+.badge.hot{background:var(--sun);color:#221800}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.card h3{font-size:20px;font-weight:700}
+.card .foot{display:flex;justify-content:space-between;align-items:end;margin-top:auto;padding-top:10px}
+.price small{display:block;font:600 10px/1 var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.price b{font:700 22px/1 var(--display)}
+.price i{font-style:normal;color:var(--muted);font-size:13px}
+.stars{color:var(--sun);font-weight:700;font-size:13px}
+.stars span{color:var(--muted);font-weight:500}
+.empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding-block:40px}
+@media (max-width:800px){.why{grid-template-columns:1fr}}
+.why h4{font-size:18px;margin-bottom:6px}
+.why p{color:var(--muted)}
+.foot-site{border-top:1px solid var(--line);padding-block:24px;color:var(--muted);font-size:13px}
+
+/* detail */
+.back{border:0;background:none;color:var(--muted);font-weight:600;padding:18px 0 12px;display:inline-flex;gap:6px}
+.d-hero{border-radius:20px;overflow:hidden;height:340px;position:relative}
+@media (max-width:600px){.d-hero{height:220px}}
+.d-grid{display:grid;grid-template-columns:1fr 380px;gap:32px;margin-top:24px;align-items:start;padding-bottom:48px}
+@media (max-width:960px){.d-grid{grid-template-columns:1fr}}
+.d-grid h1{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.03em}
+.d-desc{color:var(--muted);font-size:16px;max-width:62ch;margin-top:14px}
+.block{margin-top:28px}
+.block h3{font-size:20px;margin-bottom:12px}
+.itin{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:14px}
+.itin li{display:grid;grid-template-columns:62px 1fr;gap:12px;padding-left:16px;position:relative}
+.itin li::before{content:"";position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--sea)}
+.itin .num{color:var(--muted);font-size:13px;padding-top:1px}
+.inc{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;list-style:none;padding:0;margin:0}
+@media (max-width:600px){.inc{grid-template-columns:1fr}}
+.inc li{display:flex;gap:8px}
+.inc li::before{content:"✓";color:var(--ok);font-weight:700}
+.inc.no li::before{content:"–";color:var(--muted)}
+
+.book{position:sticky;top:calc(env(safe-area-inset-top,0px) + 72px);background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.book-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.book-tabs button{border:0;background:var(--surface-2);padding:12px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+.book-tabs button small{font:600 10px/1 var(--mono);letter-spacing:.06em}
+.book-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink)}
+.book-in{padding:18px;display:flex;flex-direction:column;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stepper{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.stepper button{width:30px;height:30px;border-radius:8px;border:0;background:var(--surface-2);font-weight:700}
+.stepper b{font-family:var(--mono)}
+.stepper-wrap{display:flex;flex-direction:column;gap:6px}
+.note{font-size:13px;color:var(--muted)}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:12px}
+.total b{font:800 26px/1 var(--display)}
+
+.cal-h{display:flex;justify-content:space-between;align-items:center}
+.cal-h b{font-family:var(--display);font-size:17px;text-transform:capitalize}
+.cal-h button{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:32px;height:32px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .wd{font:600 10px/1 var(--mono);text-align:center;color:var(--muted);padding:4px 0}
+.day{border:1px solid transparent;background:var(--surface-2);border-radius:8px;padding:5px 0 4px;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:44px}
+.day b{font-size:14px}
+.day small{font:600 9px/1 var(--mono);color:var(--ok)}
+.day.low small{color:var(--warn)}
+.day.off{background:transparent;color:var(--muted);opacity:.45;cursor:not-allowed}
+.day.sold{background:transparent;cursor:not-allowed}
+.day.sold b{text-decoration:line-through;color:var(--muted)}
+.day.sold small{color:var(--bad)}
+.day.sel{background:var(--ink);color:var(--bg)}
+.day.sel small{color:var(--bg)}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+
+.wa-bubble{background:#DCF8C6;color:#102015;border-radius:12px 12px 12px 2px;padding:10px 12px;font-size:14px;position:relative}
+.wa-bubble small{display:block;text-align:right;color:#5a7560;font-size:11px;margin-top:4px}
+.success{display:flex;gap:10px;align-items:center;color:var(--ok);font-weight:700}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(4,12,17,.55);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--surface);border-radius:18px;max-width:520px;width:100%;max-height:calc(100% - 32px);overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.modal-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal-h h3{font-size:20px}
+.x{border:0;background:var(--surface-2);border-radius:8px;width:32px;height:32px;font-size:18px}
+.modal-b{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.line-item{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.line-item span:first-child{color:var(--muted)}
+.pay-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pay-opts button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 6px;font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pay-opts button small{font-weight:500;color:var(--muted);font-size:11px}
+.pay-opts button[aria-pressed="true"]{border-color:var(--sea);box-shadow:inset 0 0 0 1px var(--sea);background:var(--sea-soft)}
+.log{background:#07131A;color:#BFE7DA;border-radius:10px;padding:12px;font:12px/1.7 var(--mono);overflow-x:auto}
+.log .k{color:#7FB6FF}.log .d{color:#6D8793}
+.spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--sea);animation:spin .8s linear infinite;margin:10px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* agent */
+.agent{display:grid;grid-template-columns:1fr 320px;gap:24px;padding-block:28px 48px}
+@media (max-width:900px){.agent{grid-template-columns:1fr}}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;min-height:620px;overflow:hidden}
+.chat-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.avatar{width:38px;height:38px;border-radius:12px;background:var(--ink);display:grid;place-items:center}
+.avatar svg{width:22px;height:22px}
+.chat-h b{display:block;font-family:var(--display);font-size:17px}
+.chat-h small{color:var(--ok);font-size:12px;font-weight:600}
+.msgs{flex:1;padding:18px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:640px}
+.msg{max-width:86%;padding:10px 14px;border-radius:14px;font-size:15px}
+.msg.bot{background:var(--surface-2);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.me{background:var(--sea);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.msg.plan{max-width:100%;width:100%;background:var(--surface);border:1px solid var(--line)}
+.qr{display:flex;flex-wrap:wrap;gap:8px}
+.qr button{border:1px solid var(--sea);color:var(--sea);background:transparent;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px}
+.qr button:hover{background:var(--sea-soft)}
+.typing{display:flex;gap:4px;padding:14px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.composer{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.composer input{flex:1}
+.pday{display:grid;grid-template-columns:74px 56px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.pday:first-of-type{border-top:0}
+.pday .th{height:44px;border-radius:8px;overflow:hidden}
+.pday .d{font:600 11px/1.3 var(--mono);color:var(--muted);text-transform:uppercase}
+.pday b{display:block;font-size:15px}
+.pday .s{font-size:12px;color:var(--ok)}
+@media (max-width:520px){.pday{grid-template-columns:48px 1fr auto}.pday .d{grid-column:1/-1}}
+.side{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.panel h4{font-size:16px;margin-bottom:10px}
+.step{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:8px 0}
+.step .n{width:24px;height:24px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 12px/1 var(--mono);color:var(--muted)}
+.step.done .n{background:var(--ok);color:#fff}
+.step.now .n{background:var(--sea);color:#fff}
+.step p{font-size:14px}
+.step small{color:var(--muted);font-size:12px;display:block}
+.kv{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-top:1px solid var(--line)}
+.kv:first-of-type{border-top:0}
+.kv span{color:var(--muted)}
+.kv b.pending{color:var(--muted);font-weight:500}
+
+/* admin */
+.admin{padding-block:28px 48px}
+.admin-top{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.admin-top h2{font-size:30px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi span{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kpi b{display:block;font:700 30px/1.1 var(--display);margin-top:8px}
+.kpi small{color:var(--ok);font-weight:600;font-size:12px}
+.subtabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.subtabs button{border:0;background:none;padding:10px 12px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.subtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--mola)}
+.subtabs button .cnt{font:600 11px/1 var(--mono);background:var(--surface-2);padding:2px 6px;border-radius:999px;margin-left:6px}
+.tbl-wrap{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:760px}
+th{text-align:left;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.fresh td{background:var(--sea-soft)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-nuevo{background:var(--info-soft);color:var(--info)}
+.p-contactado{background:var(--warn-soft);color:var(--warn)}
+.p-cotizado{background:var(--sea-soft);color:var(--sea)}
+.p-cerrado,.p-pagado{background:var(--ok-soft);color:var(--ok)}
+.p-perdido{background:var(--bad-soft);color:var(--bad)}
+.sel-mini{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 8px;font-size:13px;font-weight:600}
+.thumb{width:56px;height:38px;border-radius:6px;overflow:hidden;display:block}
+.price-in{width:92px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 8px;font-family:var(--mono)}
+.switch{position:relative;width:40px;height:22px;display:inline-block}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.switch span{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:.2s}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked+span{background:var(--ok)}
+.switch input:checked+span::after{transform:translateX(18px)}
+.switch input:focus-visible+span{outline:2px solid var(--sea);outline-offset:2px}
+.newform{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;grid-template-columns:2fr 1.2fr 1fr .8fr 1fr auto;gap:10px;align-items:end;margin-bottom:14px}
+@media (max-width:900px){.newform{grid-template-columns:1fr 1fr}}
+.newform .f{display:flex;flex-direction:column;gap:6px}
+.wa-link{color:#1FAF5A;font-weight:700;text-decoration:none;font-size:13px}
+
+/* roadmap */
+.rm{padding-block:36px 56px}
+.rm-head{max-width:760px}
+.rm-head h1{font-size:clamp(32px,4.4vw,52px);font-weight:800;letter-spacing:-.035em;margin-top:12px}
+.rm-head p{color:var(--muted);font-size:17px;margin-top:14px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+@media (max-width:900px){.levels{grid-template-columns:1fr}}
+.level{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.level.core{border-color:var(--ink);box-shadow:var(--shadow)}
+.level .lvl{display:flex;justify-content:space-between;align-items:center}
+.level .lvl b{font:800 44px/1 var(--display);color:var(--mola)}
+.level .lvl span{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right}
+.level h3{font-size:22px}
+.level p{color:var(--muted);font-size:14px}
+.level ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px}
+.level .btn{margin-top:auto}
+.vs{margin-top:40px}
+.vs h2{font-size:28px;margin-bottom:6px}
+.vs > p{color:var(--muted);margin-bottom:16px}
+.vs table{min-width:640px}
+.vs td:nth-child(2),.vs td:nth-child(3){width:26%}
+.yes{color:var(--ok);font-weight:700}.meh{color:var(--warn);font-weight:600}.nope{color:var(--muted)}
+.ask{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+@media (max-width:700px){.ask{grid-template-columns:1fr}}
+.ask div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.ask b{display:block;margin-bottom:4px}
+.ask span{color:var(--muted);font-size:14px}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.stack span{font:600 12px/1 var(--mono);background:var(--surface-2);padding:7px 10px;border-radius:8px}
+
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.25);border-radius:999px;padding:13px 18px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:80;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.fade{animation:fade .35s ease both}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="demobar">
+  <div class="wrap">
+    <span class="tag">Propuesta · demo interactiva</span>
+    <div class="tabs" role="tablist" id="tabs">
+      <button role="tab" data-a="view" data-v="sitio" aria-selected="true">Sitio web <span class="lv">A·B</span></button>
+      <button role="tab" data-a="view" data-v="agente" aria-selected="false">Agente IA <span class="lv">C</span></button>
+      <button role="tab" data-a="view" data-v="admin" aria-selected="false">Panel admin <span class="lv">A·B</span></button>
+      <button role="tab" data-a="view" data-v="roadmap" aria-selected="false">Plan por niveles</button>
+    </div>
+  </div>
+</div>
+<div class="mola" aria-hidden="true"></div>
+<main id="app"></main>
+<div id="modal" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const fmt = n => '$' + Number(n).toLocaleString('en-US');
+const pad = n => String(n).padStart(2, '0');
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromKey = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y, m-1, d); };
+const nice = k => fromKey(k).toLocaleDateString('es-PA', { weekday:'short', day:'numeric', month:'short' });
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let uid = 0;
+
+/* ---------- illustrated scenes (no external images) ---------- */
+function scene(t) {
+  const u = 'g' + (++uid), p = t.pal;
+  let s = `<defs><linearGradient id="${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p[0]}"/><stop offset="1" stop-color="${p[1]}"/></linearGradient></defs><rect width="400" height="260" fill="url(#${u})"/>`;
+  const palm = (x, y, c, k=1) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 0 Q8 -70 36 -118" stroke="${c}" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="${c}">${[-165,-130,-95,-60,-25,10,40].map(a=>`<ellipse cx="66" cy="-118" rx="32" ry="7" transform="rotate(${a} 36 -118)"/>`).join('')}</g></g>`;
+  switch (t.kind) {
+    case 'sea':
+      s += `<circle cx="300" cy="104" r="30" fill="${p[2]}"/><rect y="150" width="400" height="110" fill="${p[3]}"/>
+      <rect y="150" width="400" height="10" fill="#fff" opacity=".18"/><rect x="40" y="178" width="120" height="3" fill="#fff" opacity=".25"/><rect x="220" y="196" width="90" height="3" fill="#fff" opacity=".2"/>
+      <ellipse cx="290" cy="152" rx="52" ry="7" fill="${p[4]}"/>${palm(282,152,p[5],.28)}${palm(300,152,p[5],.22)}
+      <path d="M0 218 Q120 198 250 214 T400 206 V260 H0Z" fill="${p[4]}"/>${palm(70,250,p[5])}`; break;
+    case 'lagoon':
+      s += `<rect y="140" width="400" height="30" fill="${p[2]}"/><rect y="170" width="400" height="40" fill="${p[3]}"/><rect y="210" width="400" height="50" fill="${p[4]}"/>
+      <rect y="140" width="400" height="4" fill="#fff" opacity=".35"/>
+      <g fill="${p[5]}"><rect x="228" y="150" width="4" height="60"/><rect x="304" y="150" width="4" height="60"/><rect x="266" y="150" width="4" height="60"/><rect x="214" y="146" width="108" height="8"/><rect x="232" y="114" width="72" height="34"/><rect x="120" y="178" width="100" height="6"/></g>
+      <path d="M220 118 L268 80 L316 118Z" fill="#C9A04F"/><rect x="256" y="124" width="16" height="22" fill="#3a2a18"/>`; break;
+    case 'sail':
+      s += `<circle cx="96" cy="96" r="26" fill="${p[2]}"/><rect y="160" width="400" height="100" fill="${p[3]}"/><rect y="160" width="400" height="8" fill="#fff" opacity=".2"/>
+      <path d="M232 60 L232 176 L170 176Z" fill="${p[5]}"/><path d="M240 70 L240 176 L300 176Z" fill="${p[5]}" opacity=".9"/><rect x="234" y="56" width="4" height="124" fill="${p[4]}"/>
+      <rect x="160" y="178" width="150" height="9" rx="4" fill="${p[4]}"/><rect x="168" y="186" width="134" height="6" rx="3" fill="${p[4]}" opacity=".7"/>
+      <rect x="120" y="206" width="220" height="3" fill="#fff" opacity=".25"/>`; break;
+    case 'falls':
+      s += `<rect x="150" y="70" width="98" height="170" fill="${p[3]}"/>${[160,178,196,214,232].map((x,i)=>`<rect x="${x}" y="72" width="4" height="160" fill="#fff" opacity="${.25+i%2*.2}"/>`).join('')}
+      <path d="M0 50 L152 72 L162 260 H0Z" fill="${p[2]}"/><path d="M400 58 L246 74 L236 260 H400Z" fill="${p[2]}"/>
+      <ellipse cx="198" cy="244" rx="140" ry="26" fill="${p[4]}"/><ellipse cx="198" cy="236" rx="60" ry="8" fill="#fff" opacity=".35"/>
+      <g fill="${p[5]}"><circle cx="30" cy="50" r="26"/><circle cx="80" cy="56" r="24"/><circle cx="128" cy="64" r="20"/><circle cx="270" cy="66" r="22"/><circle cx="322" cy="58" r="26"/><circle cx="376" cy="54" r="28"/></g>`; break;
+    case 'fort':
+      s += `<rect y="140" width="400" height="120" fill="${p[2]}"/><rect y="140" width="400" height="6" fill="#fff" opacity=".2"/>
+      <path d="M0 176 H260 V260 H0Z" fill="${p[3]}"/>${[0,40,80,120,160,200,240].map(x=>`<rect x="${x}" y="164" width="24" height="14" fill="${p[3]}"/>`).join('')}
+      ${[20,100,180].map(x=>`<path d="M${x} 260 V222 a22 22 0 0 1 44 0 V260Z" fill="${p[4]}"/>`).join('')}
+      <rect x="236" y="186" width="60" height="11" rx="5" fill="#1b1d1f" transform="rotate(-10 236 190)"/><circle cx="244" cy="198" r="9" fill="#2a2d30"/>
+      <path d="M260 230 H400 V260 H260Z" fill="${p[5]}"/>${palm(360,236,'#1f4d2f',.55)}`; break;
+    case 'jungle':
+      s += `<path d="M0 120 Q60 70 120 110 T240 96 T400 104 V260 H0Z" fill="${p[2]}"/><path d="M0 160 Q80 120 160 150 T320 140 T400 150 V260 H0Z" fill="${p[3]}"/>
+      <path d="M0 196 Q100 176 200 190 T400 186 V260 H0Z" fill="${p[5]}"/><rect y="196" width="400" height="4" fill="#fff" opacity=".2"/>
+      <path d="M0 230 Q80 214 160 228 T320 222 T400 230 V260 H0Z" fill="${p[4]}"/>
+      <path d="M210 204 h58 l-8 9 h-44z" fill="#F4F1E8"/><rect x="226" y="196" width="26" height="8" rx="2" fill="#F4F1E8"/>`; break;
+    case 'city':
+      s += `<circle cx="310" cy="80" r="24" fill="${p[2]}" opacity=".9"/>
+      <g fill="${p[3]}">${[[150,90],[172,60],[196,104],[214,44],[240,80],[262,66],[288,98],[308,52],[332,86],[356,70],[378,100]].map(([x,y])=>`<rect x="${x}" y="${y+30}" width="18" height="${200-y}"/>`).join('')}</g>
+      <rect y="186" width="400" height="74" fill="${p[4]}"/><rect y="186" width="400" height="4" fill="#fff" opacity=".2"/>
+      <g fill="${p[5]}"><path d="M0 170 H130 V260 H0Z"/><path d="M30 170 a18 18 0 0 1 36 0Z"/><rect x="80" y="130" width="14" height="40"/><path d="M80 130 L87 116 L94 130Z"/><rect x="104" y="138" width="14" height="32"/></g>
+      <path d="M190 214 h120 l-12 14 h-100z" fill="#2c3136"/><rect x="220" y="200" width="60" height="14" fill="#E0E4E7"/><rect x="232" y="192" width="12" height="8" fill="#D22B3F"/>`; break;
+    case 'volcano':
+      s += `<circle cx="200" cy="120" r="34" fill="${p[2]}"/><path d="M40 260 L170 88 L230 88 L360 260Z" fill="${p[3]}"/><path d="M170 88 L186 110 L200 98 L214 112 L230 88Z" fill="#fff" opacity=".35"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="90" cy="150" rx="70" ry="14"/><ellipse cx="320" cy="138" rx="80" ry="16"/><ellipse cx="220" cy="170" rx="120" ry="14"/></g>
+      <path d="M0 210 Q100 186 200 204 T400 196 V260 H0Z" fill="${p[4]}"/><path d="M0 238 Q120 220 240 236 T400 232 V260 H0Z" fill="${p[5]}"/>`; break;
+    case 'river':
+      s += `<g fill="${p[2]}">${[0,40,80,120,160,200,240,280,320,360,400].map((x,i)=>`<circle cx="${x}" cy="${118+i%3*10}" r="${34+i%2*10}"/>`).join('')}<rect y="130" width="400" height="60"/></g>
+      <g fill="${p[3]}">${[20,90,160,300,370].map((x,i)=>`<circle cx="${x}" cy="${168+i%2*6}" r="${26+i%3*6}"/>`).join('')}</g>
+      <rect y="186" width="400" height="74" fill="${p[4]}"/><rect y="186" width="400" height="4" fill="#fff" opacity=".2"/>
+      <path d="M130 220 Q200 234 280 220 L270 228 Q200 238 140 228Z" fill="${p[5]}"/><circle cx="170" cy="204" r="6" fill="#2b1c12"/><rect x="166" y="210" width="8" height="12" fill="#D22B3F"/><rect x="236" y="196" width="3" height="30" fill="${p[5]}" transform="rotate(20 236 210)"/>`; break;
+  }
+  return `<svg class="scene" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${s}</svg>`;
+}
+
+/* ---------- sample data (Panamá, USD) ---------- */
+const CATS = ['Islas', 'Ciudad', 'Naturaleza', 'Aventura', 'Cultura'];
+const tours = [
+  { id:1, t:'San Blas: día en las islas Guna', dest:'Guna Yala', cat:'Islas', adulto:125, nino:95, dur:'1 día', kind:'sea', tag:'Más vendido', vibe:'playa', rating:4.9, rev:412,
+    pal:['#7FD3F0','#CFF1F7','#FFE38A','#11A7B5','#F3E3BD','#17402B'],
+    desc:'Salida de madrugada desde Ciudad de Panamá, lancha a tres islas del archipiélago, snorkel en la piscina natural y almuerzo con pescado del día preparado por la comunidad Guna.',
+    inc:['Transporte 4x4 ida y vuelta','Lancha entre islas','Almuerzo típico','Impuestos de la comarca','Equipo de snorkel'], no:['Bebidas alcohólicas','Propinas'],
+    itin:[['5:00','Recogida en tu hotel'],['8:30','Puerto de Carti, lancha'],['9:30','Isla Perro y el naufragio'],['12:30','Almuerzo en Isla Aguja'],['14:00','Piscina natural'],['18:30','Regreso a la ciudad']] },
+  { id:2, t:'San Blas: 2 días en cabaña sobre el mar', dest:'Guna Yala', cat:'Islas', adulto:189, nino:150, dur:'2 días · 1 noche', kind:'lagoon', tag:'', vibe:'playa', rating:4.8, rev:188,
+    pal:['#8ED8F2','#E3F6FB','#62D4D8','#1BA9BD','#0D7F99','#5B4128'],
+    desc:'Noche en cabaña sobre el agua, cena de langosta (según temporada), amanecer en la isla y tour por tres islas al día siguiente.',
+    inc:['Transporte 4x4','Cabaña privada con baño','3 comidas','Tour de islas','Impuestos de la comarca'], no:['Bebidas','Upgrade de langosta fuera de temporada'],
+    itin:[['Día 1','Llegada y almuerzo en la isla'],['Tarde','Snorkel y atardecer'],['Noche','Cena y fogata'],['Día 2','Tour por 3 islas'],['16:00','Regreso a la ciudad']] },
+  { id:3, t:'Catamarán privado por San Blas', dest:'Guna Yala', cat:'Islas', adulto:290, nino:220, dur:'1 día', kind:'sail', tag:'Promoción', vibe:'playa', rating:4.9, rev:96,
+    pal:['#6EC7EA','#D8F3FA','#FFE08A','#0C8FAA','#F4F6F8','#FFFFFF'],
+    desc:'Navega entre cayos a bordo de un catamarán con capitán, snorkel en arrecife y almuerzo a bordo. Grupos pequeños de máximo 10 personas.',
+    inc:['Catamarán con capitán','Almuerzo y bebidas a bordo','Snorkel en arrecife','Transporte 4x4'], no:['Propinas a la tripulación'],
+    itin:[['5:00','Recogida'],['9:00','Zarpe desde Carti'],['11:00','Snorkel en Cayos Holandeses'],['13:00','Almuerzo a bordo'],['18:30','Regreso']] },
+  { id:4, t:'El Valle de Antón: cascadas y termales', dest:'Coclé', cat:'Naturaleza', adulto:98, nino:70, dur:'1 día', kind:'falls', tag:'', vibe:'naturaleza', rating:4.7, rev:143,
+    pal:['#9CC9A8','#E4F2E6','#4E6B4F','#6FD0D0','#2F9FA4','#2F6A3B'],
+    desc:'Pueblo dentro del cráter de un volcán apagado. Caminata al Chorro El Macho, baño en aguas termales con lodo y mercado artesanal.',
+    inc:['Transporte privado','Entrada al Chorro El Macho','Aguas termales','Guía bilingüe'], no:['Almuerzo','Canopy (opcional)'],
+    itin:[['7:00','Salida de la ciudad'],['9:30','Mercado de El Valle'],['10:30','Chorro El Macho'],['13:00','Aguas termales'],['17:00','Regreso']] },
+  { id:5, t:'Portobelo e Isla Mamey', dest:'Colón', cat:'Cultura', adulto:139, nino:105, dur:'1 día', kind:'fort', tag:'', vibe:'playa', rating:4.8, rev:121,
+    pal:['#8FD0EE','#DDF2FA','#169DB0','#A89A84','#6E6352','#58A05A'],
+    desc:'Fuertes coloniales de Portobelo, Patrimonio de la Humanidad, la iglesia del Cristo Negro y tarde de playa en Isla Mamey.',
+    inc:['Transporte','Guía de historia','Lancha a Isla Mamey','Almuerzo de mariscos'], no:['Bebidas'],
+    itin:[['7:00','Salida'],['9:30','Fuerte San Jerónimo'],['11:00','Iglesia de San Felipe'],['12:30','Lancha a Isla Mamey'],['18:00','Regreso']] },
+  { id:6, t:'Gamboa: selva e Isla de los Monos', dest:'Cuenca del Canal', cat:'Naturaleza', adulto:65, nino:45, dur:'6 horas', kind:'jungle', tag:'', vibe:'naturaleza', rating:4.8, rev:260,
+    pal:['#B9DDC9','#EEF7F0','#5E9C6B','#3F7D4E','#2C5E3A','#5AA6A8'],
+    desc:'Bote por el Lago Gatún junto a los barcos del Canal, monos capuchinos y aulladores, perezosos y tucanes en su hábitat.',
+    inc:['Transporte privado','Bote por el Lago Gatún','Agua y bebidas en cooler','Guía naturalista'], no:['Comidas','Teleférico'],
+    itin:[['7:30','Recogida'],['8:30','Muelle de Gamboa'],['9:00','Isla de los Monos'],['11:00','Sendero de selva'],['13:30','Regreso']] },
+  { id:7, t:'Canal de Panamá y Casco Antiguo', dest:'Ciudad de Panamá', cat:'Ciudad', adulto:59, nino:40, dur:'5 horas', kind:'city', tag:'', vibe:'ciudad', rating:4.7, rev:338,
+    pal:['#F7C9A0','#FCE9D8','#F29A5A','#445A6B','#2E6E86','#26343F'],
+    desc:'Esclusas de Miraflores con barcos en tránsito, Cinta Costera y caminata por el Casco Antiguo con parada en una cafetería de café geisha.',
+    inc:['Transporte','Entrada a Miraflores','Guía bilingüe','Degustación de café'], no:['Almuerzo'],
+    itin:[['8:30','Recogida'],['9:15','Esclusas de Miraflores'],['11:00','Cinta Costera'],['11:45','Casco Antiguo a pie'],['13:30','Fin del tour']] },
+  { id:8, t:'Boquete: Volcán Barú al amanecer', dest:'Chiriquí', cat:'Aventura', adulto:175, nino:150, dur:'1 día', kind:'volcano', tag:'Nuevo', vibe:'naturaleza', rating:4.9, rev:74,
+    pal:['#F5A97F','#FDE3C8','#FFD166','#5B4E6E','#3E6B4F','#2A4A36'],
+    desc:'Subida nocturna en 4x4 a la cima más alta de Panamá para ver el amanecer sobre dos océanos, con desayuno en finca cafetalera al bajar.',
+    inc:['4x4 con conductor','Guía de montaña','Desayuno en finca','Abrigo y linterna'], no:['Vuelo a David','Hospedaje en Boquete'],
+    itin:[['1:00','Salida desde Boquete'],['5:30','Cima del Barú'],['6:15','Amanecer sobre dos océanos'],['9:00','Desayuno en finca'],['11:00','Regreso a Boquete']] },
+  { id:9, t:'Comunidad Emberá en el río Chagres', dest:'Parque Nacional Chagres', cat:'Cultura', adulto:105, nino:75, dur:'1 día', kind:'river', tag:'', vibe:'ciudad', rating:4.8, rev:152,
+    pal:['#BFE0D2','#EEF7F2','#3E7D55','#2F6443','#6A9E86','#6B3E22'],
+    desc:'Piragua por el río Chagres hasta una comunidad Emberá: música, danza, almuerzo de pescado con patacones y artesanía hecha en la aldea.',
+    inc:['Transporte','Piragua ida y vuelta','Almuerzo tradicional','Aporte a la comunidad'], no:['Artesanías','Tatuaje de jagua (opcional)'],
+    itin:[['7:30','Recogida'],['9:00','Embarque en piragua'],['10:00','Bienvenida en la aldea'],['12:30','Almuerzo'],['15:30','Regreso']] }
+].map(t => ({ ...t, pub:true }));
+const tourById = id => tours.find(t => t.id === id);
+
+/* inventory: seeded seats per tour per day (capacity 12) */
+const inv = {};
+function seats(id, k) {
+  const key = id + '|' + k;
+  if (!(key in inv)) {
+    let h = 7; for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    const r = h % 13;
+    inv[key] = r < 2 ? 0 : [2,3,5,6,8,9,10,12,4,7,11][h % 11];
+  }
+  return inv[key];
+}
+
+const leads = [
+  { n:'Mariana López', tel:'+507 6512-3390', tour:1, fecha:keyOf(addDays(TODAY,12)), ad:4, ni:0, est:'Nuevo', t:'hace 12 min', src:'Instagram' },
+  { n:'James Walker', tel:'+1 305 555 0142', tour:3, fecha:keyOf(addDays(TODAY,20)), ad:2, ni:0, est:'Contactado', t:'hace 1 h', src:'Google' },
+  { n:'Ana Sofía Pérez', tel:'+507 6230-1187', tour:6, fecha:keyOf(addDays(TODAY,6)), ad:2, ni:2, est:'Cotizado', t:'hace 3 h', src:'WhatsApp' },
+  { n:'Carlos Mendoza', tel:'+57 310 555 2241', tour:2, fecha:keyOf(addDays(TODAY,15)), ad:2, ni:0, est:'Cerrado', t:'ayer', src:'Facebook' },
+  { n:'Lucía Fernández', tel:'+34 612 555 908', tour:8, fecha:keyOf(addDays(TODAY,25)), ad:3, ni:0, est:'Contactado', t:'ayer', src:'TripAdvisor' },
+  { n:'Diego Castillo', tel:'+507 6788-4410', tour:7, fecha:keyOf(addDays(TODAY,3)), ad:1, ni:0, est:'Perdido', t:'hace 2 días', src:'Google' }
+];
+const reservas = [
+  { folio:'IST-1041', n:'Paola Méndez', items:[{ id:1, k:keyOf(addDays(TODAY,9)), ad:2, ni:1 }], total:345, met:'Yappy', est:'Pagado', t:'hoy 9:12' },
+  { folio:'IST-1040', n:'Tom Becker', items:[{ id:7, k:keyOf(addDays(TODAY,2)), ad:2, ni:0 }, { id:6, k:keyOf(addDays(TODAY,3)), ad:2, ni:0 }], total:248, met:'Tarjeta', est:'Pagado', t:'ayer 18:40' },
+  { folio:'IST-1039', n:'Gabriela Ortiz', items:[{ id:4, k:keyOf(addDays(TODAY,5)), ad:4, ni:2 }], total:532, met:'PayPal', est:'Pagado', t:'ayer 11:05' }
+];
+let folioN = 1042;
+
+/* ---------- state ---------- */
+const S = {
+  view:'sitio', route:null, filter:{ dest:'', cat:'' },
+  bookTab:'reservar', cal:null, sel:null, ad:2, ni:0,
+  quote:{ sent:false }, checkout:null,
+  chat:null, adminTab:'leads', showNew:false, freshLead:null, freshRes:null
+};
+function view(v) { S.view = v; window.scrollTo(0, 0); render(); }
+
+/* ---------- site ---------- */
+const compass = `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 5 L20 16 L16 27 L12 16Z" fill="var(--mola)"/><path d="M16 16 L20 16 L16 27Z" fill="currentColor"/></svg>`;
+const siteHeader = () => `
+<header class="site-h"><div class="wrap">
+  <button class="logo" data-a="home">${compass}istmo</button>
+  <nav><span>Destinos</span><span>Experiencias</span><span>Grupos y empresas</span><span>Nosotros</span></nav>
+  <button class="btn btn-mola" data-a="view" data-v="agente"><svg class="spark" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0l1.8 5.2L15 7l-5.2 1.8L8 14l-1.8-5.2L1 7l5.2-1.8z"/></svg>Planear con IA</button>
+</div></header>`;
+
+function tourCard(t) {
+  return `<button class="card fade" data-a="open" data-id="${t.id}">
+    <div class="img">${scene(t)}${t.tag ? `<span class="badge ${t.tag==='Más vendido'?'hot':''}">${t.tag}</span>` : ''}</div>
+    <div class="body">
+      <div class="meta"><span>${esc(t.dest)}</span><span>·</span><span>${t.dur}</span></div>
+      <h3>${esc(t.t)}</h3>
+      <div class="stars">★ ${t.rating} <span>(${t.rev} reseñas)</span></div>
+      <div class="foot"><div class="price"><small>Desde</small><b class="num">${fmt(t.adulto)}</b> <i>/ adulto</i></div><span class="note">Ver fechas →</span></div>
+    </div></button>`;
+}
+
+function renderHome() {
+  const dests = [...new Set(tours.filter(t=>t.pub).map(t => t.dest))];
+  const list = tours.filter(t => t.pub && (!S.filter.dest || t.dest === S.filter.dest) && (!S.filter.cat || t.cat === S.filter.cat));
+  const m = [tours[0], tours[5], tours[7]];
+  return siteHeader() + `
+  <section class="hero"><div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Tours en Panamá · guías locales</span>
+      <h1>Del Casco Antiguo a San Blas, <em>con cupo confirmado</em> en el momento.</h1>
+      <p class="lede">Elige fecha, ve cuántos lugares quedan y paga con Yappy o tarjeta. Si prefieres hablar con alguien, te respondemos por WhatsApp.</p>
+      <form class="search" id="searchForm">
+        <div class="field"><label for="f-dest">Destino</label><select id="f-dest"><option value="">Todo Panamá</option>${dests.map(d=>`<option ${S.filter.dest===d?'selected':''}>${esc(d)}</option>`).join('')}</select></div>
+        <div class="field"><label for="f-cat">Experiencia</label><select id="f-cat"><option value="">Todas</option>${CATS.map(c=>`<option ${S.filter.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+        <button class="btn btn-mola" type="submit">Buscar tours</button>
+      </form>
+      <div class="trust"><span><b>4.8 ★</b> en 1,784 reseñas</span><span><b>Yappy</b>, tarjeta y PayPal</span><span>Cancelación gratis <b>48 h</b> antes</span></div>
+    </div>
+    <div class="mosaic">
+      ${m.map(t=>`<button class="tile" data-a="open" data-id="${t.id}" style="border:0;padding:0">${scene(t)}<span>${esc(t.dest)}</span></button>`).join('')}
+    </div>
+  </div></section>
+  <section class="wrap" id="catalogo">
+    <div class="sec-h"><h2>Experiencias${S.filter.dest ? ' en ' + esc(S.filter.dest) : ''}</h2>
+      <div class="chips">${['', ...CATS].map(c=>`<button class="chip" data-a="cat" data-c="${c}" aria-pressed="${S.filter.cat===c}">${c||'Todas'}</button>`).join('')}</div></div>
+    ${list.length ? `<div class="grid">${list.map(tourCard).join('')}</div>` : `<div class="empty">No hay tours con esos filtros. <button class="btn btn-ghost" data-a="clear">Ver todos</button></div>`}
+  </section>
+  <section class="wrap why">
+    <div><h4>Disponibilidad real</h4><p>Cada fecha muestra los lugares que quedan. Si ya no hay cupo, no se puede reservar.</p></div>
+    <div><h4>Pago local o internacional</h4><p>Yappy para residentes en Panamá, tarjeta y PayPal para viajeros de fuera. Confirmación por correo al instante.</p></div>
+    <div><h4>Una persona real en WhatsApp</h4><p>Cotizaciones de grupo, dudas de logística o cambios de fecha, en el mismo chat.</p></div>
+  </section>
+  <footer class="foot-site"><div class="wrap">Istmo Experiencias · marca y datos de ejemplo para la demo</div></footer>
+  <button class="btn btn-sea fab" data-a="view" data-v="agente">¿No sabes qué elegir? Pregúntale al agente</button>`;
+}
+
+function calendarHTML(t) {
+  if (!S.cal) S.cal = { y:TODAY.getFullYear(), m:TODAY.getMonth() };
+  const { y, m } = S.cal;
+  const first = new Date(y, m, 1), days = new Date(y, m+1, 0).getDate(), off = (first.getDay() + 6) % 7;
+  const isMin = y === TODAY.getFullYear() && m === TODAY.getMonth();
+  let cells = ['L','M','M','J','V','S','D'].map(d=>`<div class="wd">${d}</div>`).join('') + '<div></div>'.repeat(off);
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(y, m, d), k = keyOf(date);
+    if (date <= TODAY) { cells += `<button class="day off" disabled><b>${d}</b><small>&nbsp;</small></button>`; continue; }
+    const c = seats(t.id, k), sel = S.sel === k;
+    if (!c) { cells += `<button class="day sold" disabled aria-label="${d}, agotado"><b>${d}</b><small>agot.</small></button>`; continue; }
+    cells += `<button class="day ${c<=3?'low':''} ${sel?'sel':''}" data-a="day" data-k="${k}" aria-label="${d}, ${c} lugares"><b>${d}</b><small>${c} lug</small></button>`;
+  }
+  return `<div class="cal-h"><button data-a="mon" data-d="-1" ${isMin?'disabled':''} aria-label="Mes anterior">‹</button><b>${first.toLocaleDateString('es-PA',{month:'long',year:'numeric'})}</b><button data-a="mon" data-d="1" aria-label="Mes siguiente">›</button></div>
+  <div class="cal">${cells}</div>
+  <div class="legend"><span><i style="background:var(--ok)"></i>Disponible</span><span><i style="background:var(--warn)"></i>Últimos lugares</span><span><i style="background:var(--bad)"></i>Agotado</span></div>`;
+}
+
+const stepper = (lbl, key, val, min=0) => `<div class="stepper-wrap"><span class="lbl">${lbl}</span><div class="stepper"><button type="button" data-a="pax" data-k="${key}" data-d="-1" ${val<=min?'disabled':''} aria-label="Menos ${lbl}">−</button><b>${val}</b><button type="button" data-a="pax" data-k="${key}" data-d="1" aria-label="Más ${lbl}">+</button></div></div>`;
+
+function bookBox(t) {
+  const tabs = `<div class="book-tabs" role="tablist">
+    <button role="tab" data-a="btab" data-t="reservar" aria-selected="${S.bookTab==='reservar'}">Reservar y pagar<small>NIVEL B</small></button>
+    <button role="tab" data-a="btab" data-t="cotizar" aria-selected="${S.bookTab==='cotizar'}">Cotizar por WhatsApp<small>NIVEL A</small></button></div>`;
+  if (S.bookTab === 'cotizar') {
+    if (S.quote.sent) {
+      const q = S.quote;
+      return tabs + `<div class="book-in fade">
+        <div class="success">✓ Recibimos tu solicitud</div>
+        <p class="note">Así llega el mensaje al WhatsApp del negocio:</p>
+        <div class="wa-bubble">${esc(q.msg)}<small>${new Date().toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit'})} ✓✓</small></div>
+        <a class="btn btn-wa btn-block" href="https://wa.me/?text=${encodeURIComponent(q.msg)}" target="_blank" rel="noopener">Abrir en WhatsApp</a>
+        <p class="note">El lead ya aparece en el <button class="btn-line" style="border:0;background:none;padding:0;color:var(--sea);font-weight:700" data-a="view" data-v="admin">panel admin</button> con estado “Nuevo”.</p>
+        <button class="btn btn-ghost" data-a="requote">Hacer otra cotización</button>
+      </div>`;
+    }
+    return tabs + `<form class="book-in" id="quoteForm">
+      <div class="price"><small>Desde</small><b class="num">${fmt(t.adulto)}</b> <i>/ adulto</i></div>
+      <div class="stepper-wrap"><label class="lbl" for="q-name">Tu nombre</label><input class="inp-box" id="q-name" required value="Andrea Ríos" autocomplete="off"></div>
+      <div class="stepper-wrap"><label class="lbl" for="q-date">Fecha aproximada</label><input class="inp-box" id="q-date" type="date" min="${keyOf(addDays(TODAY,1))}" value="${keyOf(addDays(TODAY,14))}" required></div>
+      <div class="row2">${stepper('Adultos','ad',S.ad,1)}${stepper('Niños','ni',S.ni)}</div>
+      <button class="btn btn-wa btn-block" type="submit">Enviar y continuar en WhatsApp</button>
+      <p class="note">Guarda el contacto en el panel y abre WhatsApp con el mensaje listo.</p>
+    </form>`;
+  }
+  const c = S.sel ? seats(t.id, S.sel) : 0;
+  const total = S.ad * t.adulto + S.ni * t.nino;
+  return tabs + `<div class="book-in">
+    ${calendarHTML(t)}
+    ${S.sel ? `<p class="note"><b style="color:var(--ink)">${nice(S.sel)}</b> · quedan <b style="color:var(--ink)">${c}</b> lugares</p>` : `<p class="note">Elige una fecha para ver el precio final.</p>`}
+    <div class="row2">${stepper('Adultos','ad',S.ad,1)}${stepper('Niños (3–11)','ni',S.ni)}</div>
+    ${S.sel && S.ad + S.ni > c ? `<p class="note" style="color:var(--bad)">Solo quedan ${c} lugares para esa fecha.</p>` : ''}
+    <div class="total"><span class="note num">${S.ad} × ${fmt(t.adulto)}${S.ni ? ` + ${S.ni} × ${fmt(t.nino)}` : ''}</span><b class="num">${fmt(total)}</b></div>
+    <button class="btn btn-mola btn-block" data-a="checkout" ${!S.sel || S.ad + S.ni > c ? 'disabled' : ''}>Reservar y pagar</button>
+  </div>`;
+}
+
+function renderDetail(t) {
+  return siteHeader() + `<div class="wrap fade">
+    <button class="back" data-a="home">← Todos los tours</button>
+    <div class="d-hero">${scene(t)}</div>
+    <div class="d-grid">
+      <div>
+        <div class="meta"><span>${esc(t.dest)}</span><span>·</span><span>${t.cat}</span><span>·</span><span>${t.dur}</span></div>
+        <h1 style="margin-top:8px">${esc(t.t)}</h1>
+        <div class="stars" style="margin-top:10px">★ ${t.rating} <span>· ${t.rev} reseñas verificadas</span></div>
+        <p class="d-desc">${esc(t.desc)}</p>
+        <div class="block"><h3>Itinerario</h3><ul class="itin">${t.itin.map(([h,x])=>`<li><span class="num">${h}</span><span>${esc(x)}</span></li>`).join('')}</ul></div>
+        <div class="block"><h3>Incluye</h3><ul class="inc">${t.inc.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+        <div class="block"><h3>No incluye</h3><ul class="inc no">${t.no.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+      </div>
+      <aside class="book">${bookBox(t)}</aside>
+    </div></div>`;
+}
+
+/* ---------- checkout ---------- */
+function openCheckout(items) {
+  S.checkout = { items, step:'pay', met:'Yappy', name:'Andrea Ríos', email:'andrea.rios@correo.com' };
+  renderModal();
+}
+function coTotal(items) { return items.reduce((s, it) => { const t = tourById(it.id); return s + it.ad * t.adulto + it.ni * t.nino; }, 0); }
+function renderModal() {
+  const m = $('#modal'), c = S.checkout;
+  if (!c) { m.hidden = true; m.innerHTML = ''; return; }
+  m.hidden = false;
+  const total = coTotal(c.items);
+  let body = '';
+  if (c.step === 'pay') {
+    body = `${c.items.map(it => { const t = tourById(it.id); return `<div class="line-item"><span>${esc(t.t)}<br><small class="num">${nice(it.k)} · ${it.ad} ad.${it.ni?` + ${it.ni} niños`:''}</small></span><b class="num">${fmt(it.ad*t.adulto+it.ni*t.nino)}</b></div>`; }).join('')}
+      <div class="total"><span class="note">Total USD</span><b class="num">${fmt(total)}</b></div>
+      <div class="row2"><div class="stepper-wrap"><label class="lbl" for="c-name">Nombre</label><input class="inp-box" id="c-name" value="${esc(c.name)}"></div>
+      <div class="stepper-wrap"><label class="lbl" for="c-mail">Correo</label><input class="inp-box" id="c-mail" value="${esc(c.email)}"></div></div>
+      <span class="lbl">Método de pago</span>
+      <div class="pay-opts">${[['Yappy','Banco General'],['Tarjeta','Visa · MC'],['PayPal','Internacional']].map(([k,s])=>`<button data-a="met" data-m="${k}" aria-pressed="${c.met===k}">${k}<small>${s}</small></button>`).join('')}</div>
+      <button class="btn btn-mola btn-block" data-a="pay">Pagar ${fmt(total)}</button>
+      <p class="note">Pago simulado para la demo. No se cobra nada.</p>`;
+  } else if (c.step === 'processing') {
+    body = `<div class="spinner"></div><p style="text-align:center">Esperando confirmación de ${c.met}…</p>`;
+  } else {
+    body = `<div class="success fade">✓ Pago aprobado · folio <span class="num">${c.folio}</span></div>
+      <p>Enviamos la confirmación a <b>${esc(c.email)}</b>. Lo que pasó por detrás (Nivel B):</p>
+      <div class="log">${c.log.join('<br>')}</div>
+      <div class="row2"><button class="btn btn-ghost" data-a="closeM">Seguir viendo tours</button><button class="btn btn-sea" data-a="closeM" data-then="admin">Ver en el panel</button></div>`;
+  }
+  m.innerHTML = `<div class="scrim" data-a="scrim"><div class="modal fade" role="dialog" aria-modal="true" aria-label="Pago"><div class="modal-h"><h3>${c.step==='done'?'Reserva confirmada':'Confirmar y pagar'}</h3><button class="x" data-a="closeM" aria-label="Cerrar">×</button></div><div class="modal-b">${body}</div></div></div>`;
+}
+function doPay() {
+  const c = S.checkout;
+  c.name = $('#c-name')?.value || c.name; c.email = $('#c-mail')?.value || c.email;
+  c.step = 'processing'; renderModal();
+  setTimeout(() => {
+    const folio = 'IST-' + (folioN++), total = coTotal(c.items);
+    const time = () => new Date().toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    c.log = [`<span class="d">${time()}</span> <span class="k">POST</span> /api/webhooks/${c.met.toLowerCase()} → payment.approved`];
+    c.items.forEach(it => {
+      const key = it.id + '|' + it.k, before = seats(it.id, it.k), n = it.ad + it.ni;
+      inv[key] = Math.max(0, before - n);
+      c.log.push(`<span class="d">${time()}</span> inventario tour#${it.id} ${it.k}: ${before} → ${inv[key]} lugares`);
+    });
+    c.log.push(`<span class="d">${time()}</span> reserva ${folio} estado=PAGADO total=${fmt(total)}`);
+    c.log.push(`<span class="d">${time()}</span> correo de confirmación enviado → ${esc(c.email)}`);
+    reservas.unshift({ folio, n:c.name, items:c.items, total, met:c.met, est:'Pagado', t:'ahora' });
+    S.freshRes = folio; c.folio = folio; c.step = 'done';
+    renderModal(); if (S.view === 'sitio') render();
+  }, 1400);
+}
+
+/* ---------- agent (Nivel C) ---------- */
+const Q = [
+  { key:'vibe', ask:'¡Hola! Soy el agente de Istmo. Te armo un plan con tours que sí tienen cupo. Para empezar, ¿qué te llama más?', opts:[['Playa e islas','playa'],['Selva y montaña','naturaleza'],['Ciudad y cultura','ciudad'],['Un poco de todo','mix']] },
+  { key:'who', ask:'Perfecto. ¿Con quién viajas?', opts:[['En pareja','pareja'],['Con amigos (4)','amigos'],['En familia con niños','familia'],['Solo','solo']] },
+  { key:'budget', ask:'¿Cuánto quieres gastar por persona en tours, más o menos?', opts:[['Hasta $200','200'],['$200 a $450','450'],['Sin tope','9999']] }
+];
+const LBL = { playa:'Playa e islas', naturaleza:'Selva y montaña', ciudad:'Ciudad y cultura', mix:'Un poco de todo', pareja:'En pareja', amigos:'Con amigos', familia:'Familia con niños', solo:'Solo', '200':'Hasta $200 p/p', '450':'$200–$450 p/p', '9999':'Sin tope' };
+function chatInit() { S.chat = { msgs:[{ from:'bot', html:esc(Q[0].ask), opts:Q[0].opts }], step:0, ans:{}, typing:false, plan:null }; }
+function paxOf(who) { return { pareja:[2,0], amigos:[4,0], familia:[2,2], solo:[1,0] }[who] || [2,0]; }
+function buildPlan(a) {
+  const [ad, ni] = paxOf(a.who), n = ad + ni, budget = Number(a.budget);
+  let pool = tours.filter(t => t.pub);
+  let picks = [];
+  if (a.vibe === 'mix') {
+    for (const v of ['ciudad','naturaleza','playa']) {
+      const c = pool.filter(t => t.vibe === v).sort((x,y)=>y.rating-x.rating || x.adulto-y.adulto);
+      const hit = c.find(t => picks.reduce((s,p)=>s+p.adulto,0) + t.adulto <= budget) || c.sort((x,y)=>x.adulto-y.adulto)[0];
+      if (hit) picks.push(hit);
+    }
+  } else {
+    const c = pool.filter(t => t.vibe === a.vibe || (a.vibe==='ciudad' && t.cat==='Cultura')).sort((x,y)=>y.rating-x.rating || x.adulto-y.adulto);
+    for (const t of c) { if (picks.length < 3 && picks.reduce((s,p)=>s+p.adulto,0) + t.adulto <= budget && !(t.kind==='lagoon' && picks.some(p=>p.dest===t.dest && p.kind!=='lagoon') )) picks.push(t); }
+    if (picks.length < 2) picks = c.sort((x,y)=>x.adulto-y.adulto).slice(0,2);
+    if (a.vibe==='ciudad' && picks.length < 3) { const g = pool.find(t=>t.id===6); if (g && !picks.includes(g)) picks.push(g); }
+  }
+  if (ni) picks = picks.filter(t => t.kind !== 'volcano');
+  let d = addDays(TODAY, 10);
+  const items = picks.slice(0,3).map(t => {
+    let tries = 0; while (seats(t.id, keyOf(d)) < n && tries++ < 30) d = addDays(d, 1);
+    const it = { id:t.id, k:keyOf(d), ad, ni, left:seats(t.id, keyOf(d)) };
+    d = addDays(d, t.kind === 'lagoon' ? 2 : 1); return it;
+  });
+  return items;
+}
+function planHTML(items) {
+  const total = coTotal(items);
+  return `<p style="margin-bottom:8px">Con base en lo que me dijiste, esto es lo que te recomiendo. Todas las fechas tienen cupo ahora mismo:</p>
+  ${items.map((it,i) => { const t = tourById(it.id); return `<div class="pday"><span class="d">Día ${i+1}<br>${nice(it.k)}</span><span class="th">${scene(t)}</span><div><b>${esc(t.t)}</b><span class="s">quedan ${it.left} lugares · ${t.dur}</span></div><b class="num">${fmt(it.ad*t.adulto+it.ni*t.nino)}</b></div>`; }).join('')}
+  <div class="total" style="margin-top:6px"><span class="note">${items[0].ad} adultos${items[0].ni?` + ${items[0].ni} niños`:''} · total</span><b class="num">${fmt(total)}</b></div>
+  <div class="qr" style="margin-top:12px"><button class="btn btn-mola" style="border:0;color:#fff;background:var(--mola)" data-a="agentBook">Reservar todo · ${fmt(total)}</button><button data-a="agentHuman">Prefiero hablar con una persona</button><button data-a="agentRestart">Empezar de nuevo</button></div>`;
+}
+function answer(val, label) {
+  const c = S.chat; if (c.typing || c.step > 2) return;
+  c.msgs.forEach(m => m.opts = null);
+  c.msgs.push({ from:'me', html:esc(label) });
+  c.ans[Q[c.step].key] = val; c.step++; c.typing = true; render();
+  setTimeout(() => {
+    c.typing = false;
+    if (c.step < 3) { const q = Q[c.step]; c.msgs.push({ from:'bot', html:esc(q.ask), opts:q.opts }); }
+    else { c.plan = buildPlan(c.ans); c.msgs.push({ from:'bot', plan:true, html:planHTML(c.plan) }); }
+    render();
+  }, c.step < 3 ? 700 : 1500);
+}
+function parseFree(text) {
+  const s = text.toLowerCase(), st = S.chat.step;
+  if (st === 0) return /playa|isla|mar|san blas|caribe/.test(s) ? 'playa' : /selva|monta|volc|cascad|naturaleza|fr[ií]o/.test(s) ? 'naturaleza' : /ciudad|canal|cultura|historia|casco/.test(s) ? 'ciudad' : 'mix';
+  if (st === 1) return /famil|hij|niñ|niñ/.test(s) ? 'familia' : /amig/.test(s) ? 'amigos' : /\bsol[oa]\b/.test(s) ? 'solo' : 'pareja';
+  if (st === 2) { const n = Number((s.match(/\d[\d,.]*/)||[''])[0].replace(/[,.]/g,'')); return /sin|no importa|lo que sea/.test(s) || !n ? '9999' : n <= 200 ? '200' : n <= 450 ? '450' : '9999'; }
+  return null;
+}
+function renderAgent() {
+  if (!S.chat) chatInit();
+  const c = S.chat, a = c.ans;
+  const stepState = i => c.step > i || (i===3 && c.plan) ? 'done' : c.step === i ? 'now' : '';
+  return `<div class="wrap agent">
+    <section class="chat" aria-label="Chat con el agente">
+      <div class="chat-h"><div class="avatar" style="color:#fff">${compass}</div><div><b>Agente de viaje Istmo</b><small>● En línea · responde en español e inglés</small></div></div>
+      <div class="msgs" id="msgs">
+        ${c.msgs.map(m => `<div class="msg ${m.from} ${m.plan?'plan':''} fade">${m.html}${m.opts?`<div class="qr" style="margin-top:10px">${m.opts.map(([l,v])=>`<button data-a="ans" data-v="${v}" data-l="${esc(l)}">${esc(l)}</button>`).join('')}</div>`:''}</div>`).join('')}
+        ${c.typing ? `<div class="msg bot"><div class="typing"><i></i><i></i><i></i></div></div>` : ''}
+      </div>
+      <form class="composer" id="composer"><input class="inp-box" id="chat-in" placeholder="${c.step<3?'O escríbelo con tus palabras…':'Pídele un cambio al itinerario…'}" autocomplete="off"><button class="btn btn-sea" type="submit">Enviar</button></form>
+    </section>
+    <aside class="side">
+      <div class="panel"><h4>Cómo trabaja el agente</h4>
+        <div class="step ${stepState(0)}"><span class="n">1</span><p>Entiende qué buscas<small>Clima, acompañantes y presupuesto, aunque lo escribas a tu manera</small></p></div>
+        <div class="step ${c.step>=3?'done':c.step>0?'now':''}"><span class="n">2</span><p>Consulta el catálogo en vivo<small>${tours.filter(t=>t.pub).length} tours publicados, precios y lugares por fecha</small></p></div>
+        <div class="step ${c.plan?'done':''}"><span class="n">3</span><p>Arma el plan y la liga de pago<small>Solo propone fechas con cupo real</small></p></div>
+      </div>
+      <div class="panel"><h4>Lo que entendió</h4>
+        <div class="kv"><span>Estilo</span><b class="${a.vibe?'':'pending'}">${a.vibe?LBL[a.vibe]:'—'}</b></div>
+        <div class="kv"><span>Viajeros</span><b class="${a.who?'':'pending'}">${a.who?LBL[a.who]:'—'}</b></div>
+        <div class="kv"><span>Presupuesto</span><b class="${a.budget?'':'pending'}">${a.budget?LBL[a.budget]:'—'}</b></div>
+      </div>
+      <div class="panel"><h4>También por WhatsApp</h4><p class="note">El mismo agente puede contestar en el número del negocio y pasar la conversación a una persona cuando haga falta.</p></div>
+    </aside>
+  </div>`;
+}
+
+/* ---------- admin ---------- */
+const pill = s => `<span class="pill p-${s.toLowerCase()}">${s}</span>`;
+function waMsg(l) { const t = tourById(l.tour); return `Hola ${l.n.split(' ')[0]}, soy de Istmo. Vi tu interés en "${t.t}" para el ${nice(l.fecha)}. ¿Te comparto la cotización?`; }
+function renderAdmin() {
+  const ingresos = reservas.reduce((s,r)=>s+r.total,0);
+  const tab = S.adminTab;
+  let content = '';
+  if (tab === 'leads') {
+    content = `<div class="tbl-wrap"><table><thead><tr><th>Contacto</th><th>Tour</th><th>Fecha</th><th>Personas</th><th>Origen</th><th>Estado</th><th></th></tr></thead><tbody>
+      ${leads.map((l,i) => `<tr class="${S.freshLead===l?'fresh':''}"><td><b>${esc(l.n)}</b><br><span class="note num">${esc(l.tel)} · ${l.t}</span></td><td>${esc(tourById(l.tour).t)}</td><td class="num">${nice(l.fecha)}</td><td class="num">${l.ad}${l.ni?` + ${l.ni}`:''}</td><td>${esc(l.src)}</td>
+      <td><label class="sr" hidden for="st-${i}">Estado</label><select class="sel-mini" id="st-${i}" data-lead="${i}">${['Nuevo','Contactado','Cotizado','Cerrado','Perdido'].map(s=>`<option ${l.est===s?'selected':''}>${s}</option>`).join('')}</select> ${pill(l.est)}</td>
+      <td><a class="wa-link" href="https://wa.me/?text=${encodeURIComponent(waMsg(l))}" target="_blank" rel="noopener">Responder ↗</a></td></tr>`).join('')}
+    </tbody></table></div>`;
+  } else if (tab === 'reservas') {
+    content = `<div class="tbl-wrap"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Tours</th><th>Método</th><th>Total</th><th>Estado</th><th>Creada</th></tr></thead><tbody>
+      ${reservas.map(r => `<tr class="${S.freshRes===r.folio?'fresh':''}"><td class="num"><b>${r.folio}</b></td><td>${esc(r.n)}</td><td>${r.items.map(it=>`${esc(tourById(it.id).t)} <span class="note num">· ${nice(it.k)} · ${it.ad+it.ni} pax</span>`).join('<br>')}</td><td>${r.met}</td><td class="num"><b>${fmt(r.total)}</b></td><td>${pill(r.est)}</td><td class="note">${r.t}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  } else {
+    content = `${S.showNew ? `<form class="newform fade" id="newTour">
+      <div class="f"><label class="lbl" for="n-t">Nombre del tour</label><input class="inp-box" id="n-t" required value="Isla Taboga: playa y pueblo"></div>
+      <div class="f"><label class="lbl" for="n-d">Destino</label><input class="inp-box" id="n-d" required value="Isla Taboga"></div>
+      <div class="f"><label class="lbl" for="n-c">Categoría</label><select class="inp-box" id="n-c">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+      <div class="f"><label class="lbl" for="n-p">Precio adulto</label><input class="inp-box num" id="n-p" type="number" min="1" value="79" required></div>
+      <div class="f"><label class="lbl" for="n-k">Portada</label><select class="inp-box" id="n-k"><option value="sea">Playa</option><option value="sail">Barco</option><option value="jungle">Selva</option><option value="city">Ciudad</option><option value="falls">Cascada</option></select></div>
+      <button class="btn btn-mola" type="submit">Publicar</button></form>` : ''}
+      <div class="tbl-wrap"><table><thead><tr><th></th><th>Tour</th><th>Categoría</th><th>Precio adulto (USD)</th><th>Reseñas</th><th>Publicado</th></tr></thead><tbody>
+      ${tours.map(t => `<tr><td><span class="thumb">${scene(t)}</span></td><td><b>${esc(t.t)}</b><br><span class="note">${esc(t.dest)} · ${t.dur}</span></td><td>${t.cat}</td>
+      <td><input class="price-in" type="number" min="1" id="pr-${t.id}" data-price="${t.id}" value="${t.adulto}" aria-label="Precio de ${esc(t.t)}"></td><td class="num">★ ${t.rating} · ${t.rev}</td>
+      <td><label class="switch"><input type="checkbox" id="pub-${t.id}" data-pub="${t.id}" ${t.pub?'checked':''} aria-label="Publicar ${esc(t.t)}"><span></span></label></td></tr>`).join('')}
+      </tbody></table></div>`;
+  }
+  return `<div class="wrap admin fade">
+    <div class="admin-top"><div><span class="eyebrow">Panel de Istmo</span><h2 style="margin-top:8px">Buenos días, equipo</h2></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-line" data-a="view" data-v="sitio">Ver sitio</button><button class="btn btn-mola" data-a="newTour">+ Nuevo tour</button></div></div>
+    <div class="kpis">
+      <div class="kpi"><span>Leads esta semana</span><b class="num">${leads.length + 31}</b><small>+18% vs semana pasada</small></div>
+      <div class="kpi"><span>Reservas pagadas</span><b class="num">${reservas.length + 9}</b><small>${reservas.length} en las últimas 48 h</small></div>
+      <div class="kpi"><span>Ingresos del mes</span><b class="num">${fmt(ingresos + 6840)}</b><small>USD · Yappy 52%</small></div>
+      <div class="kpi"><span>Tours publicados</span><b class="num">${tours.filter(t=>t.pub).length}</b><small style="color:var(--muted)">de ${tours.length} en catálogo</small></div>
+    </div>
+    <div class="subtabs" role="tablist">
+      <button role="tab" data-a="atab" data-t="leads" aria-selected="${tab==='leads'}">Leads<span class="cnt">${leads.length}</span></button>
+      <button role="tab" data-a="atab" data-t="reservas" aria-selected="${tab==='reservas'}">Reservas<span class="cnt">${reservas.length}</span></button>
+      <button role="tab" data-a="atab" data-t="tours" aria-selected="${tab==='tours'}">Tours y precios<span class="cnt">${tours.length}</span></button>
+    </div>
+    ${content}
+    <p class="note" style="margin-top:12px">Los cambios de precio y publicación se reflejan en el sitio al instante. Cifras de ejemplo.</p>
+  </div>`;
+}
+
+/* ---------- roadmap / proposal ---------- */
+function renderRoadmap() {
+  return `<div class="wrap rm fade">
+    <div class="rm-head"><span class="eyebrow">Propuesta · plataforma de tours en Panamá</span>
+      <h1>Un sitio que vende mientras ustedes están en la lancha.</h1>
+      <p>Se construye por niveles. Cada nivel queda en línea y funcionando antes de empezar el siguiente, así el negocio empieza a recibir clientes desde las primeras semanas.</p></div>
+    <div class="levels">
+      <div class="level core"><div class="lvl"><b>A</b><span>Captar clientes<br>≈ 3–4 semanas</span></div><h3>Catálogo + WhatsApp</h3>
+        <p>La base: un catálogo rápido y fácil de administrar que convierte visitas en conversaciones.</p>
+        <ul><li>Catálogo con filtros por destino y experiencia</li><li>Ficha de tour con itinerario, incluye y reseñas</li><li>Cotización que abre WhatsApp con el mensaje listo</li><li>Panel para editar tours, precios y ver leads</li><li>Sitio en español e inglés, listo para Google</li></ul>
+        <button class="btn btn-ghost" data-a="demoA">Ver en la demo</button></div>
+      <div class="level"><div class="lvl"><b>B</b><span>Cobrar en línea<br>≈ +3–4 semanas</span></div><h3>Reservas y pagos</h3>
+        <p>El sitio cobra solo y controla cuántos lugares quedan por fecha.</p>
+        <ul><li>Calendario con cupos reales por salida</li><li>Pago con Yappy, tarjeta y PayPal</li><li>Descuento automático de cupos al confirmarse el pago</li><li>Correo de confirmación con folio</li><li>Reservas en el panel</li></ul>
+        <button class="btn btn-ghost" data-a="demoB">Ver en la demo</button></div>
+      <div class="level"><div class="lvl"><b>C</b><span>Vender 24/7<br>≈ +3–5 semanas</span></div><h3>Agente de viaje con IA</h3>
+        <p>Un asistente que pregunta, recomienda y cierra la venta, en web y WhatsApp.</p>
+        <ul><li>Entiende preferencias en lenguaje natural</li><li>Arma itinerarios con tours y fechas con cupo</li><li>Genera la liga de pago del plan completo</li><li>Pasa la conversación a una persona cuando hace falta</li></ul>
+        <button class="btn btn-ghost" data-a="view" data-v="agente">Ver en la demo</button></div>
+    </div>
+
+    <section class="vs"><h2>Dónde podemos ganar</h2><p>Comparado con tuyotravel.com, revisado el ${TODAY.toLocaleDateString('es-PA',{day:'numeric',month:'long',year:'numeric'})}. Solo anotamos lo que vimos en su sitio público.</p>
+      <div class="tbl-wrap"><table><thead><tr><th>Qué necesita el viajero</th><th>Lo que vimos</th><th>Esta plataforma</th></tr></thead><tbody>
+        <tr><td>Catálogo con categorías y fichas</td><td class="yes">Sí, buen catálogo (14 tours)</td><td class="yes">Sí</td></tr>
+        <tr><td>Elegir fecha y número de personas</td><td class="yes">Sí, en la ficha</td><td class="yes">Sí, con adultos y niños</td></tr>
+        <tr><td>Ver cuántos lugares quedan por fecha</td><td class="nope">No lo vimos</td><td class="yes">Sí, fechas agotadas bloqueadas</td></tr>
+        <tr><td>Pago local con Yappy</td><td class="meh">Por confirmar</td><td class="yes">Sí</td></tr>
+        <tr><td>Ficha del tour más vendido</td><td class="meh">“San Blas Pasadía” abría “Tour no encontrado”</td><td class="yes">Enlaces validados en cada publicación</td></tr>
+        <tr><td>Recomendación personalizada e itinerario de varios días</td><td class="nope">No</td><td class="yes">Agente IA (Nivel C)</td></tr>
+        <tr><td>Seguimiento de cada interesado</td><td class="nope">No visible (interno)</td><td class="yes">Panel con estado y origen del lead</td></tr>
+      </tbody></table></div></section>
+
+    <section class="vs"><h2>Lo que necesitamos de ustedes</h2>
+      <div class="ask">
+        <div><b>Nombre y dominio</b><span>“Istmo” es solo un nombre de ejemplo para la demo.</span></div>
+        <div><b>Catálogo inicial</b><span>Lista de tours con precio adulto y niño, itinerario, incluye y fotos propias.</span></div>
+        <div><b>Operación</b><span>¿Los tours son propios o de terceros? ¿Cuántos lugares hay por salida?</span></div>
+        <div><b>Cobro</b><span>Cuenta comercial para Yappy y una pasarela de tarjeta disponible en Panamá.</span></div>
+      </div>
+      <div class="stack">${['Next.js','Tailwind + shadcn/ui','PostgreSQL + Prisma','Vercel','Yappy · pasarela de tarjeta','WhatsApp Cloud API','Gemini / LLM con herramientas'].map(x=>`<span>${x}</span>`).join('')}</div>
+    </section>
+  </div>`;
+}
+
+/* ---------- render + events ---------- */
+function render() {
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.v === S.view));
+  const app = $('#app');
+  if (S.view === 'sitio') app.innerHTML = S.route ? renderDetail(tourById(S.route)) : renderHome();
+  else if (S.view === 'agente') app.innerHTML = renderAgent();
+  else if (S.view === 'admin') app.innerHTML = renderAdmin();
+  else app.innerHTML = renderRoadmap();
+  const msgs = $('#msgs'); if (msgs) msgs.scrollTop = msgs.scrollHeight;
+}
+let tt;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2400); }
+function openTour(id) { S.view = 'sitio'; S.route = id; S.sel = null; S.cal = null; S.quote = { sent:false }; S.bookTab = 'reservar'; window.scrollTo(0,0); render(); }
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a;
+  if (a === 'scrim' && e.target !== el) return;
+  switch (a) {
+    case 'view': S.checkout = null; renderModal(); view(el.dataset.v); break;
+    case 'home': S.route = null; S.view = 'sitio'; window.scrollTo(0,0); render(); break;
+    case 'open': openTour(Number(el.dataset.id)); break;
+    case 'cat': S.filter.cat = el.dataset.c; render(); break;
+    case 'clear': S.filter = { dest:'', cat:'' }; render(); break;
+    case 'btab': S.bookTab = el.dataset.t; render(); break;
+    case 'mon': { const d = new Date(S.cal.y, S.cal.m + Number(el.dataset.d), 1); S.cal = { y:d.getFullYear(), m:d.getMonth() }; render(); break; }
+    case 'day': S.sel = el.dataset.k; render(); break;
+    case 'pax': { const k = el.dataset.k; S[k] = Math.max(k==='ad'?1:0, Math.min(12, S[k] + Number(el.dataset.d))); render(); break; }
+    case 'requote': S.quote = { sent:false }; render(); break;
+    case 'checkout': openCheckout([{ id:S.route, k:S.sel, ad:S.ad, ni:S.ni }]); break;
+    case 'met': S.checkout.met = el.dataset.m; renderModal(); break;
+    case 'pay': doPay(); break;
+    case 'scrim': case 'closeM': { const then = el.dataset.then; S.checkout = null; renderModal(); if (then) { S.adminTab = 'reservas'; view(then); } else render(); break; }
+    case 'ans': if (el.dataset.v === '__restart') { chatInit(); render(); break; } answer(el.dataset.v, el.dataset.l); break;
+    case 'agentBook': openCheckout(S.chat.plan.map(({id,k,ad,ni}) => ({id,k,ad,ni}))); break;
+    case 'agentHuman': {
+      const c = S.chat; c.msgs.push({ from:'me', html:'Prefiero hablar con una persona' });
+      const txt = `Hola, el agente me armó este plan: ${c.plan.map(it=>`${tourById(it.id).t} (${nice(it.k)})`).join(', ')}. ¿Me ayudan a cerrarlo?`;
+      c.msgs.push({ from:'bot', html:`Claro. Te paso con el equipo por WhatsApp con tu plan ya escrito, para que no repitas nada.<div class="qr" style="margin-top:10px"><a class="btn btn-wa" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Abrir WhatsApp</a></div>` });
+      leads.unshift({ n:'Visitante del chat', tel:'vía agente IA', tour:c.plan[0].id, fecha:c.plan[0].k, ad:c.plan[0].ad, ni:c.plan[0].ni, est:'Nuevo', t:'ahora', src:'Agente IA' });
+      S.freshLead = leads[0]; render(); break;
+    }
+    case 'agentRestart': chatInit(); render(); break;
+    case 'atab': S.adminTab = el.dataset.t; render(); break;
+    case 'newTour': S.adminTab = 'tours'; S.showNew = !S.showNew; render(); break;
+    case 'demoA': S.bookTab = 'cotizar'; openTour(1); S.bookTab = 'cotizar'; render(); break;
+    case 'demoB': openTour(1); break;
+  }
+});
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === 'searchForm') { S.filter = { dest:$('#f-dest').value, cat:$('#f-cat').value }; render(); $('#catalogo')?.scrollIntoView({ behavior:'smooth' }); }
+  if (f.id === 'quoteForm') {
+    const t = tourById(S.route), name = $('#q-name').value.trim() || 'Cliente', k = $('#q-date').value;
+    const pax = `${S.ad} adulto${S.ad>1?'s':''}${S.ni?` y ${S.ni} niño${S.ni>1?'s':''}`:''}`;
+    const msg = `Hola Istmo, me interesa el tour "${t.t}" para ${pax} el ${nice(k)}. Mi nombre es ${name}.`;
+    const lead = { n:name, tel:'+507 6000-0000', tour:t.id, fecha:k, ad:S.ad, ni:S.ni, est:'Nuevo', t:'ahora', src:'Sitio web' };
+    leads.unshift(lead); S.freshLead = lead; S.quote = { sent:true, msg }; render(); toast('Lead guardado en el panel');
+  }
+  if (f.id === 'composer') {
+    const inp = $('#chat-in'), v = inp.value.trim(); if (!v) return;
+    const c = S.chat;
+    if (c.step < 3) { answer(parseFree(v), v); }
+    else { c.msgs.push({ from:'me', html:esc(v) }); c.typing = true; render();
+      setTimeout(() => { c.typing = false; c.msgs.push({ from:'bot', html:'Entendido. En la versión real ajusto el plan con tu comentario, consultando otra vez precios y cupos. En esta demo puedes empezar de nuevo para probar otra combinación.', opts:[['Empezar de nuevo','__restart']] }); render(); }, 900); }
+  }
+  if (f.id === 'newTour') {
+    const id = Math.max(...tours.map(t=>t.id)) + 1, kind = $('#n-k').value;
+    const pals = { sea:tours[0].pal, sail:tours[2].pal, jungle:tours[5].pal, city:tours[6].pal, falls:tours[3].pal };
+    const p = Number($('#n-p').value);
+    tours.push({ id, t:$('#n-t').value, dest:$('#n-d').value, cat:$('#n-c').value, adulto:p, nino:Math.round(p*.7), dur:'1 día', kind, pal:pals[kind], tag:'Nuevo', vibe:'playa', rating:5.0, rev:0, pub:true,
+      desc:'Tour recién publicado desde el panel.', inc:['Transporte','Guía'], no:['Comidas'], itin:[['8:00','Salida'],['16:00','Regreso']] });
+    S.showNew = false; render(); toast('Tour publicado en el sitio');
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.lead) { leads[Number(el.dataset.lead)].est = el.value; render(); toast('Estado actualizado'); }
+  if (el.dataset.price) { const t = tourById(Number(el.dataset.price)); t.adulto = Math.max(1, Number(el.value) || t.adulto); toast(`Nuevo precio de ${t.t}: ${fmt(t.adulto)}`); }
+  if (el.dataset.pub) { const t = tourById(Number(el.dataset.pub)); t.pub = el.checked; render(); toast(t.pub ? 'Tour visible en el sitio' : 'Tour oculto del sitio'); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.checkout) { S.checkout = null; renderModal(); render(); } });
+
+render();
+})();
+</script>
+</body>
+</html>
