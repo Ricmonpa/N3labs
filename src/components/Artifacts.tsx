@@ -1,20 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, MessageSquareHeart, ScanFace, ShoppingBag, Mic, PawPrint, GraduationCap, Target, Globe, ScanLine } from "lucide-react";
+import { ArrowUpRight, Bot, MessagesSquare, Target, ScanLine, Globe, GraduationCap, PawPrint, MessageSquareHeart, ScanFace, ShoppingBag, Mic } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 // Visual meta stays here; text (category/title/desc/tags/metric) comes from translations by index
 const meta = [
-  { icon: MessageSquareHeart, color: "red" },
-  { icon: ScanFace, color: "steel" },
-  { icon: ShoppingBag, color: "red" },
-  { icon: Mic, color: "steel" },
-  { icon: PawPrint, color: "red" },
-  { icon: GraduationCap, color: "steel" },
+  { icon: Bot, color: "red" },
+  { icon: MessagesSquare, color: "steel" },
   { icon: Target, color: "red" },
-  { icon: Globe, color: "steel" },
-  { icon: ScanLine, color: "red" },
+  { icon: ScanLine, color: "steel" },
+  { icon: Globe, color: "red" },
+  { icon: GraduationCap, color: "steel" },
+  { icon: PawPrint, color: "red" },
+  { icon: MessageSquareHeart, color: "steel" },
+  { icon: ScanFace, color: "red" },
+  { icon: ShoppingBag, color: "steel" },
+  { icon: Mic, color: "red" },
 ];
 
 const colorMap = {

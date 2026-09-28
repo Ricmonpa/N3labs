@@ -1,14 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MousePointerClick, Wrench, Settings, ArrowUpRight } from "lucide-react";
+import { MessagesSquare, Workflow, ScanSearch, Radar, Settings, MousePointerClick, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 // Visual meta stays in the component; text comes from translations (by index)
-const meta = [
-  { icon: MousePointerClick, accent: "red" },
-  { icon: Wrench, accent: "steel" },
+const meta: { icon: typeof Settings; accent: string; href?: string }[] = [
+  { icon: MessagesSquare, accent: "red" },
+  { icon: Workflow, accent: "steel" },
+  { icon: ScanSearch, accent: "red" },
+  { icon: Radar, accent: "steel", href: "/geotest.html" },
   { icon: Settings, accent: "red" },
+  { icon: MousePointerClick, accent: "steel" },
 ];
 
 const accentMap = {
@@ -52,7 +55,7 @@ export default function Services() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {s.items.map((item, i) => {
             const a = accentMap[meta[i].accent as keyof typeof accentMap];
             const Icon = meta[i].icon;
@@ -89,7 +92,7 @@ export default function Services() {
                 </ul>
 
                 <div className="pt-2 border-t border-white/[0.05] flex items-center justify-between">
-                  <a href="#contacto" className="text-xs font-semibold text-zinc-500 group-hover:text-white transition-colors flex items-center gap-1">
+                  <a href={meta[i].href ?? "#contacto"} className="text-xs font-semibold text-zinc-500 group-hover:text-white transition-colors flex items-center gap-1">
                     {s.more} <ArrowUpRight size={12} />
                   </a>
                 </div>
