@@ -7,6 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/geotest.html", priority: 0.8 },
     { path: "/prompter", priority: 0.8 },
     { path: "/iaready.html", priority: 0.6 },
+    { path: "/iaready-en.html", priority: 0.5 },
+    { path: "/iaready-pt.html", priority: 0.5 },
   ];
   return pages.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
