@@ -328,7 +328,10 @@ tr.fresh td{background:var(--sea-soft)}
 .level h3{font-size:22px}
 .level p{color:var(--muted);font-size:14px}
 .level ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px}
-.level .btn{margin-top:auto}
+.level .cost{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:4px}
+.level .cost b{font:800 30px/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.level .cost span{color:var(--muted);font-size:14px}
+.level .cost em{font-style:normal;color:var(--ink);font-weight:700}
 .vs{margin-top:40px}
 .vs h2{font-size:28px;margin-bottom:6px}
 .vs > p{color:var(--muted);margin-bottom:16px}
@@ -855,14 +858,17 @@ function renderRoadmap() {
       <div class="level core"><div class="lvl"><b>A</b><span>Captar clientes<br>≈ 3–4 semanas</span></div><h3>Catálogo + WhatsApp</h3>
         <p>La base: un catálogo rápido y fácil de administrar que convierte visitas en conversaciones.</p>
         <ul><li>Catálogo con filtros por destino y experiencia</li><li>Ficha de tour con itinerario, incluye y reseñas</li><li>Cotización que abre WhatsApp con el mensaje listo</li><li>Panel para editar tours, precios y ver leads</li><li>Sitio en español e inglés, listo para Google</li></ul>
+        <div class="cost"><b>$10,000</b><span>pago único</span><span>+ <em>$3,000</em> de mantenimiento mensual</span></div>
         <button class="btn btn-ghost" data-a="demoA">Ver en la demo</button></div>
       <div class="level"><div class="lvl"><b>B</b><span>Cobrar en línea<br>≈ +3–4 semanas</span></div><h3>Reservas y pagos</h3>
         <p>El sitio cobra solo y controla cuántos lugares quedan por fecha.</p>
         <ul><li>Calendario con cupos reales por salida</li><li>Pago con Yappy, tarjeta y PayPal</li><li>Descuento automático de cupos al confirmarse el pago</li><li>Correo de confirmación con folio</li><li>Reservas en el panel</li></ul>
+        <div class="cost"><b>$20,000</b><span>pago único</span><span>+ <em>$3,000</em> de mantenimiento mensual</span></div>
         <button class="btn btn-ghost" data-a="demoB">Ver en la demo</button></div>
       <div class="level"><div class="lvl"><b>C</b><span>Vender 24/7<br>≈ +3–5 semanas</span></div><h3>Agente de viaje con IA</h3>
         <p>Un asistente que pregunta, recomienda y cierra la venta, en web y WhatsApp.</p>
         <ul><li>Entiende preferencias en lenguaje natural</li><li>Arma itinerarios con tours y fechas con cupo</li><li>Genera la liga de pago del plan completo</li><li>Pasa la conversación a una persona cuando hace falta</li></ul>
+        <div class="cost"><b>$35,000</b><span>pago único</span><span>+ <em>$3,000</em> de mantenimiento mensual</span></div>
         <button class="btn btn-ghost" data-a="view" data-v="agente">Ver en la demo</button></div>
     </div>
 
