@@ -359,10 +359,10 @@ tr.fresh td{background:var(--sea-soft)}
   <div class="wrap">
     <span class="tag">Propuesta · demo interactiva</span>
     <div class="tabs" role="tablist" id="tabs">
-      <button role="tab" data-a="view" data-v="sitio" aria-selected="true">Sitio web <span class="lv">A·B</span></button>
-      <button role="tab" data-a="view" data-v="agente" aria-selected="false">Agente IA <span class="lv">C</span></button>
-      <button role="tab" data-a="view" data-v="admin" aria-selected="false">Panel admin <span class="lv">A·B</span></button>
-      <button role="tab" data-a="view" data-v="roadmap" aria-selected="false">Plan por niveles</button>
+      <button role="tab" data-a="view" data-v="sitio" aria-selected="true">Sitio web</button>
+      <button role="tab" data-a="view" data-v="agente" aria-selected="false">Agente IA</button>
+      <button role="tab" data-a="view" data-v="admin" aria-selected="false">Panel admin</button>
+      <button role="tab" data-a="view" data-v="roadmap" aria-selected="false">Propuesta comercial</button>
     </div>
   </div>
 </div>
@@ -871,27 +871,6 @@ function renderRoadmap() {
         <div class="cost"><b>$35,000</b><span>pago único</span><span>+ <em>$3,000</em> de mantenimiento mensual</span></div>
         <button class="btn btn-ghost" data-a="view" data-v="agente">Ver en la demo</button></div>
     </div>
-
-    <section class="vs"><h2>Dónde podemos ganar</h2><p>Comparado con tuyotravel.com, revisado el ${TODAY.toLocaleDateString('es-PA',{day:'numeric',month:'long',year:'numeric'})}. Solo anotamos lo que vimos en su sitio público.</p>
-      <div class="tbl-wrap"><table><thead><tr><th>Qué necesita el viajero</th><th>Lo que vimos</th><th>Esta plataforma</th></tr></thead><tbody>
-        <tr><td>Catálogo con categorías y fichas</td><td class="yes">Sí, buen catálogo (14 tours)</td><td class="yes">Sí</td></tr>
-        <tr><td>Elegir fecha y número de personas</td><td class="yes">Sí, en la ficha</td><td class="yes">Sí, con adultos y niños</td></tr>
-        <tr><td>Ver cuántos lugares quedan por fecha</td><td class="nope">No lo vimos</td><td class="yes">Sí, fechas agotadas bloqueadas</td></tr>
-        <tr><td>Pago local con Yappy</td><td class="meh">Por confirmar</td><td class="yes">Sí</td></tr>
-        <tr><td>Ficha del tour más vendido</td><td class="meh">“San Blas Pasadía” abría “Tour no encontrado”</td><td class="yes">Enlaces validados en cada publicación</td></tr>
-        <tr><td>Recomendación personalizada e itinerario de varios días</td><td class="nope">No</td><td class="yes">Agente IA (Nivel C)</td></tr>
-        <tr><td>Seguimiento de cada interesado</td><td class="nope">No visible (interno)</td><td class="yes">Panel con estado y origen del lead</td></tr>
-      </tbody></table></div></section>
-
-    <section class="vs"><h2>Lo que necesitamos de ustedes</h2>
-      <div class="ask">
-        <div><b>Nombre y dominio</b><span>“Travy” es el nombre de trabajo; confirmamos nombre final y dominio.</span></div>
-        <div><b>Catálogo inicial</b><span>Lista de tours con precio adulto y niño, itinerario, incluye y fotos propias.</span></div>
-        <div><b>Operación</b><span>¿Los tours son propios o de terceros? ¿Cuántos lugares hay por salida?</span></div>
-        <div><b>Cobro</b><span>Cuenta comercial para Yappy y una pasarela de tarjeta disponible en Panamá.</span></div>
-      </div>
-      <div class="stack">${['Next.js','Tailwind + shadcn/ui','PostgreSQL + Prisma','Vercel','Yappy · pasarela de tarjeta','WhatsApp Cloud API','Gemini / LLM con herramientas'].map(x=>`<span>${x}</span>`).join('')}</div>
-    </section>
   </div>`;
 }
 
