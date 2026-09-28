@@ -24,6 +24,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Run on page routes only — skip Next internals, API, static assets and the /demo page
-  matcher: ["/((?!_next|api|demo(?:/|$)|.*\\..*).*)"],
+  // Run on page routes only — skip Next internals, API, static assets and the /travy page
+  matcher: ["/((?!_next|api|travy(?:/|$)|.*\\..*).*)"],
 };

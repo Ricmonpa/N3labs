@@ -10,14 +10,20 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     // The full GEO diagnosis is paid now: the hook leads to booking a call instead.
-    return [{ source: "/geo", destination: "/geotest.html", permanent: false }];
+    return [
+      { source: "/geo", destination: "/geotest.html", permanent: false },
+      // The tours demo lives at /travy; keep old /demo links and the /travi spelling working.
+      { source: "/demo", destination: "/travy", permanent: false },
+      { source: "/demo/:path*", destination: "/travy", permanent: false },
+      { source: "/travi", destination: "/travy", permanent: false },
+    ];
   },
   async rewrites() {
     return [
       { source: "/avante", destination: "/avante/index.html" },
       { source: "/avante/demo", destination: "/avante/demo/index.html" },
       { source: "/autycom", destination: "/autycom/index.html" },
-      { source: "/demo", destination: "/demo/index.html" },
+      { source: "/travy", destination: "/travy/index.html" },
     ];
   },
   async headers() {
@@ -31,7 +37,7 @@ const nextConfig: NextConfig = {
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
       {
-        source: "/demo/:path*",
+        source: "/travy/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];
