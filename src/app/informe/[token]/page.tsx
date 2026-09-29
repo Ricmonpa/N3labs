@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import Logo from "@/components/Logo";
 import ReportView from "@/components/panel/ReportView";
 import PrintButton from "@/components/panel/PrintButton";
+import Readability from "@/components/geo/Readability";
+import { auditLang, isAudit } from "@/lib/panel/readability";
 import { getRunByToken } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +33,12 @@ export default async function SharedReport({ params }: PageProps<"/informe/[toke
       </header>
       <main className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
         <ReportView report={run.report} audience="client" />
+        {isAudit(run.audit) && (
+          <section className="mt-10">
+            <h2 className="mb-4 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">¿Te pueden leer?</h2>
+            <Readability report={run.audit} lang={auditLang(run.study)} />
+          </section>
+        )}
         <p className="mt-8 text-center text-xs text-zinc-500 print:hidden">
           Preparado por N3 Thinktech IA Laboratory ·{" "}
           <Link href="/#contacto" className="text-red-400 hover:text-red-300">
