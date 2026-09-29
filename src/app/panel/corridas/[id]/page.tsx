@@ -5,6 +5,8 @@ import Gate from "@/components/panel/Gate";
 import RunConsole from "@/components/panel/RunConsole";
 import ReportView from "@/components/panel/ReportView";
 import AnswersExplorer from "@/components/panel/AnswersExplorer";
+import RunReadability from "@/components/panel/RunReadability";
+import { auditLang } from "@/lib/panel/readability";
 import { UUID } from "@/lib/panel/http";
 import { getRun, progress } from "@/lib/panel/store";
 
@@ -32,6 +34,7 @@ async function RunPage({ id }: { id: string }) {
         report={report}
         fileName={fileName}
       />
+      <h2 className="pt-2 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">¿Te recomiendan?</h2>
       {report ? (
         <ReportView report={report} />
       ) : (
@@ -44,6 +47,8 @@ async function RunPage({ id }: { id: string }) {
           brandTerms={[run.study.brand.name, ...(run.study.brand.aliases ?? [])]}
         />
       )}
+      <h2 className="pt-6 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">¿Te pueden leer?</h2>
+      <RunReadability audit={run.audit} lang={auditLang(run.study)} startedAt={run.created_at} />
     </div>
   );
 }

@@ -1,27 +1,26 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
 import Gate from "@/components/panel/Gate";
+import NewStudyWizard from "@/components/panel/NewStudyWizard";
 import { RunList } from "@/components/panel/RunList";
 import DeleteStudyButton from "@/components/panel/DeleteStudyButton";
 import InviteLinks from "@/components/panel/InviteLinks";
 import { listInvites } from "@/lib/panel/invites";
-import { listRuns, listStudies } from "@/lib/panel/store";
+import { engineAvailability } from "@/lib/geo-visibility/engines/index.ts";
+import { listRuns, listStudies, MAX_CALLS_PER_RUN } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
 
 async function Dashboard() {
   const [studies, runs, invites] = await Promise.all([listStudies(), listRuns(undefined, 10), listInvites()]);
+  const engines = engineAvailability().map(({ id, label, model, hasKey }) => ({ id, label, model, hasKey }));
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-black text-white">Estudios de visibilidad en IA</h1>
-          <p className="text-sm text-zinc-400 mt-1">Pregunta a ChatGPT, Claude, Perplexity y Gemini como lo haría un cliente, y mide si recomiendan la marca.</p>
-        </div>
-        <Link href="/panel/estudios/nuevo" className="inline-flex items-center gap-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-sm px-4 py-2">
-          <Plus size={16} /> Nuevo estudio
-        </Link>
+      <div>
+        <h1 className="text-2xl font-black text-white">Estudios de visibilidad en IA</h1>
+        <p className="text-sm text-zinc-400 mt-1">Pregunta a ChatGPT, Claude, Perplexity y Gemini como lo haría un cliente, mide si recomiendan la marca y revisa si pueden leer su sitio.</p>
       </div>
+
+      <NewStudyWizard aiAvailable={!!process.env.GEMINI_API_KEY} engines={engines} maxCalls={MAX_CALLS_PER_RUN} />
 
       <section>
         <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-zinc-500 mb-3">Clientes</h2>

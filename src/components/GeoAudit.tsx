@@ -6,21 +6,17 @@ import {
   Radar,
   ArrowRight,
   CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Info,
-  MinusCircle,
   Printer,
   RotateCcw,
   Loader2,
-  ChevronDown,
   Calendar,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { sendLead, emailRe } from "@/lib/leads";
-import type { AuditReport, Check, Status, BotPurpose } from "@/lib/geo/audit";
+import type { AuditReport } from "@/lib/geo/audit";
 import type { Report } from "@/lib/geo-visibility/report.ts";
 import ReportView from "@/components/panel/ReportView";
+import Readability from "@/components/geo/Readability";
 import { ENGEL_CALENDLY } from "./Calendly";
 
 const ACCESS_KEY = "n3-geo-access";
@@ -55,30 +51,12 @@ const copy = {
     what: [
       ["Acceso de bots de IA", "Qué bots permite tu robots.txt y si tu servidor o Cloudflare los rechaza."],
       ["Contenido sin JavaScript", "Cuánto texto llega en el HTML inicial, que es lo que ven muchos bots."],
-      ["Entidad y datos estructurados", "JSON-LD, identidad de la marca y perfiles oficiales (sameAs)."],
+      ["Entidad y datos estructurados", "JSON-LD página por página: portada, fichas de producto, servicios, contacto y artículos, con lo que falta en cada una."],
       ["¿Te recomienda la IA?", "Preguntas reales de clientes a Gemini, con búsqueda en Google: si te menciona, si enlaza tu sitio y a quién recomienda en tu lugar."],
     ],
     resultFor: "Diagnóstico de",
     part1: "Parte 1 · ¿Te pueden leer?",
     part2: "Parte 2 · ¿Te recomiendan?",
-    scoreLabel: "Preparación técnica para IA",
-    partial: "Evaluación parcial",
-    partialText:
-      "Tu servidor bloqueó nuestra visita, así que no pudimos leer el contenido y no mostramos una calificación que sería engañosa. Revisa el acceso de bots abajo: suele ser un firewall o Cloudflare.",
-    audited: "Revisado",
-    topIssues: "Lo más urgente",
-    noIssues: "No encontramos fallas graves.",
-    details: "Ver el detalle técnico con evidencia",
-    fullTitle: "Detalle por revisión",
-    botsTitle: "Qué bots pueden entrar",
-    botsNote:
-      "Según tu robots.txt, para esta página. Los de búsqueda deciden si te pueden citar; los de entrenamiento son una decisión de negocio y no restan puntos.",
-    purpose: { search: "Búsqueda y citas", user: "Visita a pedido del usuario", training: "Entrenamiento" } as Record<BotPurpose, string>,
-    allowed: "Permitido",
-    blocked: "Bloqueado",
-    unknown: "Sin confirmar",
-    points: "pts",
-    na: "no evaluable",
     scanStarting: "Arrancando el estudio…",
     scanPreparing: "Leyendo tu sitio y armando las preguntas que haría tu cliente…",
     scanPreparingHint: "Buscamos en la web qué vendes y quién es tu competencia. Menos de un minuto.",
@@ -134,30 +112,12 @@ const copy = {
     what: [
       ["AI bot access", "Which bots your robots.txt allows, and whether your server or Cloudflare rejects them."],
       ["Content without JavaScript", "How much text arrives in the initial HTML, which is what many bots see."],
-      ["Entity and structured data", "JSON-LD, brand identity and official profiles (sameAs)."],
+      ["Entity and structured data", "JSON-LD page by page: home, product pages, services, contact and articles, with what each one is missing."],
       ["Does AI recommend you?", "Real customer questions to Gemini, with Google Search: whether it mentions you, links your site, and who it recommends instead."],
     ],
     resultFor: "Audit of",
     part1: "Part 1 · Can AI read you?",
     part2: "Part 2 · Does AI recommend you?",
-    scoreLabel: "Technical AI readiness",
-    partial: "Partial audit",
-    partialText:
-      "Your server blocked our visit, so we couldn't read the content and we don't show a score that would be misleading. Check bot access below: it's usually a firewall or Cloudflare.",
-    audited: "Audited",
-    topIssues: "Most urgent",
-    noIssues: "No serious problems found.",
-    details: "See the technical detail with evidence",
-    fullTitle: "Detail by check",
-    botsTitle: "Which bots can get in",
-    botsNote:
-      "Per your robots.txt, for this page. Search bots decide whether you can be cited; training bots are a business decision and don't cost points.",
-    purpose: { search: "Search & citations", user: "User-requested visit", training: "Training" } as Record<BotPurpose, string>,
-    allowed: "Allowed",
-    blocked: "Blocked",
-    unknown: "Unconfirmed",
-    points: "pts",
-    na: "not assessable",
     scanStarting: "Starting the study…",
     scanPreparing: "Reading your site and writing the questions your customers would ask…",
     scanPreparingHint: "We search the web for what you sell and who you compete with. Under a minute.",
@@ -200,26 +160,6 @@ const copy = {
 
 type Copy = (typeof copy)["es"];
 
-const statusStyle: Record<Status, { icon: typeof CheckCircle2; cls: string }> = {
-  pass: { icon: CheckCircle2, cls: "text-emerald-400" },
-  warn: { icon: AlertTriangle, cls: "text-amber-400" },
-  fail: { icon: XCircle, cls: "text-red-500" },
-  info: { icon: Info, cls: "text-slate-400" },
-  na: { icon: MinusCircle, cls: "text-slate-500" },
-};
-
-function scoreColor(score: number) {
-  if (score >= 70) return "text-emerald-400";
-  if (score >= 40) return "text-amber-400";
-  return "text-red-500";
-}
-
-function barColor(ratio: number) {
-  if (ratio >= 0.7) return "bg-emerald-500";
-  if (ratio >= 0.4) return "bg-amber-500";
-  return "bg-red-600";
-}
-
 const inputCls =
   "w-full rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3 text-white text-sm placeholder:text-zinc-600 focus:outline-none focus:border-red-500/60 disabled:opacity-60";
 
@@ -238,33 +178,6 @@ function writeJson(key: string, value: unknown) {
   } catch {
     /* ignore */
   }
-}
-
-function CheckRow({ check, c }: { check: Check; c: Copy }) {
-  const { icon: Icon, cls } = statusStyle[check.status];
-  return (
-    <li className="py-4 border-t border-white/[0.06] first:border-t-0 break-inside-avoid">
-      <div className="flex items-start gap-3">
-        <Icon size={18} className={`${cls} shrink-0 mt-0.5`} aria-hidden />
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-            <p className="text-white text-sm font-semibold">{check.label}</p>
-            {check.max > 0 && (
-              <span className="text-xs font-mono text-slate-400">
-                {check.status === "na" ? c.na : `${check.earned}/${check.max} ${c.points}`}
-              </span>
-            )}
-          </div>
-          <p className="text-zinc-400 text-sm mt-1 leading-relaxed">{check.detail}</p>
-          {check.evidence && (
-            <p className="mt-2 text-xs font-mono text-slate-300 bg-white/[0.03] border border-white/[0.06] rounded-md px-2.5 py-1.5 break-all">
-              {check.evidence}
-            </p>
-          )}
-        </div>
-      </div>
-    </li>
-  );
 }
 
 /** Mientras corre el estudio: una sola pantalla, para que nadie crea que ya terminó. */
@@ -312,123 +225,6 @@ function Building({ scan, c }: { scan: ScanState; c: Copy }) {
 
 function PartHeading({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-10 mb-4 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">{children}</h2>;
-}
-
-function Readability({ report, c, lang }: { report: AuditReport; c: Copy; lang: "es" | "en" }) {
-  const scored = report.categories.filter((cat) => cat.max > 0);
-  const topIssues = report.categories
-    .flatMap((cat) => cat.checks)
-    .filter((ch) => ch.status === "fail" || (ch.status === "warn" && ch.max > 0))
-    .sort((a, b) => b.max - b.earned - (a.max - a.earned))
-    .slice(0, 3);
-
-  return (
-    <>
-      <div className="glass rounded-2xl p-6 sm:p-8 border border-white/[0.06]">
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase text-zinc-400">{c.scoreLabel}</p>
-        <p className="text-xs text-zinc-500 mt-1">
-          {c.audited}: {new Date(report.auditedAt).toLocaleString(lang === "en" ? "en-US" : "es-MX")}
-        </p>
-
-        {report.score !== null ? (
-          <div className="mt-5 flex items-end gap-3">
-            <span className={`text-6xl font-black leading-none ${scoreColor(report.score)}`}>{report.score}</span>
-            <span className="text-zinc-500 text-lg mb-1">/ 100</span>
-            <span className="ml-2 mb-1.5 text-sm font-semibold text-white">{report.grade}</span>
-          </div>
-        ) : (
-          <div className="mt-5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
-            <p className="text-amber-300 font-semibold text-sm">{c.partial}</p>
-            <p className="text-zinc-300 text-sm mt-1 leading-relaxed">{c.partialText}</p>
-          </div>
-        )}
-
-        <div className="mt-7 space-y-3.5">
-          {scored.map((cat) => {
-            const ratio = cat.max ? cat.earned / cat.max : 0;
-            return (
-              <div key={cat.id}>
-                <div className="flex justify-between text-sm mb-1.5">
-                  <span className="text-zinc-300">{cat.label}</span>
-                  <span className="font-mono text-slate-400">
-                    {cat.earned}/{cat.max}
-                  </span>
-                </div>
-                <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
-                  <div className={`h-full rounded-full ${barColor(ratio)}`} style={{ width: `${ratio * 100}%` }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="glass rounded-2xl p-6 sm:p-8 border border-white/[0.06] mt-5">
-        <h3 className="text-xs font-semibold tracking-[0.2em] uppercase text-red-500 mb-2">{c.topIssues}</h3>
-        {topIssues.length ? (
-          <ul>
-            {topIssues.map((ch) => (
-              <CheckRow key={ch.id} check={{ ...ch, evidence: undefined }} c={c} />
-            ))}
-          </ul>
-        ) : (
-          <p className="text-zinc-400 text-sm">{c.noIssues}</p>
-        )}
-      </div>
-
-      <details className="group glass rounded-2xl border border-white/[0.06] mt-5">
-        <summary className="cursor-pointer list-none p-6 sm:px-8 flex items-center justify-between gap-3 text-sm font-semibold text-white">
-          {c.details}
-          <ChevronDown size={16} className="text-zinc-400 transition group-open:rotate-180 print:hidden" />
-        </summary>
-        <div className="px-6 sm:px-8 pb-8">
-          <h3 className="text-base font-bold text-white">{c.botsTitle}</h3>
-          <p className="text-zinc-400 text-sm mt-1">{c.botsNote}</p>
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full text-sm min-w-[520px]">
-              <tbody>
-                {report.bots.map((b) => {
-                  const v = b.robots;
-                  return (
-                    <tr key={b.token} className="border-t border-white/[0.06]">
-                      <td className="py-2.5 pr-3 font-mono text-white">{b.token}</td>
-                      <td className="py-2.5 pr-3 text-zinc-400">{b.owner}</td>
-                      <td className="py-2.5 pr-3 text-zinc-500">{c.purpose[b.purpose]}</td>
-                      <td
-                        className={`py-2.5 font-semibold text-right ${!v ? "text-slate-400" : v.allowed ? "text-emerald-400" : "text-red-500"}`}
-                        title={v?.rule ?? undefined}
-                      >
-                        {!v ? c.unknown : v.allowed ? c.allowed : c.blocked}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <h3 className="text-base font-bold text-white mt-8">{c.fullTitle}</h3>
-          {report.categories.map((cat) => (
-            <div key={cat.id} className="mt-6 first:mt-2">
-              <div className="flex justify-between items-baseline">
-                <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-red-400">{cat.label}</h4>
-                {cat.max > 0 && (
-                  <span className="font-mono text-xs text-slate-400">
-                    {cat.earned}/{cat.max}
-                  </span>
-                )}
-              </div>
-              <ul className="mt-1">
-                {cat.checks.map((ch) => (
-                  <CheckRow key={ch.id} check={ch} c={c} />
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </details>
-    </>
-  );
 }
 
 function Visibility({ scan, c }: { scan: ScanState; c: Copy }) {
@@ -737,7 +533,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
             <p className="font-mono text-lg text-white break-all">{report.finalUrl}</p>
 
             <PartHeading>{c.part1}</PartHeading>
-            <Readability report={report} c={c} lang={lang} />
+            <Readability report={report} lang={lang} />
 
             {scan && (
               <>

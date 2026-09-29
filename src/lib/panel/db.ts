@@ -45,6 +45,8 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
     finished_at timestamptz
   )`;
   await sql`CREATE INDEX IF NOT EXISTS geo_runs_study_idx ON geo_runs (study_id, created_at DESC)`;
+  // La revisión de legibilidad del sitio, tomada al arrancar cada medición.
+  await sql`ALTER TABLE geo_runs ADD COLUMN IF NOT EXISTS audit jsonb`;
   await sql`CREATE TABLE IF NOT EXISTS geo_responses (
     run_id uuid NOT NULL REFERENCES geo_runs(id) ON DELETE CASCADE,
     key text NOT NULL,

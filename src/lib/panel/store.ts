@@ -6,6 +6,7 @@ import { createMockEngine } from "@/lib/geo-visibility/engines/mock.ts";
 import { executeTask, listTasks, pool } from "@/lib/geo-visibility/execute.ts";
 import { buildReport, type Report } from "@/lib/geo-visibility/report.ts";
 import type { EngineId, RunRecord, Study } from "@/lib/geo-visibility/types.ts";
+import type { StoredAudit } from "./readability";
 
 export type StudyRow = { id: string; data: Study; created_by: string; created_at: string; updated_at: string };
 
@@ -21,13 +22,15 @@ export type RunRow = {
   status: RunStatus;
   total: number;
   report: Report | null;
+  /** Legibilidad del sitio al arrancar la medición; null en mediciones anteriores o mientras corre. */
+  audit: StoredAudit | null;
   share_token: string | null;
   created_by: string;
   created_at: string;
   finished_at: string | null;
 };
 
-export type RunSummary = Omit<RunRow, "study" | "report"> & {
+export type RunSummary = Omit<RunRow, "study" | "report" | "audit"> & {
   study_name: string;
   answered: number;
   failed: number;
@@ -94,14 +97,14 @@ export async function listRuns(studyId?: string, limit = 50): Promise<RunSummary
 
 export async function getRun(id: string): Promise<RunRow | null> {
   const sql = await db();
-  const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, share_token, created_by, created_at, finished_at FROM geo_runs WHERE id = ${id}`) as RunRow[];
+  const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, audit, share_token, created_by, created_at, finished_at FROM geo_runs WHERE id = ${id}`) as RunRow[];
   return rows[0] ?? null;
 }
 
 export async function getRunByToken(token: string): Promise<RunRow | null> {
   if (!/^[A-Za-z0-9_-]{20,}$/.test(token)) return null;
   const sql = await db();
-  const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, share_token, created_by, created_at, finished_at FROM geo_runs WHERE share_token = ${token} AND report IS NOT NULL`) as RunRow[];
+  const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, audit, share_token, created_by, created_at, finished_at FROM geo_runs WHERE share_token = ${token} AND report IS NOT NULL`) as RunRow[];
   return rows[0] ?? null;
 }
 
@@ -115,6 +118,11 @@ export async function createRun(study: StudyRow, opts: { engines: EngineId[]; ru
     VALUES (${study.id}, ${JSON.stringify(snapshot)}::jsonb, ${opts.engines}, ${opts.runs}, ${opts.simulated}, ${total}, ${email})
     RETURNING id`) as { id: string }[];
   return rows[0].id;
+}
+
+export async function setRunAudit(runId: string, audit: StoredAudit) {
+  const sql = await db();
+  await sql`UPDATE geo_runs SET audit = ${JSON.stringify(audit)}::jsonb WHERE id = ${runId}`;
 }
 
 export async function getRecords(runId: string): Promise<RunRecord[]> {

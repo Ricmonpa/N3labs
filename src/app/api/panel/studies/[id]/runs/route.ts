@@ -1,4 +1,6 @@
+import { after } from "next/server";
 import { createRun, getStudy, MAX_CALLS_PER_RUN } from "@/lib/panel/store";
+import { auditLang, auditRun, siteOf } from "@/lib/panel/readability";
 import { fail, ok, panelRoute, readJson } from "@/lib/panel/http";
 import { ENGINES } from "@/lib/geo-visibility/engines/index.ts";
 import { ENGINE_IDS } from "@/lib/geo-visibility/study.ts";
@@ -27,5 +29,9 @@ export const POST = panelRoute(async ({ request, session, id }) => {
   const calls = prompts * engines.length * runs;
   if (calls > MAX_CALLS_PER_RUN) return fail(422, "too_many_calls", { calls, max: MAX_CALLS_PER_RUN });
 
-  return ok({ id: await createRun(study, { engines, runs, limit, simulated }, session.email) });
+  const runId = await createRun(study, { engines, runs, limit, simulated }, session.email);
+  // La legibilidad del sitio se guarda con cada medición; tarda segundos y no usa IA.
+  const site = siteOf(study.data);
+  if (site) after(() => auditRun(runId, site, auditLang(study.data)));
+  return ok({ id: runId });
 });

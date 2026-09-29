@@ -6,7 +6,8 @@ import type { Study } from "@/lib/geo-visibility/types.ts";
 import { internalStepToken } from "./auth";
 import { db } from "./db";
 import { getInvite, inviteUsable, useInvite } from "./invites";
-import { createRun, createStudy, getRun, progress } from "./store";
+import { auditSite } from "./readability";
+import { createRun, createStudy, getRun, progress, setRunAudit } from "./store";
 import { suggestStudy } from "./suggest";
 import { kickRun } from "./worker";
 
@@ -129,15 +130,18 @@ export async function startScan(
 async function prepare(scanId: string, url: string, lang: "es" | "en", email: string, origin: string) {
   const sql = await db();
   try {
-    const suggestion = await suggestStudy(
-      lang === "en" ? { url, country: "US", language: "en-US" } : { url, country: "MX", language: "es-MX" },
-    );
+    // La legibilidad se guarda con el estudio, para que el panel lo muestre completo.
+    const [suggestion, audit] = await Promise.all([
+      suggestStudy(lang === "en" ? { url, country: "US", language: "en-US" } : { url, country: "MX", language: "es-MX" }),
+      auditSite(url, lang),
+    ]);
     // A template study would report on generic questions; better to say it didn't run.
     if (suggestion.source !== "ai") throw new Error(suggestion.warnings.join(" ") || "no AI draft");
 
     const owner = `scan:${email}`;
     const study = await createStudy(lite(suggestion.study), owner);
     const runId = await createRun(study, { engines: ["gemini"], runs: RUNS, simulated: false }, owner);
+    await setRunAudit(runId, audit);
     await sql`UPDATE geo_scans SET status = 'running', run_id = ${runId} WHERE id = ${scanId}`;
 
     await fetch(`${origin}/api/panel/runs/${runId}/step`, {

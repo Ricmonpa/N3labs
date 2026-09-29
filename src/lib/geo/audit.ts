@@ -9,6 +9,7 @@ import {
   nodeTypes,
   metaContent,
 } from "./html";
+import { structuredData, type StructuredReport } from "./structured";
 
 export type Lang = "es" | "en";
 export type Status = "pass" | "warn" | "fail" | "info" | "na";
@@ -58,6 +59,8 @@ export type AuditReport = {
     llmsTxt: boolean;
     robotsStatus: number | null;
   };
+  /** JSON-LD page by page (home, products, services…). Missing in reports saved before it existed. */
+  structured?: StructuredReport | null;
 };
 
 export class AuditError extends Error {
@@ -562,6 +565,18 @@ export async function runAudit(rawInput: string, lang: Lang): Promise<AuditRepor
     },
   ];
 
+  // Detail by page type; not scored, so the 0–100 stays comparable with earlier audits.
+  const structured =
+    na || !isHtml
+      ? null
+      : await structuredData(
+          { homeUrl: final.toString(), homeHtml: html, sitemaps: robots?.sitemaps.length ? robots.sitemaps : sitemapFound ? [sitemapEvidence] : [] },
+          lang,
+        ).catch((err) => {
+          console.warn("structured data check failed", err);
+          return null;
+        });
+
   // ---------- E. Frescura ----------
   const dateCandidates = [
     ...nodes.flatMap((n) => [n.dateModified, n.datePublished, n.uploadDate].filter((x): x is string => typeof x === "string")),
@@ -670,5 +685,6 @@ export async function runAudit(rawInput: string, lang: Lang): Promise<AuditRepor
       llmsTxt,
       robotsStatus,
     },
+    structured,
   };
 }
