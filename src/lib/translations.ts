@@ -60,7 +60,13 @@ export const translations = {
         },
         {
           tag: "INTEGRACIÓN",
-          title: "Integración de IA Web",
+          title: "Integraciones y Back-Office",
+          desc: "Un agente sirve de poco si no habla con tus sistemas. Lo conectamos a tu ERP, tu CRM y tu catálogo para que responda con inventario, precios y disponibilidad reales, y deje el registro donde tu equipo ya trabaja.",
+          features: ["Conexión en vivo a ERP y catálogo", "Alta y seguimiento del lead en tu CRM", "Dashboard propio si aún no tienes CRM", "APIs y webhooks a la medida"],
+        },
+        {
+          tag: "WEB",
+          title: "Sitios Web con IA",
           desc: "Embebemos inteligencia en sitios corporativos. Transformamos webs pasivas en agentes de ventas activos y centros de soporte dinámico.",
           features: ["Asistentes de ventas inteligentes", "Agentes de soporte al cliente", "Generación de contenido dinámico", "Ecosistemas web conversacionales"],
         },
@@ -343,7 +349,13 @@ export const translations = {
         },
         {
           tag: "INTEGRATION",
-          title: "Web AI Integration",
+          title: "Integrations & Back-Office",
+          desc: "An agent is worth little if it can't talk to your systems. We connect it to your ERP, your CRM and your catalog so it answers with real inventory, pricing and availability, and logs everything where your team already works.",
+          features: ["Live ERP and catalog connection", "Lead creation and tracking in your CRM", "A dashboard of your own if you have no CRM", "Custom APIs and webhooks"],
+        },
+        {
+          tag: "WEB",
+          title: "AI-Powered Websites",
           desc: "We embed intelligence into corporate websites. We turn passive sites into active sales agents and dynamic support hubs.",
           features: ["Smart sales assistants", "Customer support agents", "Dynamic content generation", "Conversational web ecosystems"],
         },

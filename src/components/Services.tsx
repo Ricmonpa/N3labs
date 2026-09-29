@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessagesSquare, Workflow, ScanSearch, Radar, Settings, MousePointerClick, ArrowUpRight } from "lucide-react";
+import { MessagesSquare, Workflow, ScanSearch, Radar, PlugZap, Settings, MousePointerClick, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 // Visual meta stays in the component; text comes from translations (by index)
@@ -10,8 +10,9 @@ const meta: { icon: typeof Settings; accent: string; href?: string }[] = [
   { icon: Workflow, accent: "steel" },
   { icon: ScanSearch, accent: "red" },
   { icon: Radar, accent: "steel", href: "/geotest.html" },
-  { icon: Settings, accent: "red" },
-  { icon: MousePointerClick, accent: "steel" },
+  { icon: PlugZap, accent: "red" },
+  { icon: Settings, accent: "steel" },
+  { icon: MousePointerClick, accent: "red" },
 ];
 
 const accentMap = {
@@ -55,7 +56,7 @@ export default function Services() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
           {s.items.map((item, i) => {
             const a = accentMap[meta[i].accent as keyof typeof accentMap];
             const Icon = meta[i].icon;
@@ -66,7 +67,7 @@ export default function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className={`glass glass-hover rounded-2xl p-7 flex flex-col gap-5 group border border-white/[0.06] hover:shadow-2xl ${a.borderHover} ${a.glow} transition-all duration-300`}
+                className={`w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] glass glass-hover rounded-2xl p-7 flex flex-col gap-5 group border border-white/[0.06] hover:shadow-2xl ${a.borderHover} ${a.glow} transition-all duration-300`}
               >
                 <div className="flex items-start justify-between">
                   <div className={`w-11 h-11 rounded-xl ${a.iconBg} flex items-center justify-center`}>
