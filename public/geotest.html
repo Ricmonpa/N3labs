@@ -54,6 +54,8 @@
   /* HEADER */
   .brand{display:flex; align-items:center; gap:12px; margin-bottom:28px;}
   .brand img{height:34px; width:auto; filter:drop-shadow(0 0 12px rgba(59,130,246,.3));}
+  .brand .home{display:flex; border-radius:6px;}
+  .brand .home:focus-visible{outline:2px solid var(--red-bright); outline-offset:4px;}
   .brand .tag{
     font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--text-dim);
     text-transform:uppercase; border-left:1px solid var(--line); padding-left:12px;
@@ -352,7 +354,7 @@
 <div class="wrap">
 
   <div class="brand">
-    <img src="https://n3labs.potenttial.site/_next/image?url=%2Fn3-logo.png&w=384&q=75" alt="N3 Labs">
+    <a class="home" href="/" aria-label="Ir al sitio de N3 Thinktech"><img src="https://n3labs.potenttial.site/_next/image?url=%2Fn3-logo.png&w=384&q=75" alt="N3 Labs"></a>
     <div class="tag">N3 GEO Test</div>
     <span class="version">v1.3</span>
   </div>
