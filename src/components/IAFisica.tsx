@@ -5,7 +5,7 @@ import { Activity, ArrowRight, Check } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { linkFisica } from "./FisicaAutolink";
 
-const SHOOT_URL = "https://www.shoot.com.mx/n3";
+const SHOOT_URL = "https://shoot.com.mx/?auth=required&flow=partner";
 
 export default function IAFisica() {
   const { t } = useLanguage();
