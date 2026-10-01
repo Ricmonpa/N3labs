@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="GEO diagnosis of bubbleup.ca: how often AI recommends BubbleUP Marketing to Edmonton businesses, and what stands in the way. By N3 Thinktech IA Laboratory." />
+<meta property="og:title" content="GEO Diagnosis · BubbleUP Marketing" />
+<meta property="og:description" content="78 recorded answers from Gemini with web search, plus a technical review of the site. By N3 Thinktech IA Laboratory." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://n3labs.potenttial.site/bubbleup" />
+<meta property="og:site_name" content="N3 Thinktech IA Laboratory" />
+<style>:root{color-scheme:light dark}</style>
+<title>GEO Diagnosis · BubbleUP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F5F3; --paper:#FFFFFF; --ink:#17212B; --ink-2:#4A5763; --ink-3:#7A8691;
+  --rule:#DCE0DE; --accent:#B8641A; --accent-soft:#F6E7D6;
+  --crit:#B3261E; --crit-soft:#FBE3E1; --warn:#9A6A00; --warn-soft:#FBF0D2; --ok:#2D6A3E; --ok-soft:#E1F0E4;
+  --brand:#1F5F8B; --bar:#AEB8C0; --code-bg:#1B252F; --code-ink:#E4E9ED;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#12181E; --paper:#19212A; --ink:#E6EAED; --ink-2:#AAB5BE; --ink-3:#7F8B95;
+    --rule:#2B3640; --accent:#E39A55; --accent-soft:#3A2A1B;
+    --crit:#F08A80; --crit-soft:#3B1D1B; --warn:#E3B84E; --warn-soft:#352C14; --ok:#7CC48E; --ok-soft:#1B3022;
+    --brand:#6FB2E0; --bar:#4B5864; --code-bg:#0D1318; --code-ink:#DDE4EA;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#12181E; --paper:#19212A; --ink:#E6EAED; --ink-2:#AAB5BE; --ink-3:#7F8B95;
+  --rule:#2B3640; --accent:#E39A55; --accent-soft:#3A2A1B;
+  --crit:#F08A80; --crit-soft:#3B1D1B; --warn:#E3B84E; --warn-soft:#352C14; --ok:#7CC48E; --ok-soft:#1B3022;
+  --brand:#6FB2E0; --bar:#4B5864; --code-bg:#0D1318; --code-ink:#DDE4EA;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:40px 80px}
+h1,h2,h3{font-family:Archivo,"IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3vw,28px);font-weight:700;margin-bottom:8px}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+.eyebrow{font:500 12px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.lede{font-size:18px;color:var(--ink-2);max-width:68ch}
+section{margin-top:56px;display:grid;gap:18px}
+.sub{color:var(--ink-2);max-width:68ch}
+header.top{display:grid;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:24px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--ink-3)}
+.meta b{color:var(--ink-2);font-weight:500}
+
+/* verdict */
+.verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.verdict>div{background:var(--paper);padding:20px;display:grid;gap:6px;align-content:start}
+.big{font:800 44px/1 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.big small{font-size:18px;font-weight:700;color:var(--ink-3)}
+.verdict .lab{font-size:14px;color:var(--ink-2)}
+.verdict .rng{font:12px/1.4 "IBM Plex Mono",monospace;color:var(--ink-3)}
+.c-crit{color:var(--crit)} .c-ok{color:var(--ok)} .c-warn{color:var(--warn)}
+@media (max-width:720px){.verdict{grid-template-columns:1fr}}
+
+/* chart */
+.chart{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:20px;display:grid;gap:12px}
+.row{display:grid;grid-template-columns:130px 1fr 110px;gap:12px;align-items:center;font-size:14px}
+.row .nm{font-weight:500}
+.row.me .nm{color:var(--brand);font-weight:600}
+.track{position:relative;height:18px;background:linear-gradient(to right,var(--rule) 1px,transparent 1px) 0 0/25% 100%;border-right:1px solid var(--rule)}
+.fill{position:absolute;left:0;top:3px;height:12px;background:var(--bar);border-radius:0 2px 2px 0}
+.row.me .fill{background:var(--brand)}
+.ci{position:absolute;top:8px;height:2px;background:var(--ink-2)}
+.ci::before,.ci::after{content:"";position:absolute;top:-4px;width:2px;height:10px;background:var(--ink-2)}
+.ci::before{left:0}.ci::after{right:0}
+.val{font:500 13px/1.3 "IBM Plex Mono",monospace;text-align:right;font-variant-numeric:tabular-nums}
+.val span{display:block;color:var(--ink-3);font-size:11px}
+.axis{display:grid;grid-template-columns:130px 1fr 110px;gap:12px;font:11px "IBM Plex Mono",monospace;color:var(--ink-3)}
+.axis .ticks{display:flex;justify-content:space-between}
+@media (max-width:560px){.row,.axis{grid-template-columns:92px 1fr 78px;gap:8px}.row{font-size:13px}.axis .ticks span:nth-child(even){visibility:hidden}}
+
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--rule);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:500 11px/1.4 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+tr:last-child td{border-bottom:0}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink-3)}
+.dots i.on{background:var(--brand);border-color:var(--brand)}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+blockquote{margin:0;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:16px;display:grid;gap:8px;font-size:14px}
+blockquote .q{font:12px/1.4 "IBM Plex Mono",monospace;color:var(--ink-3)}
+
+/* findings */
+.find{background:var(--paper);border:1px solid var(--rule);border-radius:4px;display:grid;grid-template-columns:auto 1fr;gap:0}
+.find .sev{writing-mode:vertical-rl;transform:rotate(180deg);font:600 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;padding:14px 8px;text-align:center}
+.sev.crit{background:var(--crit-soft);color:var(--crit)}
+.sev.high{background:var(--warn-soft);color:var(--warn)}
+.sev.med{background:var(--rule);color:var(--ink-2)}
+.find .body{padding:18px 20px;display:grid;gap:10px}
+.find .body p{color:var(--ink-2);font-size:15px}
+.find .fix{font-size:14px;color:var(--ink);border-top:1px dashed var(--rule);padding-top:10px}
+.find .fix b{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.find ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:15px;display:grid;gap:4px}
+code{font:13px "IBM Plex Mono",monospace;background:var(--accent-soft);padding:1px 5px;border-radius:3px;word-break:break-word}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{border:1px solid var(--rule);border-radius:4px;padding:12px;display:grid;gap:2px}
+.stat .k{font:700 26px/1 Archivo,sans-serif;font-variant-numeric:tabular-nums}
+.stat .d{font-size:13px;color:var(--ink-2)}
+.good{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:5px 10px;border-radius:99px;background:var(--ok-soft);color:var(--ok);font-weight:500}
+
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.phase{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:18px;display:grid;gap:10px;align-content:start}
+.phase ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:grid;gap:6px}
+.phase .when{font:500 12px "IBM Plex Mono",monospace;color:var(--accent)}
+@media (max-width:820px){.plan{grid-template-columns:1fr}}
+
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:4px;padding:16px;overflow-x:auto;font:12.5px/1.55 "IBM Plex Mono",ui-monospace,monospace;margin:0}
+details{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:14px 16px}
+summary{cursor:pointer;font-weight:600}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+details[open] summary{margin-bottom:12px}
+.fan{display:flex;flex-wrap:wrap;gap:8px}
+.fan span{font:13px "IBM Plex Mono",monospace;border:1px solid var(--rule);background:var(--paper);padding:6px 10px;border-radius:3px}
+.fan span b{color:var(--accent);font-weight:600;margin-right:6px}
+.note{font-size:13px;color:var(--ink-3);max-width:75ch}
+footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:20px;display:grid;gap:10px;font-size:13px;color:var(--ink-3)}
+footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
+</style>
+<style>
+/* Question tables: fit four columns without horizontal scroll. */
+.qtbl table{table-layout:fixed;width:100%}
+.qtbl th:nth-child(1),.qtbl td:nth-child(1){width:54%}
+.qtbl th:nth-child(2),.qtbl td:nth-child(2),
+.qtbl th:nth-child(3),.qtbl td:nth-child(3){width:11%;text-align:center}
+.qtbl th:nth-child(4),.qtbl td:nth-child(4){width:24%;font-size:12.5px;line-height:1.45}
+.qtbl td{vertical-align:top}
+@media (max-width:720px){
+  .qtbl table{table-layout:auto;min-width:640px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">N3 Thinktech IA Laboratory · GEO Diagnosis</div>
+  <h1>When an Edmonton business asks AI for a marketing agency, does it name BubbleUP?</h1>
+  <p class="lede">About a third of the time — and when it does, you are usually named first or second. That is a real position, not a blank slate. We asked Gemini the 26 questions your buyers actually type, three times each, and recorded all 78 answers with the sources the model opened and the 201 searches it ran to produce them.</p>
+  <div class="meta">
+    <span><b>Site:</b> bubbleup.ca</span>
+    <span><b>Date:</b> October 1, 2026</span>
+    <span><b>Engine:</b> Gemini with Google Search</span>
+    <span><b>Market:</b> Edmonton, Alberta · en-CA</span>
+    <span><b>Sample:</b> 26 questions × 3 runs = 78 answers</span>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">The short answer</div>
+  <div class="verdict">
+    <div>
+      <div class="big c-warn">24<small> / 69</small></div>
+      <p class="lab">answers that name BubbleUP when the buyer does <b>not</b> say your name.</p>
+      <p class="rng">35% · likely range 25%–47%</p>
+    </div>
+    <div>
+      <div class="big c-warn">21<small> / 69</small></div>
+      <p class="lab">of those answers where the model actually opened bubbleup.ca as a source.</p>
+      <p class="rng">30% · likely range 21%–42%</p>
+    </div>
+    <div>
+      <div class="big c-ok">9<small> / 9</small></div>
+      <p class="lab">answers that describe you correctly when someone asks for BubbleUP by name.</p>
+      <p class="rng">100% · likely range 70%–100%</p>
+    </div>
+  </div>
+  <p class="sub">Gemini knows who you are and rates you well: your average position when named is <b>1.96</b>, meaning you are usually the first or second agency in the list. The gap is upstream of that — two competitors get named more often than you, and you are absent from every question where the buyer has not yet decided how to spend the money.</p>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Against the market</div>
+    <h2>Who gets named when the buyer names nobody</h2>
+    <p class="sub">Share of the 69 unbranded answers in which each agency appears. The capped line is the 95% confidence interval.</p>
+  </div>
+  <div class="chart">
+    <div class="row"><span class="nm">Top Draw</span><div class="track"><div class="fill" style="width:49%"></div><div class="ci" style="left:38%;width:23%"></div></div><div class="val">49%<span>38–61%</span></div></div>
+    <div class="row"><span class="nm">Adster Creative</span><div class="track"><div class="fill" style="width:43%"></div><div class="ci" style="left:32%;width:23%"></div></div><div class="val">43%<span>32–55%</span></div></div>
+    <div class="row me"><span class="nm">BubbleUP</span><div class="track"><div class="fill" style="width:35%"></div><div class="ci" style="left:25%;width:22%"></div></div><div class="val">35%<span>25–47%</span></div></div>
+    <div class="row"><span class="nm">Pixel Army</span><div class="track"><div class="fill" style="width:16%"></div><div class="ci" style="left:9%;width:17%"></div></div><div class="val">16%<span>9–26%</span></div></div>
+    <div class="row"><span class="nm">Box Clever</span><div class="track"><div class="fill" style="width:12%"></div><div class="ci" style="left:6%;width:15%"></div></div><div class="val">12%<span>6–21%</span></div></div>
+    <div class="row"><span class="nm">Web3</span><div class="track"><div class="fill" style="width:12%"></div><div class="ci" style="left:6%;width:15%"></div></div><div class="val">12%<span>6–21%</span></div></div>
+    <div class="axis"><span></span><div class="ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><span></span></div>
+  </div>
+  <p class="note">Competitors were proposed by the model from the market, not supplied by you, and their domains were verified. The intervals for the top three overlap: this is a contest, not a settled category.</p>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">The whole study</div>
+    <h2>Every question, one by one</h2>
+    <p class="sub">Each row is one question asked three times. Filled dots are the runs where BubbleUP was named, and the second column is where the model opened bubbleup.ca.</p>
+  </div>
+  <div class="tbl qtbl">
+    <table>
+      <thead><tr><th>Category questions — “who are the best…”</th><th>Named</th><th>Cited</th><th>Named instead</th></tr></thead>
+      <tbody>
+        <tr><td>Who are the best full-service digital marketing agencies in Edmonton for small and medium-sized businesses?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>Which Edmonton web design companies specialize in custom responsive websites with built-in SEO?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Pixel Army, Box Clever, Web3</td></tr>
+        <tr><td>Where can I find reputable local SEO agencies in Edmonton to improve my business's Google rankings?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>What are the top PPC and Google Ads management companies based in Edmonton, Alberta?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>Which marketing agencies in Edmonton handle both social media management and email marketing campaigns?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">Top Draw</td></tr>
+        <tr><td>Can you recommend trusted web development and hosting providers for local businesses in Edmonton?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Pixel Army, Web3</td></tr>
+        <tr><td>What digital marketing firms in Edmonton offer comprehensive brand development and graphic design services?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw</td></tr>
+        <tr><td>Who are the leading content marketing and digital strategy agencies in the Edmonton area?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>Which Edmonton digital agencies have proven experience delivering B2B digital marketing solutions?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>What Edmonton marketing firms provide 360-degree virtual tour services integrated with web design?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl qtbl">
+    <table>
+      <thead><tr><th>Situation questions — a buyer describing a problem</th><th>Named</th><th>Cited</th><th>Named instead</th></tr></thead>
+      <tbody>
+        <tr><td>Our Edmonton trade contracting business has an outdated website that generates zero inquiries. Which local agency can redesign it and set up lead generation?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative, Pixel Army</td></tr>
+        <tr><td>Our business website is stuck on page 3 of Google for relevant Edmonton searches. What local SEO company can diagnose the issue and boost our organic traffic?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>We are launching a new company in Edmonton and need a complete package: logo design, a responsive website, and an introductory digital ad campaign. Who should we hire?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Pixel Army, Web3</td></tr>
+        <tr><td>We have been burning through our budget on Google Ads with very poor ROI. Which Edmonton PPC management expert can audit and optimize our ad spend?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>Our Edmonton clinic needs consistent social media posting and monthly email newsletters to keep patients engaged, but we lack the internal time. Who can handle this for us?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Adster Creative</td></tr>
+        <tr><td>Our current site takes too long to load on mobile and prospective customers are bouncing away. Which Edmonton web agency can rebuild it for better speed and conversions?</td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Pixel Army, Box Clever, Web3</td></tr>
+        <tr><td>We want to showcase our Edmonton showroom and facilities online with interactive virtual tours and high-quality visuals. Which digital marketing agency can set that up?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">—</td></tr>
+        <tr><td>Our competitors in Edmonton are outranking us in local map packs and search results. Which marketing firm can build an aggressive multi-channel growth plan for us?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative</td></tr>
+        <tr><td>Our non-profit organization in Edmonton needs an accessible, easy-to-update website alongside a coordinated content strategy. Which agency is well suited for this?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">Box Clever</td></tr>
+        <tr><td>I run an established service business in Edmonton and need an outsourced marketing team to handle our website, SEO, and paid advertising under one roof. Who do you recommend?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class=""></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class=""></i></span></td><td class="note">Top Draw, Adster Creative, Box Clever</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl qtbl">
+    <table>
+      <thead><tr><th>Comparison questions — the buyer is still deciding how to spend</th><th>Named</th><th>Cited</th><th>Named instead</th></tr></thead>
+      <tbody>
+        <tr><td>For a growing Edmonton company, is it better to hire a full-service marketing agency or juggle specialized individual freelancers for web design, SEO, and PPC?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">—</td></tr>
+        <tr><td>How does investing in a custom agency-built website compare to using DIY website platforms like Squarespace or Wix for long-term SEO in competitive Edmonton markets?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">—</td></tr>
+        <tr><td>When expanding customer reach in Alberta, what are the trade-offs between investing primarily in Google PPC ads versus an ongoing organic SEO strategy?</td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="n"><span class="dots"><i class=""></i><i class=""></i><i class=""></i></span></td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl qtbl">
+    <table>
+      <thead><tr><th>Brand questions — the buyer already typed your name</th><th>Named</th><th>Cited</th><th>Named instead</th></tr></thead>
+      <tbody>
+        <tr><td>What digital marketing and web design services does BubbleUP Marketing offer in Edmonton?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">—</td></tr>
+        <tr><td>Is BubbleUP Marketing a good agency to hire for website development and SEO in Edmonton?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">—</td></tr>
+        <tr><td>What kind of reviews and client feedback does BubbleUP Marketing have from Alberta businesses?</td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="n"><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td class="note">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Reading the pattern</div>
+    <h2>You win capabilities. You lose situations.</h2>
+  </div>
+  <div class="find">
+    <div class="sev high">Pattern</div>
+    <div class="body">
+      <p>Every question you swept 3 of 3 is phrased as <b>“who does X”</b>. Every question you lost 0 of 3 is phrased as <b>“we have this problem”</b> or <b>“should we do A or B”</b>. Buyers ask the second kind first — they describe their situation before they know what to call the service.</p>
+      <div class="fix"><b>Fix</b> Write the situation-shaped pages: the trade contractor with a dead website, the business stuck on page 3, the non-profit, the map pack.</div>
+    </div>
+  </div>
+  <div class="find">
+    <div class="sev crit">Hurts</div>
+    <div class="body">
+      <p><b>Web design is your headline service and you are invisible on it.</b> Asked for Edmonton web design companies, you were named in 0 of 3 runs. Top Draw, Pixel Army, Box Clever and Web3 were named instead — and we can see the model searching for them by name while it answers.</p>
+      <div class="fix"><b>Fix</b> A real web design service page. Today <span class="mono">/services/web-design/</span> redirects to a competitor-comparison landing page.</div>
+    </div>
+  </div>
+  <div class="find">
+    <div class="sev med">Encouraging</div>
+    <div class="body">
+      <p><b>Virtual tours you sweep 3 of 3</b> — and it is not declared anywhere in your llms.txt. Something other than the file you wrote for AI is already working in your favour there, which means these wins are earnable.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Inside the model's head</div>
+    <h2>Who it goes looking for by name</h2>
+    <p class="sub">The 69 buying answers triggered 199 web searches. We counted how often the model searched for each agency by name — the clearest signal of who it already treats as a candidate.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="k">16</div><div class="d">searches for <b>Top Draw</b> by name</div></div>
+    <div class="stat"><div class="k">4</div><div class="d">searches for <b>BubbleUP</b> by name</div></div>
+    <div class="stat"><div class="k">4</div><div class="d">searches for <b>Adster</b></div></div>
+    <div class="stat"><div class="k">3</div><div class="d">searches for <b>Box Clever</b></div></div>
+  </div>
+  <p class="sub">The model verified Top Draw by name four times more often than it verified you. That is what being a default candidate looks like from the inside: the name is already in mind and the model goes to confirm it. Yours mostly arrives later, from a directory listing, if at all.</p>
+  <div class="fan">
+    <span><b>searched</b> best digital marketing agencies Edmonton small medium businesses</span>
+    <span><b>searched</b> top web design agencies Edmonton responsive custom SEO</span>
+    <span><b>searched</b> “Top Draw” Edmonton web design SEO</span>
+    <span><b>searched</b> best SEO companies Edmonton Clutch</span>
+    <span><b>searched</b> top PPC agencies Edmonton Alberta Google Ads management</span>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Sources</div>
+    <h2>What AI reads before it answers</h2>
+    <p class="sub">Every site the model opened, by how many of the 78 answers used it.</p>
+  </div>
+  <div class="chart">
+    <div class="row"><span class="nm mono">clutch.co</span><div class="track"><div class="fill" style="width:47%"></div></div><div class="val">37<span>of 78</span></div></div>
+    <div class="row me"><span class="nm mono">bubbleup.ca <span class="note">(you)</span></span><div class="track"><div class="fill" style="width:38%"></div></div><div class="val">30<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">adster.ca <span class="note">(competitor)</span></span><div class="track"><div class="fill" style="width:33%"></div></div><div class="val">26<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">topdraw.com <span class="note">(competitor)</span></span><div class="track"><div class="fill" style="width:26%"></div></div><div class="val">20<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">themanifest.com</span><div class="track"><div class="fill" style="width:21%"></div></div><div class="val">16<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">yegdigital.com</span><div class="track"><div class="fill" style="width:19%"></div></div><div class="val">15<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">reddit.com</span><div class="track"><div class="fill" style="width:19%"></div></div><div class="val">15<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">growmemarketing.ca</span><div class="track"><div class="fill" style="width:18%"></div></div><div class="val">14<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">pixelarmy.ca <span class="note">(competitor)</span></span><div class="track"><div class="fill" style="width:14%"></div></div><div class="val">11<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">bluelinks.agency</span><div class="track"><div class="fill" style="width:13%"></div></div><div class="val">10<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">boomtowndigital.ca</span><div class="track"><div class="fill" style="width:12%"></div></div><div class="val">9<span>of 78</span></div></div>
+    <div class="row"><span class="nm mono">urbanjungle.ca</span><div class="track"><div class="fill" style="width:12%"></div></div><div class="val">9<span>of 78</span></div></div>
+  </div>
+  <p class="sub"><b>Clutch is the front door to this market.</b> It was opened in 37 of 78 answers — more than any agency website, including yours. Directories and third-party listings, not agency sites, are what the model trusts to decide who belongs on a shortlist. Reddit in 15 answers says the same thing in a different accent: unpaid third-party opinion carries weight.</p>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">Evidence</div>
+    <h2>In the model's own words</h2>
+  </div>
+  <div class="quotes">
+    <blockquote>
+      <p class="note">Where can I find reputable local SEO agencies in Edmonton to improve my business's Google rankings?</p>
+      <p>“the city’s longest-standing full-service digital agencies. Best suited if you need comprehensive digital strategy, web development, and content-driven SEO alongside local map rankings.  BubbleUP Marketing / YEG Digital: Both agencies have strong portfolios working with Edmonton trades, medical clinics, and local professional services requiring local map pack optimization and lead-generating websites. ---  2. Platforms and Directories to Compare Agencies  Clutch”</p>
+      <p class="note">Gemini with Google Search · Oct 1, 2026 · run 1 of 3</p>
+    </blockquote>
+    <blockquote>
+      <p class="note">For a growing Edmonton company, is it better to hire a full-service marketing agency or juggle specialized individual freelancers for web design, SEO, and PPC?</p>
+      <p>“For a growing company, the decision hinges on one critical factor: do you have the internal time and technical knowledge to act as a general contractor? Web design, SEO, and PPC are not separate silos—they are deeply interdependent. While hiring individual freelancers can lower hard costs, it significantly increases your management o”</p>
+      <p class="note">Gemini with Google Search · Oct 1, 2026 · run 1 of 3. BubbleUP appears in none of the nine comparison runs.</p>
+    </blockquote>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">The technical side</div>
+    <h2>98 out of 100 — and one broken file</h2>
+    <p class="sub">We audited the site the way an AI crawler sees it. Most agencies we audit have none of this.</p>
+  </div>
+  <div class="good">
+    <span class="chip">All 14 AI crawlers allowed</span>
+    <span class="chip">LocalBusiness + Organization schema</span>
+    <span class="chip">WebSite · BreadcrumbList · PostalAddress</span>
+    <span class="chip">Clean sitemap · 68 URLs</span>
+    <span class="chip">Homepage 200 OK in 891 ms</span>
+    <span class="chip">llms.txt published</span>
+  </div>
+  <div class="find">
+    <div class="sev crit">Critical</div>
+    <div class="body">
+      <p><b>Five of the eleven links in your llms.txt are dead.</b> It is the one file on your site written specifically so AI models can find and describe you. Your case studies, your About page and three of your services return nothing to a model that follows it. Two more land on the wrong page.</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Link declared in llms.txt</th><th>What actually happens</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">/about/</td><td class="c-crit">404 — does not exist</td></tr>
+            <tr><td class="mono">/our-work/ — your case studies</td><td class="c-crit">404 — does not exist</td></tr>
+            <tr><td class="mono">/services/google-ads/</td><td class="c-crit">404 — does not exist</td></tr>
+            <tr><td class="mono">/services/branding/</td><td class="c-crit">404 — does not exist</td></tr>
+            <tr><td class="mono">/services/social-media-advertising/</td><td class="c-crit">404 — does not exist</td></tr>
+            <tr><td class="mono">/services/seo/</td><td class="c-warn">Redirects to a blog post, not your SEO service page</td></tr>
+            <tr><td class="mono">/services/web-design/</td><td class="c-warn">Redirects to a competitor-comparison landing page</td></tr>
+            <tr><td class="mono">/blog/ · /services/content-marketing/ · /services/email-marketing/</td><td class="c-ok">Redirect, but land correctly</td></tr>
+            <tr><td class="mono">/contact/</td><td class="c-ok">Resolves directly</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Six services that do exist — virtual tours, web hosting, video marketing, graphic design, print and marketing strategy — are not declared at all. The file also reads as keyword copy (“a go-to Edmonton SEO company”) rather than the plain factual description these files are meant to carry.</p>
+      <div class="fix"><b>Fix</b> Rebuild it against the live sitemap, in hours, not days. Is this what costs you the lost questions? Not on its own — you win virtual tours without declaring it. But right now the single asset you built for AI points it at five empty pages.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <div class="eyebrow">What we would do</div>
+    <h2>In order, with the effort it takes</h2>
+  </div>
+  <div class="plan">
+    <div class="phase">
+      <div class="when">Hours</div>
+      <ul>
+        <li>Rebuild <span class="mono">llms.txt</span> against the live sitemap; plain description instead of keyword copy; declare the six missing services.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="when">Days</div>
+      <ul>
+        <li>Restore the case studies page and map the five 404s to real destinations.</li>
+        <li>Complete and maintain the Clutch profile with recent reviews — it is read in 37 of 78 answers.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="when">Weeks</div>
+      <ul>
+        <li>Write the three comparison pages you lose 0 of 9.</li>
+        <li>Claim web design explicitly, with a real service page.</li>
+        <li>Situation-shaped pages for the problems you lose.</li>
+        <li>Re-measure with the same 26 questions.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Method.</b> Unbranded prompts are questions a buyer would type without knowing BubbleUP exists; only those count toward the headline figure. A mention counts when the brand or an alias appears in the answer text. A citation counts when bubbleup.ca appears among the sources the model opened. Confidence intervals are Wilson 95%.</p>
+  <p><b>Limits.</b> One engine (Gemini with Google Search), 78 answers, one market, one day. Enough to establish position and direction with confidence intervals; not enough to claim a trend over time, and it does not tell you how ChatGPT, Claude or Perplexity answer the same questions — they retrieve differently and the numbers will differ.</p>
+  <ul>
+    <li>N3 Thinktech IA Laboratory · Potenttial Group</li>
+    <li>Ricardo Moncada · ricardo.m@potenttial.com — Engel Fonseca · e.fonseca@potenttial.com</li>
+    <li>Prepared for BubbleUP Marketing, Edmonton. Confidential.</li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>
