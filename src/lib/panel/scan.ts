@@ -51,6 +51,22 @@ const PREPARE_TIMEOUT_MIN = 5;
 /** Mismo tamaño que un estudio del panel: 26 preguntas × 3 repeticiones = 78 respuestas. */
 const RUNS = 3;
 
+/** Mercados que el scan público puede medir. El panel admite más; aquí se eligen desde el formulario. */
+export const SCAN_MARKETS = {
+  MX: { country: "MX", language: "es-MX", label: "México" },
+  US: { country: "US", language: "en-US", label: "Estados Unidos" },
+  CA: { country: "CA", language: "en-CA", label: "Canadá" },
+} as const;
+
+export type ScanCountry = keyof typeof SCAN_MARKETS;
+
+/** El país pedido, o el que corresponde al idioma de la página. */
+export function scanMarket(country: string | undefined, lang: "es" | "en"): ScanCountry {
+  const code = (country ?? "").toUpperCase();
+  if (code in SCAN_MARKETS) return code as ScanCountry;
+  return lang === "en" ? "US" : "MX";
+}
+
 function domainOf(raw: string) {
   try {
     const url = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
@@ -90,7 +106,7 @@ export function scanAllowed(code?: string | null) {
 }
 
 export async function startScan(
-  input: { url: string; name: string; email: string; lang: "es" | "en"; ip: string; code?: string; invite?: string },
+  input: { url: string; name: string; email: string; lang: "es" | "en"; country?: string; ip: string; code?: string; invite?: string },
   origin: string,
 ) {
   const site = domainOf(input.url.trim());
@@ -115,24 +131,25 @@ export async function startScan(
   if (usage.mine >= PER_CLIENT) throw new ScanError("rate_limited");
   if (usage.everyone >= DAILY_CAP) throw new ScanError("busy");
 
+  const market = scanMarket(input.country, input.lang);
   const token = randomBytes(24).toString("base64url");
   const [row] = (await sql`
-    INSERT INTO geo_scans (token, domain, url, name, email, ip, lang)
-    VALUES (${token}, ${site.domain}, ${site.url}, ${input.name.trim().slice(0, 120)}, ${email}, ${input.ip}, ${input.lang})
+    INSERT INTO geo_scans (token, domain, url, name, email, ip, lang, country)
+    VALUES (${token}, ${site.domain}, ${site.url}, ${input.name.trim().slice(0, 120)}, ${email}, ${input.ip}, ${input.lang}, ${market})
     RETURNING id`) as { id: string }[];
 
   if (invite) await useInvite(invite.token, email);
-  after(() => prepare(row.id, site.url, input.lang, email, origin));
+  after(() => prepare(row.id, site.url, input.lang, market, email, origin));
   return { id: row.id, token };
 }
 
 /** Drafts the study from the site, then starts its run. Runs after the response is sent. */
-async function prepare(scanId: string, url: string, lang: "es" | "en", email: string, origin: string) {
+async function prepare(scanId: string, url: string, lang: "es" | "en", market: ScanCountry, email: string, origin: string) {
   const sql = await db();
   try {
     // La legibilidad se guarda con el estudio, para que el panel lo muestre completo.
     const [suggestion, audit] = await Promise.all([
-      suggestStudy(lang === "en" ? { url, country: "US", language: "en-US" } : { url, country: "MX", language: "es-MX" }),
+      suggestStudy({ url, country: SCAN_MARKETS[market].country, language: SCAN_MARKETS[market].language }),
       auditSite(url, lang),
     ]);
     // A template study would report on generic questions; better to say it didn't run.

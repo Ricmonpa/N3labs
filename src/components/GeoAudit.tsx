@@ -41,6 +41,7 @@ const copy = {
       "En un solo paso revisamos tu página en vivo —si ChatGPT, Claude, Perplexity y Google pueden entrar y entenderla— y le hacemos a Gemini las preguntas que haría tu cliente, para ver si te recomienda a ti o a tu competencia.",
     urlLabel: "Tu sitio",
     placeholder: "tuempresa.com",
+    market: "Dónde vendes",
     name: "Nombre",
     email: "Correo de trabajo",
     cta: "Hacer mi diagnóstico completo",
@@ -102,6 +103,7 @@ const copy = {
       "In one step we check your page live —whether ChatGPT, Claude, Perplexity and Google can get in and understand it— and ask Gemini the questions your customers would, to see whether it recommends you or your competitors.",
     urlLabel: "Your website",
     placeholder: "yourcompany.com",
+    market: "Where you sell",
     name: "Name",
     email: "Work email",
     cta: "Run my full audit",
@@ -280,6 +282,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [country, setCountry] = useState(lang === "en" ? "US" : "MX");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [report, setReport] = useState<AuditReport | null>(null);
@@ -340,7 +343,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
       const res = await fetch("/api/geo/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: auditedUrl, name, email, lang, code: scanCode, invite }),
+        body: JSON.stringify({ url: auditedUrl, name, email, lang, country, code: scanCode, invite }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -448,6 +451,22 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
                   disabled={loading}
                   className={`${inputCls} font-mono`}
                 />
+              </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="geo-country" className="block text-xs font-semibold text-zinc-400 mb-1.5">
+                  {c.market}
+                </label>
+                <select
+                  id="geo-country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  disabled={loading}
+                  className={inputCls}
+                >
+                  <option value="MX">México</option>
+                  <option value="US">{lang === "en" ? "United States" : "Estados Unidos"}</option>
+                  <option value="CA">{lang === "en" ? "Canada" : "Canadá"}</option>
+                </select>
               </div>
               <div>
                 <label htmlFor="geo-name" className="block text-xs font-semibold text-zinc-400 mb-1.5">

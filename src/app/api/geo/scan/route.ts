@@ -5,7 +5,7 @@ import { ScanError, startScan } from "@/lib/panel/scan";
 // Drafting the study (reading the site + a model call with web search) runs after the response.
 export const maxDuration = 300;
 
-type Body = { url?: unknown; name?: unknown; email?: unknown; lang?: unknown; code?: unknown; invite?: unknown };
+type Body = { url?: unknown; name?: unknown; email?: unknown; lang?: unknown; country?: unknown; code?: unknown; invite?: unknown };
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
           name,
           email: str(body?.email, 200),
           lang: body?.lang === "en" ? "en" : "es",
+          country: str(body?.country, 2),
           ip,
           code: str(body?.code, 80),
           invite: str(body?.invite, 80),
