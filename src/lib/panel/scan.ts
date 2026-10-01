@@ -118,10 +118,13 @@ export async function startScan(
   if (!scanAllowed(input.code) && !inviteUsable(invite)) throw new ScanError("unavailable");
 
   const sql = await db();
+  const market = scanMarket(input.country, input.lang);
 
+  // El mismo dominio en otro mercado es otro estudio: solo se reutiliza dentro del mismo país.
   const recent = (await sql`
     SELECT id, token FROM geo_scans
-    WHERE domain = ${site.domain} AND status <> 'failed' AND created_at > now() - make_interval(hours => ${REUSE_HOURS})
+    WHERE domain = ${site.domain} AND country = ${market} AND status <> 'failed'
+      AND created_at > now() - make_interval(hours => ${REUSE_HOURS})
     ORDER BY created_at DESC LIMIT 1`) as { id: string; token: string }[];
   if (recent[0]) return recent[0];
 
@@ -131,7 +134,6 @@ export async function startScan(
   if (usage.mine >= PER_CLIENT) throw new ScanError("rate_limited");
   if (usage.everyone >= DAILY_CAP) throw new ScanError("busy");
 
-  const market = scanMarket(input.country, input.lang);
   const token = randomBytes(24).toString("base64url");
   const [row] = (await sql`
     INSERT INTO geo_scans (token, domain, url, name, email, ip, lang, country)
