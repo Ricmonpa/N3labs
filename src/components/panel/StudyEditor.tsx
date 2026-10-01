@@ -19,6 +19,8 @@ const TYPE_HELP: Record<PromptType, string> = {
 export const COUNTRIES = [
   { code: "MX", name: "México", tz: "America/Mexico_City", lang: "es-MX" },
   { code: "US", name: "Estados Unidos", tz: "America/New_York", lang: "en-US" },
+  { code: "CA", name: "Canadá", tz: "America/Toronto", lang: "en-CA" },
+  { code: "BR", name: "Brasil", tz: "America/Sao_Paulo", lang: "pt-BR" },
   { code: "CO", name: "Colombia", tz: "America/Bogota", lang: "es-CO" },
   { code: "AR", name: "Argentina", tz: "America/Argentina/Buenos_Aires", lang: "es-AR" },
   { code: "CL", name: "Chile", tz: "America/Santiago", lang: "es-CL" },
