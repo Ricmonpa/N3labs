@@ -27,7 +27,9 @@ function LangToggle({ className = "" }: { className?: string }) {
 }
 
 export default function Nav() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  // El anzuelo es una página estática: cada idioma tiene su archivo.
+  const geoHref = lang === "en" ? "/geotest-en.html" : "/geotest.html";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -72,7 +74,7 @@ export default function Nav() {
             {t.prompter.navLabel}
           </a>
           <a
-            href="/geotest.html"
+            href={geoHref}
             className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
           >
             <Radar size={13} />
@@ -134,7 +136,7 @@ export default function Nav() {
                 {t.prompter.navLabel}
               </a>
               <a
-                href="/geotest.html"
+                href={geoHref}
                 onClick={() => setOpen(false)}
                 className="text-red-400 font-semibold text-base flex items-center gap-1.5"
               >

@@ -5,11 +5,11 @@ import { MessagesSquare, Workflow, ScanSearch, Radar, PlugZap, Settings, MousePo
 import { useLanguage } from "@/context/LanguageContext";
 
 // Visual meta stays in the component; text comes from translations (by index)
-const meta: { icon: typeof Settings; accent: string; href?: string }[] = [
+const meta: { icon: typeof Settings; accent: string; geo?: boolean }[] = [
   { icon: MessagesSquare, accent: "red" },
   { icon: Workflow, accent: "steel" },
   { icon: ScanSearch, accent: "red" },
-  { icon: Radar, accent: "steel", href: "/geotest.html" },
+  { icon: Radar, accent: "steel", geo: true },
   { icon: PlugZap, accent: "red" },
   { icon: Settings, accent: "steel" },
   { icon: MousePointerClick, accent: "red" },
@@ -33,8 +33,10 @@ const accentMap = {
 };
 
 export default function Services() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const s = t.services;
+  // El anzuelo es una página estática con un archivo por idioma.
+  const geoHref = lang === "en" ? "/geotest-en.html" : "/geotest.html";
   return (
     <section id="servicios" className="py-28 px-6 relative">
       <div className="max-w-7xl mx-auto">
@@ -93,7 +95,7 @@ export default function Services() {
                 </ul>
 
                 <div className="pt-2 border-t border-white/[0.05] flex items-center justify-between">
-                  <a href={meta[i].href ?? "#contacto"} className="text-xs font-semibold text-zinc-500 group-hover:text-white transition-colors flex items-center gap-1">
+                  <a href={meta[i].geo ? geoHref : "#contacto"} className="text-xs font-semibold text-zinc-500 group-hover:text-white transition-colors flex items-center gap-1">
                     {s.more} <ArrowUpRight size={12} />
                   </a>
                 </div>
