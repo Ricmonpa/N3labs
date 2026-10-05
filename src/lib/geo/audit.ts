@@ -100,7 +100,7 @@ const BOTS: { token: string; owner: string; purpose: BotPurpose }[] = [
 ];
 
 const ENTITY_TYPE =
-  /Organization|LocalBusiness|Person|Corporation|Store|Restaurant|Hotel|Clinic|Dentist|Physician|Attorney|Brand|Airline|Bank|School|College|University/i;
+  /Organization|Business|Person|Corporation|Store|Dealer|Restaurant|Hotel|Clinic|Dentist|Physician|Attorney|Brand|Airline|Bank|School|College|University/i;
 
 const CHALLENGE =
   /cf-chl|challenge-platform|<title>\s*Just a moment|Attention Required! \| Cloudflare|_Incapsula_Resource|px-captcha|captcha-delivery|Access Denied<\/title>/i;

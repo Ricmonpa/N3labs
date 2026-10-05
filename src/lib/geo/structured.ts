@@ -44,22 +44,27 @@ const SAMPLE_CHARS = 1400;
 
 const KIND_PATTERNS: [Exclude<PageKind, "home">, RegExp][] = [
   ["product", /\/(products?|productos?|item|items|p|articulo|refaccion(es)?|shop\/[^/]+|tienda\/[^/]+)\/[^/]+\/?$/i],
+  // Armadoras y agencias: la página de cada modelo es su ficha de producto.
+  ["product", /\/(vehiculos?|vehicles?|modelos?|models?|autos|carros|camionetas|suvs?|pickups?|motos|motocicletas)\/(?:[^/]+\/)*[^/]+\/?$/i],
   ["article", /\/(blogs?|articulos|noticias|news|posts?|guias?|recursos)\/[^/]+\/?$/i],
   ["service", /\/(servicios?|services?|soluciones|solutions?)(\/[^/]+)?\/?$/i],
-  ["contact", /\/(contacto|contactanos|contact|contact-us|sucursales|ubicaciones|locations?)\/?$/i],
+  ["contact", /\/(contacto|contactanos|contact|contact-us|sucursales|ubicaciones|locations?|distribuidores|concesionarios|agencias|dealers?)\/?$/i],
   ["about", /\/(nosotros|quienes-somos|about|about-us|acerca(-de)?|empresa|us|conocenos)\/?$/i],
 ];
 
 /** How many pages of each kind we read. */
 const WANTED: Record<Exclude<PageKind, "home">, number> = { product: 2, service: 1, contact: 1, about: 1, article: 1 };
 
-const ENTITY = /Organization|LocalBusiness|Corporation|Store|Restaurant|Hotel|Clinic|Dentist|Physician|Attorney|Airline|Bank|School|College|University|Person/i;
+const ENTITY = /Organization|Business|Corporation|Store|Dealer|Restaurant|Hotel|Clinic|Dentist|Physician|Attorney|Airline|Bank|School|College|University|Person/i;
+
+/** Files linked from a site aren't pages. */
+const NOT_A_PAGE = /\.(pdf|jpe?g|png|gif|webp|svg|zip|docx?|xlsx?|pptx?|mp4|mp3)$/i;
 
 /** Listings, tags and pagination look like content pages by their path but aren't. */
 const LISTING = /\/(tags?|etiquetas?|category|categor[ií]as?|categories|page|pagina|author|autor|feed)\/|\/(blogs?|news|noticias|articulos|best-sellers|ofertas|all|todos|search|buscar)\/?$/i;
 
 function classify(path: string): Exclude<PageKind, "home"> | null {
-  if (LISTING.test(path)) return null;
+  if (LISTING.test(path) || NOT_A_PAGE.test(path)) return null;
   for (const [kind, re] of KIND_PATTERNS) if (re.test(path)) return kind;
   return null;
 }
@@ -114,43 +119,58 @@ function linksFrom(html: string, base: URL): string[] {
   return out;
 }
 
-/** The locale/channel part of the home URL (e.g. /es/ or /default-channel/es/), to stay in one language. */
+/** The locale/channel part of the home URL (e.g. /mx/ or /default-channel/es/), to stay in one country and language. */
 function localePrefix(path: string): string {
   const parts = path.split("/").filter(Boolean);
+  if (parts.length && parts[parts.length - 1].includes(".")) parts.pop(); // /mx/main.html → /mx/
   return parts.length ? `/${parts.join("/")}/` : "/";
 }
 
-function pick(candidates: string[], home: URL): Map<Exclude<PageKind, "home">, string[]> {
+const bare = (u: string) => new URL(u).pathname.replace(/\.html?$/i, "").replace(/\/$/, "");
+
+/**
+ * Candidates per page type, best first: links on the home page, then the sitemap spread out, always
+ * in the home's country/language. A few extra per type so a broken page can be skipped.
+ */
+function pick(homeLinks: string[], sitemap: string[], home: URL): Map<Exclude<PageKind, "home">, string[]> {
   const prefix = localePrefix(home.pathname);
-  const byKind = new Map<Exclude<PageKind, "home">, string[]>();
   const seen = new Set<string>([home.toString()]);
-  for (const raw of candidates) {
-    let u: URL;
-    try {
-      u = new URL(raw);
-    } catch {
-      continue;
+  const collect = (urls: string[]) => {
+    const byKind = new Map<Exclude<PageKind, "home">, string[]>();
+    for (const raw of urls) {
+      let u: URL;
+      try {
+        u = new URL(raw);
+      } catch {
+        continue;
+      }
+      u.search = "";
+      if (!sameSite(u.hostname, home.hostname) || seen.has(u.toString())) continue;
+      seen.add(u.toString());
+      const kind = classify(u.pathname);
+      if (!kind) continue;
+      byKind.set(kind, [...(byKind.get(kind) ?? []), u.toString()]);
     }
-    u.search = "";
-    if (!sameSite(u.hostname, home.hostname) || seen.has(u.toString())) continue;
-    seen.add(u.toString());
-    const kind = classify(u.pathname);
-    if (!kind) continue;
-    const list = byKind.get(kind) ?? [];
-    list.push(u.toString());
-    byKind.set(kind, list);
-  }
+    return byKind;
+  };
+  const fromHome = collect(homeLinks);
+  const fromSitemap = collect(sitemap);
+
   const chosen = new Map<Exclude<PageKind, "home">, string[]>();
-  for (const [kind, list] of byKind) {
-    // Same language as the home first; then spread picks across the list, not just the first ones.
-    const inLocale = list.filter((u) => new URL(u).pathname.startsWith(prefix));
-    const pool = inLocale.length ? inLocale : list;
-    const n = WANTED[kind];
-    const step = Math.max(1, Math.floor(pool.length / n));
-    chosen.set(
-      kind,
-      Array.from({ length: Math.min(n, pool.length) }, (_, i) => pool[Math.min(i * step + Math.floor(step / 2), pool.length - 1)]),
-    );
+  for (const kind of Object.keys(WANTED) as Exclude<PageKind, "home">[]) {
+    const all = [...(fromHome.get(kind) ?? []), ...(fromSitemap.get(kind) ?? [])];
+    if (!all.length) continue;
+    // A path that contains other candidates is a listing (/modelos/suv/ vs /modelos/suv/sienna/).
+    const paths = all.map(bare);
+    const leaves = all.filter((_, i) => !paths.some((p, j) => j !== i && p.startsWith(`${paths[i]}/`)));
+    // A site per country (/mx/) only counts its own pages; never another country's.
+    const pool = leaves.filter((u) => new URL(u).pathname.startsWith(prefix));
+    const homeFirst = pool.filter((u) => fromHome.get(kind)?.includes(u));
+    const rest = pool.filter((u) => !homeFirst.includes(u));
+    const n = WANTED[kind] + 1;
+    const step = Math.max(1, Math.floor(rest.length / n));
+    const spread = Array.from({ length: Math.min(n, rest.length) }, (_, i) => rest[Math.min(i * step + Math.floor(step / 2), rest.length - 1)]);
+    chosen.set(kind, [...new Set([...homeFirst, ...spread])].slice(0, n));
   }
   return chosen;
 }
@@ -192,7 +212,7 @@ function evaluate(kind: PageKind, nodes: Node[], L: (es: string, en: string) => 
   }
 
   if (kind === "product") {
-    const product = ofType(nodes, /^(Product|ProductGroup|IndividualProduct|ProductModel)$/i)[0];
+    const product = ofType(nodes, /^(Product|ProductGroup|IndividualProduct|ProductModel|Car|Vehicle|Motorcycle|MotorizedBicycle)$/i)[0];
     if (!product) {
       add("fail", "La ficha no declara el producto (Product): para las máquinas no hay precio, marca ni existencia.", "The page doesn't declare the product (Product): machines see no price, brand or stock.");
       return { findings: f };
@@ -295,9 +315,20 @@ export async function structuredData(
 
   const fromSitemap = await sitemapUrls(input.sitemaps, deadline);
   // Links on the home page come first: they're the pages the business chose to show.
-  const chosen = pick([...linksFrom(input.homeHtml, home), ...(fromSitemap ?? [])], home);
-  const targets = [...chosen].flatMap(([kind, urls]) => urls.map((url) => ({ kind, url })));
-  const responses = await Promise.all(targets.map((t) => fetchWithin(t.url, deadline)));
+  const chosen = pick(linksFrom(input.homeHtml, home), fromSitemap ?? [], home);
+  const candidates = [...chosen].flatMap(([kind, urls]) => urls.map((url) => ({ kind, url })));
+  const fetched = await Promise.all(candidates.map((t) => fetchWithin(t.url, deadline)));
+  // Keep the pages that loaded, up to the number wanted per type; a broken one is only shown if nothing loaded.
+  const targets: { kind: Exclude<PageKind, "home">; url: string }[] = [];
+  const responses: (SafeResponse | null)[] = [];
+  for (const kind of chosen.keys()) {
+    const idx = candidates.map((c, i) => (c.kind === kind ? i : -1)).filter((i) => i >= 0);
+    const good = idx.filter((i) => fetched[i] && fetched[i]!.status < 400);
+    for (const i of (good.length ? good : idx.slice(0, 1)).slice(0, WANTED[kind])) {
+      targets.push(candidates[i]);
+      responses.push(fetched[i]);
+    }
+  }
 
   const order: PageKind[] = ["home", "product", "service", "contact", "about", "article"];
   const pages = [
