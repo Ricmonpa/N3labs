@@ -132,15 +132,16 @@
   "brand": "Ford",
   "model": "Territory",
   "url": "https://www.ford.mx/suv/territory-hibrida/2026/",
-  "http": 403,
-  "blocks": 0,
-  "invalid": 0,
+  "http": 200,
+  "blocks": 1,
+  "invalid": 1,
   "types": [],
   "product": false,
   "productType": null,
   "offer": null,
-  "words": 0,
-  "title": ""
+  "words": 1639,
+  "title": "",
+  "note": "Trae un bloque Vehicle con precio y existencia, pero el JSON es inválido (una llave de cierre de más): los buscadores lo ignoran. Ford rechaza visitas que no parecen navegador; se leyó con la herramienta de la revisión."
  },
  {
   "brand": "Hyundai",
@@ -176,17 +177,29 @@
  },
  {
   "brand": "Suzuki",
-  "model": "Vitara",
-  "url": "https://suzuki.com.mx/autos/vitara",
-  "http": 404,
-  "blocks": 0,
+  "model": "Fronx BoosterGreen",
+  "url": "https://autos.suzuki.com.mx/cars/fronx-boostergreen",
+  "http": 200,
+  "blocks": 2,
   "invalid": 0,
-  "types": [],
-  "product": false,
-  "productType": null,
-  "offer": null,
-  "words": 0,
-  "title": ""
+  "types": [
+   "Brand",
+   "Car",
+   "EngineSpecification",
+   "Offer",
+   "Organization",
+   "PropertyValue",
+   "QuantitativeValue"
+  ],
+  "product": true,
+  "productType": "Car",
+  "offer": {
+   "price": "454990",
+   "currency": "MXN"
+  },
+  "words": 1055,
+  "title": "",
+  "note": "suzuki.com.mx es un selector; el sitio de autos es autos.suzuki.com.mx"
  },
  {
   "brand": "MG",
