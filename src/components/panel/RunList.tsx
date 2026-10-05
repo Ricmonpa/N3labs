@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FileText } from "lucide-react";
 import { ENGINE_LABEL } from "@/lib/geo-visibility/report.ts";
 import type { RunSummary } from "@/lib/panel/store";
 
@@ -13,7 +14,7 @@ const STATUS: Record<RunSummary["status"], { label: string; className: string }>
 export function RunList({ runs, showStudy = false }: { runs: RunSummary[]; showStudy?: boolean }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-white/[0.07]">
-      <table className="w-full text-sm min-w-[640px]">
+      <table className="w-full text-sm min-w-[720px]">
         <thead className="bg-white/[0.02]">
           <tr className="text-left text-xs text-zinc-500">
             <th className="px-4 py-2.5 font-medium">Fecha</th>
@@ -22,6 +23,7 @@ export function RunList({ runs, showStudy = false }: { runs: RunSummary[]; showS
             <th className="px-4 py-2.5 font-medium">Avance</th>
             <th className="px-4 py-2.5 font-medium">Menciona sin nombre</th>
             <th className="px-4 py-2.5 font-medium">Estado</th>
+            <th className="px-4 py-2.5 font-medium"><span className="sr-only">Informe</span></th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +45,14 @@ export function RunList({ runs, showStudy = false }: { runs: RunSummary[]; showS
               <td className="px-4 py-2.5">
                 <span className={`rounded-full px-2 py-0.5 text-xs ${STATUS[r.status].className}`}>{STATUS[r.status].label}</span>
                 {r.share_token && <span className="ml-2 text-xs text-zinc-500">compartida</span>}
+              </td>
+              <td className="px-4 py-2.5 text-right">
+                <Link
+                  href={`/panel/corridas/${r.id}`}
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:border-red-500/50 hover:text-white"
+                >
+                  <FileText size={13} /> {r.status === "running" ? "Ver avance" : "Ver informe"}
+                </Link>
               </td>
             </tr>
           ))}
