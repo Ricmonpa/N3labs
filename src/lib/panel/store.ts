@@ -5,6 +5,7 @@ import { ENGINES } from "@/lib/geo-visibility/engines/index.ts";
 import { createMockEngine } from "@/lib/geo-visibility/engines/mock.ts";
 import { executeTask, listTasks, pool } from "@/lib/geo-visibility/execute.ts";
 import { buildReport, type Report } from "@/lib/geo-visibility/report.ts";
+import { MATCHER_VERSION } from "@/lib/geo-visibility/match.ts";
 import type { EngineId, RunRecord, Study } from "@/lib/geo-visibility/types.ts";
 import type { StoredAudit } from "./readability";
 
@@ -95,17 +96,31 @@ export async function listRuns(studyId?: string, limit = 50): Promise<RunSummary
   )) as RunSummary[];
 }
 
+/**
+ * Reports saved with an older way of matching names are rebuilt from their stored answers
+ * (no new API calls), keeping the date they were measured.
+ */
+async function withFreshReport(run: RunRow | null): Promise<RunRow | null> {
+  if (!run?.report || run.status === "running" || run.report.matcher === MATCHER_VERSION) return run;
+  const records = await getRecords(run.id);
+  if (!records.some((r) => r.ok)) return run;
+  const report = { ...buildReport(run.study, records), generatedAt: run.report.generatedAt };
+  const sql = await db();
+  await sql`UPDATE geo_runs SET report = ${JSON.stringify(report)}::jsonb WHERE id = ${run.id}`;
+  return { ...run, report };
+}
+
 export async function getRun(id: string): Promise<RunRow | null> {
   const sql = await db();
   const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, audit, share_token, created_by, created_at, finished_at FROM geo_runs WHERE id = ${id}`) as RunRow[];
-  return rows[0] ?? null;
+  return withFreshReport(rows[0] ?? null);
 }
 
 export async function getRunByToken(token: string): Promise<RunRow | null> {
   if (!/^[A-Za-z0-9_-]{20,}$/.test(token)) return null;
   const sql = await db();
   const rows = (await sql`SELECT id, study_id, study, engines, runs, simulated, status, total, report, audit, share_token, created_by, created_at, finished_at FROM geo_runs WHERE share_token = ${token} AND report IS NOT NULL`) as RunRow[];
-  return rows[0] ?? null;
+  return withFreshReport(rows[0] ?? null);
 }
 
 export async function createRun(study: StudyRow, opts: { engines: EngineId[]; runs: number; limit?: number; simulated: boolean }, email: string) {

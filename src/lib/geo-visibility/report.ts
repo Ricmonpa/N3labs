@@ -1,4 +1,4 @@
-import { firstMention, citesEntity, hostOf, hostMatches, wilson } from "./match.ts";
+import { firstMention, citesEntity, hostOf, hostMatches, wilson, MATCHER_VERSION } from "./match.ts";
 import type { EngineId, Entity, PromptType, RunRecord, Study } from "./types.ts";
 
 export type Rate = { hits: number; n: number; rate: number; low: number; high: number };
@@ -151,6 +151,7 @@ export function buildReport(study: Study, lines: RunRecord[]) {
     types,
     simulated,
     generatedAt: new Date().toISOString(),
+    matcher: MATCHER_VERSION,
     market: study.market,
     engines: engines.map((e) => ({ id: e, model: models[e] })),
     prompts: study.prompts.length,

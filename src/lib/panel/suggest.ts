@@ -90,7 +90,10 @@ const SCHEMA = {
       description: "De 4 a 6 competidores reales y activos en el mismo mercado, con su dominio oficial.",
       items: {
         type: "object",
-        properties: { name: { type: "string" }, domain: { type: "string" } },
+        properties: {
+          name: { type: "string", description: "Nombre corto, como lo escribe la gente: \"Nissan\", no \"Nissan México\" ni la razón social." },
+          domain: { type: "string" },
+        },
         required: ["name", "domain"],
       },
     },

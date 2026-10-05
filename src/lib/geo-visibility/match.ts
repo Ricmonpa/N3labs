@@ -8,8 +8,23 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/**
+ * Bumped when matching changes, so saved reports get rebuilt from their stored answers.
+ * v2: "Nissan México" also counts when the answer only says "Nissan".
+ */
+export const MATCHER_VERSION = 2;
+
+const COUNTRY_SUFFIX = /\s+(?:de\s+)?(?:m[eé]xico|mx)$/i;
+
+/** A name plus the way people actually write it, without the country ("Toyota México" → "Toyota"). */
+function variants(name: string): string[] {
+  const full = name.trim();
+  const base = full.replace(COUNTRY_SUFFIX, "").trim();
+  return base !== full && base.length >= 3 ? [full, base] : [full];
+}
+
 function namePatterns(entity: Entity): RegExp[] {
-  return [entity.name, ...(entity.aliases ?? [])].map(
+  return [entity.name, ...(entity.aliases ?? [])].flatMap(variants).map(
     (n) => new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegex(normalizeText(n))}(?![\\p{L}\\p{N}])`, "u"),
   );
 }
