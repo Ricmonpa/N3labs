@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
+import { ARTICLES } from "@/lib/news";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
@@ -7,6 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/geotest.html", priority: 0.8 },
     { path: "/geotest-en.html", priority: 0.7 },
     { path: "/prompter", priority: 0.8 },
+    { path: "/noticias", priority: 0.7 },
+    ...ARTICLES.map((a) => ({ path: `/noticias/${a.slug}`, priority: 0.7 })),
     { path: "/iaready.html", priority: 0.6 },
     { path: "/iaready-en.html", priority: 0.5 },
     { path: "/iaready-pt.html", priority: 0.5 },

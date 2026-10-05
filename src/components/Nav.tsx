@@ -56,7 +56,7 @@ export default function Nav() {
         </a>
 
         {/* Desktop links */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden xl:flex items-center gap-8">
           {t.nav.links.map((l) => (
             <a
               key={l.href}
@@ -83,7 +83,7 @@ export default function Nav() {
         </nav>
 
         {/* CTA + lang */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden xl:flex items-center gap-4">
           <LangToggle />
           <a
             href={ENGEL_CALENDLY}
@@ -96,7 +96,7 @@ export default function Nav() {
         </div>
 
         {/* Mobile toggle */}
-        <div className="md:hidden flex items-center gap-3">
+        <div className="xl:hidden flex items-center gap-3">
           <LangToggle />
           <button
             className="text-slate-400 hover:text-white"
@@ -114,7 +114,7 @@ export default function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-white/5"
+            className="xl:hidden glass border-t border-white/5"
           >
             <div className="px-6 py-6 flex flex-col gap-5">
               {t.nav.links.map((l) => (
