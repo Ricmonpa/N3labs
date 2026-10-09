@@ -112,6 +112,16 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+/* Entrada del header. En CSS, no en JS: si el script falla, el header se ve igual. */
+@keyframes header-in {
+  from { opacity: 0; transform: translateY(-80px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-header-in { animation: header-in .6s cubic-bezier(.22,1,.36,1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-header-in { animation: none; }
+}
+
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 .animate-gradient { animation: gradient-shift 8s ease infinite; }

@@ -40,11 +40,8 @@ export default function Nav() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+    <header
+      className={`animate-header-in fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
           ? "glass border-b border-white/5 py-3"
           : "bg-transparent py-5"
@@ -52,11 +49,11 @@ export default function Nav() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <a href="/">
-          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority />
+          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority className="w-[120px] xl:w-[160px] h-auto" />
         </a>
 
         {/* Desktop links */}
-        <nav className="hidden xl:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-8">
           {t.nav.links.map((l) => (
             <a
               key={l.href}
@@ -83,20 +80,20 @@ export default function Nav() {
         </nav>
 
         {/* CTA + lang */}
-        <div className="hidden xl:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3 xl:gap-4">
           <LangToggle />
           <a
             href={ENGEL_CALENDLY}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
+            className="text-sm font-semibold px-3.5 xl:px-5 py-2.5 rounded-lg whitespace-nowrap bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
           >
             {t.nav.cta}
           </a>
         </div>
 
         {/* Mobile toggle */}
-        <div className="xl:hidden flex items-center gap-3">
+        <div className="lg:hidden flex items-center gap-3">
           <LangToggle />
           <button
             className="text-slate-400 hover:text-white"
@@ -114,7 +111,7 @@ export default function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="xl:hidden glass border-t border-white/5"
+            className="lg:hidden glass border-t border-white/5"
           >
             <div className="px-6 py-6 flex flex-col gap-5">
               {t.nav.links.map((l) => (
@@ -156,6 +153,6 @@ export default function Nav() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }
