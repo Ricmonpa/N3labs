@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
       { source: "/avante", destination: "/avante/index.html" },
       { source: "/avante/demo", destination: "/avante/demo/index.html" },
       { source: "/autycom", destination: "/autycom/index.html" },
+      { source: "/leviton-legibilidad", destination: "/leviton-legibilidad/index.html" },
       { source: "/bubbleup", destination: "/bubbleup/index.html" },
       { source: "/travy", destination: "/travy/index.html" },
     ];
@@ -35,6 +36,10 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/autycom/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
+        source: "/leviton-legibilidad/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
       {
