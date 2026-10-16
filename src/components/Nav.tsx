@@ -26,6 +26,15 @@ function LangToggle({ className = "" }: { className?: string }) {
   );
 }
 
+// Un link del menu puede apuntar a otro sitio: si trae protocolo, se usa tal cual
+// y se abre en pestana nueva; si no, es una ruta interna.
+function navLinkProps(href: string) {
+  const external = /^https?:\/\//.test(href);
+  return external
+    ? { href, target: "_blank", rel: "noopener noreferrer" as const }
+    : { href: `/${href}` };
+}
+
 export default function Nav() {
   const { t, lang } = useLanguage();
   // El anzuelo es una página estática: cada idioma tiene su archivo.
@@ -48,45 +57,45 @@ export default function Nav() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="/">
-          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority className="w-[120px] xl:w-[160px] h-auto" />
+        <a href="/" className="shrink-0">
+          <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={160} height={63} priority className="w-[104px] xl:w-[160px] h-auto" />
         </a>
 
         {/* Desktop links */}
-        <nav className="hidden lg:flex items-center gap-4 xl:gap-8">
+        <nav className="hidden lg:flex items-center gap-2.5 xl:gap-5">
           {t.nav.links.map((l) => (
             <a
               key={l.href}
-              href={`/${l.href}`}
-              className="text-sm text-slate-400 hover:text-white transition-colors duration-200 font-medium"
+              {...navLinkProps(l.href)}
+              className="text-[13px] xl:text-sm text-slate-400 hover:text-white transition-colors duration-200 font-medium whitespace-nowrap"
             >
               {l.label}
             </a>
           ))}
           <a
             href="/prompter"
-            className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
+            className="text-[13px] xl:text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
           >
-            <Sparkles size={13} />
+            <Sparkles size={13} className="hidden xl:block" />
             {t.prompter.navLabel}
           </a>
           <a
             href={geoHref}
-            className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5"
+            className="text-[13px] xl:text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
           >
-            <Radar size={13} />
+            <Radar size={13} className="hidden xl:block" />
             Scan GEO
           </a>
         </nav>
 
         {/* CTA + lang */}
-        <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+        <div className="hidden lg:flex items-center gap-2.5 xl:gap-4">
           <LangToggle />
           <a
             href={ENGEL_CALENDLY}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold px-3.5 xl:px-5 py-2.5 rounded-lg whitespace-nowrap bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
+            className="text-sm font-semibold px-3 xl:px-5 py-2.5 rounded-lg whitespace-nowrap bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-900/30"
           >
             {t.nav.cta}
           </a>
@@ -117,7 +126,7 @@ export default function Nav() {
               {t.nav.links.map((l) => (
                 <a
                   key={l.href}
-                  href={`/${l.href}`}
+                  {...navLinkProps(l.href)}
                   onClick={() => setOpen(false)}
                   className="text-slate-300 font-medium text-base"
                 >
