@@ -14,7 +14,10 @@
   --color-text: #f1f5f9;
   --color-muted: #52525b;
   --color-muted-light: #94a3b8;
-  --font-sans: var(--font-inter);
+  /* Helvetica Neue Light si la maquina la tiene (todos los Mac); si no, Inter,
+     que es el neo-grotesque libre mas cercano. Helvetica Neue tiene licencia
+     y no se puede servir desde el sitio, solo pedirla al sistema. */
+  --font-sans: "Helvetica Neue", var(--font-inter), Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -28,7 +31,8 @@ html {
 body {
   background: #06060c;
   color: #f1f5f9;
-  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-family: "Helvetica Neue", var(--font-inter), Helvetica, Arial, sans-serif;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
