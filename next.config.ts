@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
       { source: "/leviton-legibilidad", destination: "/leviton-legibilidad/index.html" },
       { source: "/bubbleup", destination: "/bubbleup/index.html" },
       { source: "/travy", destination: "/travy/index.html" },
+      { source: "/mosca", destination: "/mosca/index.html" },
     ];
   },
   async headers() {

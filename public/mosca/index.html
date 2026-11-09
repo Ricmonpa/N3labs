@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="es">
+<title>Penales contra la Mosca</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Tírale una tanda de penales a una mosca cuyo cerebro es la copia del de una mosca real.">
+<link rel="icon" href="/n3-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Estadio de noche: la cancha es el escenario; todo lo demás es marcador y tribuna. Un solo look oscuro a propósito. */
+:root{
+  --noche:#0a0f0d; --tribuna:#121a16; --linea:#24302a; --cal:#eef3ee; --pasto:#2f9d4a;
+  --marcador:#ffcf3f; --ojo:#e8343c; --tenue:#8fa398;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --texto:"Barlow", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", Consolas, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--noche);color:var(--cal);font:16px/1.55 var(--texto);margin:0}
+.envuelve{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:20px 56px}
+header.cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px 20px;margin-bottom:14px}
+.marca{font:800 15px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--marcador)}
+h1{font:900 clamp(40px,7vw,78px)/.92 var(--display);text-transform:uppercase;margin:6px 0 0;letter-spacing:.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--ojo)}
+.sub{color:var(--tenue);max-width:46ch;margin:0}
+
+/* escenario */
+.escenario{position:relative;aspect-ratio:16/9;max-width:100%;background:#000;border-radius:6px;overflow:hidden;border:1px solid var(--linea)}
+.escenario video,.escenario img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.aviso{position:absolute;left:12px;bottom:12px;font:500 12px/1.3 var(--mono);color:var(--cal);background:rgba(8,12,10,.72);padding:6px 9px;border-radius:4px}
+.cargando{position:absolute;inset:0;display:grid;place-items:center;font:800 28px var(--display);letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.35)}
+
+/* controles */
+.mesa{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;margin-top:16px}
+@media (max-width:760px){.mesa{grid-template-columns:1fr}}
+.bloque{background:var(--tribuna);border:1px solid var(--linea);border-radius:6px;padding:14px 16px;min-width:0}
+.etq{font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--tenue);margin:0 0 10px}
+.arco{position:relative;border:4px solid var(--cal);border-bottom:0;border-radius:3px 3px 0 0;height:96px;
+  background:repeating-linear-gradient(90deg,rgba(238,243,238,.07) 0 1px,transparent 1px 14px),repeating-linear-gradient(0deg,rgba(238,243,238,.07) 0 1px,transparent 1px 14px);
+  display:grid;grid-template-columns:repeat(7,1fr);align-items:end}
+.arco::after{content:"";position:absolute;left:-16px;right:-16px;bottom:-4px;height:4px;background:var(--cal)}
+.zona{all:unset;cursor:pointer;height:100%;display:grid;place-items:end center;padding-bottom:10px;position:relative}
+.zona span{width:26px;height:26px;border-radius:50%;border:2px dashed rgba(238,243,238,.45);transition:transform .15s,background .15s}
+.zona:hover span{transform:scale(1.12);border-color:var(--cal)}
+.zona[aria-pressed="true"] span{border:0;background:radial-gradient(circle at 35% 35%,#fff 0 30%,#d8d8d8 31% 55%,#222 56%);transform:scale(1.15)}
+.zona:focus-visible span{outline:2px solid var(--marcador);outline-offset:3px}
+.pasto{height:26px;background:repeating-linear-gradient(90deg,#24803b 0 40px,#2a8f43 40px 80px);margin:4px -16px -14px;border-radius:0 0 6px 6px}
+.fila{display:flex;flex-wrap:wrap;gap:8px}
+.opc{all:unset;cursor:pointer;font:600 15px var(--texto);padding:8px 14px;border:1px solid var(--linea);border-radius:999px;color:var(--cal)}
+.opc[aria-pressed="true"]{background:var(--cal);color:var(--noche);border-color:var(--cal)}
+.opc:focus-visible{outline:2px solid var(--marcador);outline-offset:2px}
+.tirar{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:block;text-align:center;margin-top:14px;padding:14px;border-radius:6px;background:var(--marcador);color:#1a1405;
+  font:900 28px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.tirar:hover{filter:brightness(1.06)}.tirar:focus-visible{outline:3px solid var(--cal);outline-offset:3px}
+.tirar[disabled]{opacity:.45;cursor:not-allowed}
+.nota{font-size:13px;color:var(--tenue);margin:10px 0 0}
+
+/* marcador */
+.tablero{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
+.equipo{font:800 18px/1.1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.goles{font:700 54px/1 var(--mono);color:var(--marcador);font-variant-numeric:tabular-nums;background:#050806;border:1px solid var(--linea);border-radius:4px;padding:6px 12px;min-width:2ch}
+.vs{font:800 16px var(--display);color:var(--tenue)}
+.tanda{display:flex;justify-content:center;gap:8px;margin:14px 0 4px}
+.tanda i{width:18px;height:18px;border-radius:50%;border:2px solid var(--linea)}
+.tanda i.gol{background:var(--marcador);border-color:var(--marcador)}
+.tanda i.atajada{background:var(--ojo);border-color:var(--ojo)}
+.tanda i.fuera{background:var(--tenue);border-color:var(--tenue)}
+.leyenda{display:flex;justify-content:center;gap:14px;font-size:12px;color:var(--tenue)}
+.leyenda b{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.final{margin-top:12px;font:800 22px/1.15 var(--display);text-transform:uppercase;letter-spacing:.03em;text-align:center;text-wrap:balance}
+.otra{all:unset;cursor:pointer;display:block;margin:10px auto 0;font:600 14px var(--texto);text-decoration:underline;color:var(--cal)}
+
+/* explicación */
+.como{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:22px;margin-top:44px;border-top:1px solid var(--linea);padding-top:26px}
+.como h2{font:800 24px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px;text-wrap:balance}
+.como p{margin:0;color:#c9d6ce;max-width:62ch}
+.cifra{font:700 13px var(--mono);color:var(--marcador);letter-spacing:.06em;display:block;margin-bottom:6px}
+footer{margin-top:36px;font-size:13px;color:var(--tenue);border-top:1px solid var(--linea);padding-top:16px}
+footer a{color:var(--cal)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="envuelve">
+  <header class="cab">
+    <div>
+      <a class="marca" href="/" style="text-decoration:none">← N3 Labs</a>
+      <h1>Tírale un penal <em>a la mosca</em></h1>
+    </div>
+    <p class="sub">Su cerebro es la copia, neurona por neurona, del de una mosca real. Nadie le enseñó a atajar.</p>
+  </header>
+
+  <div class="escenario" id="escenario">
+    <img id="poster" src="/mosca/portada.jpg" alt="Una mosca en la portería de un estadio, frente a un balón de futbol">
+    <video id="video" playsinline muted hidden></video>
+    <div class="aviso" id="aviso">Elige dónde tirar y dale a «Tirar»</div>
+    <div class="cargando" id="cargando" hidden>Cargando el tiro…</div>
+  </div>
+
+  <div class="mesa">
+    <div class="bloque">
+      <p class="etq">1 · ¿A dónde le tiras?</p>
+      <div class="arco" id="arco" role="group" aria-label="Punto de la portería"></div>
+      <div class="pasto"></div>
+      <div style="height:16px"></div>
+      <p class="etq">2 · ¿Qué tan fuerte?</p>
+      <div class="fila" role="group" aria-label="Potencia">
+        <button class="opc" id="pot-s" aria-pressed="false" data-pot="s">Colocado</button>
+        <button class="opc" id="pot-f" aria-pressed="true" data-pot="f">Cañonazo</button>
+      </div>
+      <div style="height:16px"></div>
+      <p class="etq">3 · ¿Contra qué mosca?</p>
+      <div class="fila" role="group" aria-label="Portera">
+        <button class="opc" id="cer-real" aria-pressed="true" data-cer="real">Mosca real</button>
+        <button class="opc" id="cer-rev" aria-pressed="false" data-cer="revuelto">Mosca revuelta</button>
+      </div>
+      <button class="tirar" id="tirar">¡Tirar!</button>
+      <p class="nota" id="nota-cer">La mosca real tiene el cerebro tal cual se copió.</p>
+    </div>
+
+    <div class="bloque" aria-live="polite">
+      <p class="etq">Tanda de 5 penales</p>
+      <div class="tablero">
+        <div class="equipo">Tú</div>
+        <div><span class="goles" id="g-tu">0</span> <span class="vs">–</span> <span class="goles" id="g-mosca">0</span></div>
+        <div class="equipo">Mosca</div>
+      </div>
+      <div class="tanda" id="tanda"></div>
+      <div class="leyenda"><span><b style="background:var(--marcador)"></b>Gol</span><span><b style="background:var(--ojo)"></b>Atajada</span><span><b style="background:var(--tenue)"></b>Fuera</span></div>
+      <div class="final" id="final"></div>
+      <button class="otra" id="otra" hidden>Otra tanda</button>
+    </div>
+  </div>
+
+  <section class="como">
+    <div>
+      <span class="cifra">139,255 NEURONAS</span>
+      <h2>Un cerebro copiado</h2>
+      <p>Científicos mapearon todas las neuronas de una mosca de la fruta y cómo se conectan (proyecto FlyWire, 2024). Ese mapa corre como simulación en una laptop. Cada punto que brilla en el video es una neurona que disparó en ese instante.</p>
+    </div>
+    <div>
+      <span class="cifra">0 ENTRENAMIENTO</span>
+      <h2>Nadie le enseñó</h2>
+      <p>La mosca ve el balón con sus neuronas visuales. Su cerebro, sin tocarlo, activa unas neuronas de giro (DNa02) del lado donde viene el tiro, y un cuerpo 3D con física camina hacia allá. Solo le centramos el «volante» con un número, como a un carro que se jala.</p>
+    </div>
+    <div>
+      <span class="cifra">MISMAS PIEZAS, AL AZAR</span>
+      <h2>La mosca revuelta</h2>
+      <p>Es el mismo cerebro con las mismas conexiones, pero cada cable va a una neurona cualquiera. Si la real ataja y la revuelta no, lo que importa es cómo está cableado el cerebro, no cuántas neuronas tiene.</p>
+    </div>
+    <div>
+      <span class="cifra">TIROS GRABADOS</span>
+      <h2>¿Es en vivo?</h2>
+      <p>Cada penal lo jugó de verdad la simulación completa, cerebro y cuerpo. Simular un tiro tarda unos 3 minutos, así que los grabamos antes: 7 puntos de la portería, 2 potencias y las 2 moscas.</p>
+    </div>
+  </section>
+
+<style>
+.clase{margin-top:56px;border-top:1px solid var(--linea);padding-top:28px}
+.clase .etq{font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--marcador);margin:0 0 8px}
+.clase h2.grande{font:900 clamp(34px,6vw,64px)/.95 var(--display);text-transform:uppercase;margin:0 0 10px;text-wrap:balance}
+.clase .intro{color:#c9d6ce;max-width:62ch;margin:0 0 30px}
+.leccion{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px 34px;align-items:center;padding:26px 0;border-top:1px solid var(--linea)}
+.leccion:nth-of-type(even){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.leccion:nth-of-type(even) .medio{order:2}
+@media (max-width:820px){.leccion,.leccion:nth-of-type(even){grid-template-columns:1fr}.leccion:nth-of-type(even) .medio{order:0}}
+.leccion .medio{display:grid;gap:8px;min-width:0}
+.leccion .medio.dos{grid-template-columns:1fr 1fr}
+.leccion video{display:block;width:100%;max-width:100%;aspect-ratio:16/9;object-fit:cover;background:#000;border-radius:6px;border:1px solid var(--linea)}
+.leccion .num{font:700 13px var(--mono);color:var(--marcador);letter-spacing:.08em}
+.leccion h3{font:800 clamp(26px,3vw,36px)/1.02 var(--display);text-transform:uppercase;margin:6px 0 10px;letter-spacing:.02em;text-wrap:balance}
+.leccion p{margin:0 0 10px;color:#c9d6ce;max-width:60ch}
+.leccion .ojo{font-size:14px;color:var(--tenue);border-left:3px solid var(--marcador);padding-left:10px}
+.leccion .pie{font:500 12px var(--mono);color:var(--tenue)}
+.leccion .real{display:inline-block;font:700 11px var(--mono);letter-spacing:.08em;padding:2px 6px;border-radius:3px;margin-bottom:6px}
+.leccion .real.si{background:#123524;color:#7ee2a8}
+.leccion .real.no{background:#2b2512;color:#f3d77a}
+.remate{margin-top:34px;padding:22px;border:1px solid var(--marcador);border-radius:8px;font:800 clamp(24px,3vw,34px)/1.15 var(--display);text-transform:uppercase;text-align:center;text-wrap:balance}
+</style>
+
+<section class="clase" id="clase">
+  <p class="etq">La clase</p>
+  <h2 class="grande">¿Cómo ataja una mosca que nadie entrenó?</h2>
+  <p class="intro">Todo lo que viste en el juego, explicado paso a paso. Las etiquetas te dicen qué es dato real del cerebro de la mosca y qué es una animación para explicar.</p>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/jamon.mp4" poster="/mosca/media/jamon.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">DATOS REALES</span><div class="num">01</div><h3>Así se copia un cerebro</h3>
+      <p>Haz de cuenta que agarras el cerebro de una mosca y lo rebanas como jamón, en rebanadas miles de veces más delgadas que un cabello. A cada rebanada le toman una foto con un microscopio electrónico.</p>
+      <p>Después una inteligencia artificial sigue cada cablecito, rebanada por rebanada, y arma el mapa completo: quién está conectado con quién.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/galaxia.mp4" poster="/mosca/media/galaxia.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">DATOS REALES</span><div class="num">02</div><h3>La galaxia: 139,255 neuronas</h3>
+      <p>Cada puntito es una neurona de verdad, en su posición de verdad. Este mapa (FlyWire, 2024) es público y gratis. Lo bajamos y lo corrimos en una laptop.</p>
+      <p class="ojo">En azul, los ojos; en ámbar, el cerebro central. Cuando algo se ilumina, es una neurona disparando en la simulación.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/mosca_vs_humano.mp4" poster="/mosca/media/mosca_vs_humano.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real no">ILUSTRACIÓN</span><div class="num">03</div><h3>¿Y comparado contigo?</h3>
+      <p>Una mosca tiene unas 140 mil neuronas. Tú tienes unas 86 mil millones: necesitarías unos 600 mil cerebros de mosca para igualar el tuyo.</p>
+      <p class="ojo">Por eso «subir tu cerebro a la nube» hoy es especulación. Lo que sí es real es que el camino ya empezó.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/trompa.mp4" poster="/mosca/media/trompa.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">ACTIVIDAD REAL</span><div class="num">04</div><h3>Le di azúcar… y sacó la trompa</h3>
+      <p>En el mapa ya vienen identificadas las neuronas del gusto. Si prendes las del dulce, es como si la mosca pisara un charco de refresco.</p>
+      <p>Solita, sin que nadie se lo programara, se prende MN9: la neurona que le ordena sacar la trompa para comer. Esa respuesta venía en el cableado.</p>
+      <p class="pie">La actividad del cerebro es real. Que la trompa del modelo 3D se estire cuando MN9 dispara lo conectamos nosotros.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/mecanico.mp4" poster="/mosca/media/mecanico.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">CABLES REALES</span><div class="num">05</div><h3>El mecánico malhechoso</h3>
+      <p>Imagina que llega un mecánico y te reconecta todos los cables del coche donde caigan. Mismas piezas, mismos cables… pero nada tiene sentido.</p>
+      <p>Eso le hicimos al cerebro de la mosca para compararlo: la <b>mosca revuelta</b> tiene las mismas neuronas y los mismos cables, conectados al azar. Con azúcar, la señal ya no llega a la neurona de comer.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio dos"><video src="/mosca/media/mosca_real.mp4" poster="/mosca/media/mosca_real.jpg" muted loop playsinline controls preload="none"></video><video src="/mosca/media/mosca_revuelto.mp4" poster="/mosca/media/mosca_revuelto.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">EXPERIMENTO REAL</span><div class="num">06</div><h3>El truco de los videos virales</h3>
+      <p>Primero la pusimos a perseguir bolitas usando un «traductor»: un programita que aprende a leer las neuronas y convertirlas en movimiento. Así funcionan muchos de los videos donde una mosca juega Doom.</p>
+      <p>Resultado: la mosca real alcanzó 13 bolitas… y la revuelta también 13. El traductor aprende a sacar información hasta de un cerebro revuelto.</p>
+      <p class="ojo">Moraleja: que pongan una mosca a jugar Doom no demuestra que la mosca sepa jugar Doom.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/girar.mp4" poster="/mosca/media/girar.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">ACTIVIDAD REAL</span><div class="num">07</div><h3>Las neuronas de girar</h3>
+      <p>Así que le quitamos el traductor. Nada de aprendizaje. Solo leímos dos neuronas que los científicos ya conocían: DNa02 izquierda y derecha, que le dicen a la mosca hacia dónde girar.</p>
+      <p>Si el balón aparece a un lado, se prende la DNa02 de ese lado. Nadie se lo enseñó.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/duelo_portera.mp4" poster="/mosca/media/duelo_portera.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real si">EXPERIMENTO REAL</span><div class="num">08</div><h3>La portera</h3>
+      <p>Con esas dos neuronas y un cuerpo 3D con física, la mosca real atajó <b>13 de 14 penales</b>. La revuelta, <b>8 de 14</b>, y casi todas porque el balón le llegó de frente.</p>
+      <p class="ojo">Para ser honestos: le centramos el «volante» con un solo número (venía jalando a la izquierda) y el balón se mueve con una trayectoria fija. Ver, decidir y caminar hacia el balón lo hizo su cerebro.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/taqueria.mp4" poster="/mosca/media/taqueria.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real no">ILUSTRACIÓN</span><div class="num">09</div><h3>¿Qué es una red neuronal?</h3>
+      <p>ChatGPT, Claude y Gemini funcionan con redes neuronales artificiales. Imagina que aprendes a adivinar si una taquería está buena: ¿hay fila?, ¿el trompo gira?, ¿la salsa está en molcajete?</p>
+      <p>Cada pista tiene un peso. Pruebas, te equivocas, te enchilas, corriges… y aprendes que la fila pesa mucho y el letrero bonito casi nada. Eso es <b>entrenar</b>: ajustar los pesos.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/copiar_entrenar.mp4" poster="/mosca/media/copiar_entrenar.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real no">ILUSTRACIÓN</span><div class="num">10</div><h3>Copiar contra entrenar</h3>
+      <p>La mosca trae sus cables de fábrica: los armó la evolución durante millones de años, y nosotros solo los copiamos. Por eso ataja sin entrenamiento.</p>
+      <p>ChatGPT empieza con los cables en blanco y los ajusta con muchísimos datos. Las dos son redes de neuronas, pero nacen al revés.</p></div>
+  </article>
+
+  <article class="leccion">
+    <div class="medio"><video src="/mosca/media/archivo_gusano_mosca.mp4" poster="/mosca/media/archivo_gusano_mosca.jpg" muted loop playsinline controls preload="none"></video></div>
+    <div><span class="real no">ILUSTRACIÓN</span><div class="num">11</div><h3>Del gusano a la mosca</h3>
+      <p>En 1986 se mapeó el primer sistema nervioso completo: un gusanito con 302 neuronas, a mano, foto por foto, en más de diez años.</p>
+      <p>Hoy ya mapeamos una mosca con 139 mil, gracias a la IA. Y en 1958 la prensa decía que la primera red neuronal pronto iba a caminar, hablar y ser consciente. Nos tardamos tantito más.</p></div>
+  </article>
+
+  <div class="remate">No basta con tener neuronas.<br>Importa cómo están conectadas.</div>
+</section>
+
+<script>
+(() => {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting && !matchMedia("(prefers-reduced-motion: reduce)").matches) { v.preload = "auto"; v.play().catch(() => {}); }
+    else v.pause();
+  }), { threshold: 0.4 });
+  document.querySelectorAll(".clase video").forEach(v => io.observe(v));
+})();
+</script>
+
+  <footer>
+    Datos: FlyWire Codex (FAFB v783). Modelo del cerebro: Shiu et al., <i>Nature</i> 2024. Cuerpo: NeuroMechFly (EPFL). Por <b>Ricardo Moncada</b>.
+  </footer>
+</div>
+
+<script>
+const RESULTADOS = {"real_f0": "atajada", "real_f1": "atajada", "real_f2": "atajada", "real_f3": "atajada", "real_f4": "atajada", "real_f5": "atajada", "real_f6": "gol", "real_s0": "atajada", "real_s1": "atajada", "real_s2": "atajada", "real_s3": "atajada", "real_s4": "atajada", "real_s5": "atajada", "real_s6": "atajada", "revuelto_f0": "gol", "revuelto_f1": "gol", "revuelto_f2": "atajada", "revuelto_f3": "atajada", "revuelto_f4": "atajada", "revuelto_f5": "atajada", "revuelto_f6": "gol", "revuelto_s0": "gol", "revuelto_s1": "gol", "revuelto_s2": "atajada", "revuelto_s3": "atajada", "revuelto_s4": "atajada", "revuelto_s5": "atajada", "revuelto_s6": "gol"};  // {"real_f0":"atajada", ...}
+const ZONAS = 7, TANDA = 5;
+const $ = id => document.getElementById(id);
+let zona = 3, pot = "f", cer = "real", tiros = [], jugando = false;
+
+const arco = $("arco");
+for (let i = 0; i < ZONAS; i++) {
+  const b = document.createElement("button");
+  b.className = "zona"; b.id = "zona-" + i; b.dataset.i = i;
+  b.setAttribute("aria-label", ["Pegado al poste izquierdo","Izquierda","Centro-izquierda","Al centro","Centro-derecha","Derecha","Pegado al poste derecho"][i]);
+  b.setAttribute("aria-pressed", i === zona);
+  b.innerHTML = "<span></span>";
+  b.onclick = () => { zona = i; document.querySelectorAll(".zona").forEach(z => z.setAttribute("aria-pressed", z === b)); };
+  arco.appendChild(b);
+}
+document.querySelectorAll("[data-pot]").forEach(b => b.onclick = () => {
+  pot = b.dataset.pot; document.querySelectorAll("[data-pot]").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+document.querySelectorAll("[data-cer]").forEach(b => b.onclick = () => {
+  if (tiros.length && cer !== b.dataset.cer) reiniciar();
+  cer = b.dataset.cer; document.querySelectorAll("[data-cer]").forEach(x => x.setAttribute("aria-pressed", x === b));
+  $("nota-cer").textContent = cer === "real" ? "La mosca real tiene el cerebro tal cual se copió."
+    : "La revuelta tiene las mismas neuronas, conectadas al azar. Cambiar de mosca reinicia la tanda.";
+});
+
+function pintar() {
+  const g = tiros.filter(t => t === "gol").length;
+  $("g-tu").textContent = g; $("g-mosca").textContent = tiros.length - g;
+  $("tanda").innerHTML = Array.from({length: TANDA}, (_, i) => `<i class="${tiros[i] || ""}" title="Penal ${i + 1}"></i>`).join("");
+  const fin = tiros.length >= TANDA;
+  $("tirar").disabled = fin || jugando;
+  $("otra").hidden = !fin;
+  if (fin) {
+    const a = tiros.filter(t => t === "atajada").length;
+    $("final").textContent = a >= 3 ? `La mosca te atajó ${a} de ${TANDA}. 140 mil neuronas te ganaron.`
+      : g === TANDA ? "Cinco de cinco. Ahora prueba contra la mosca real." : `Le metiste ${g} de ${TANDA} a una mosca.`;
+  } else $("final").textContent = "";
+}
+function reiniciar() { tiros = []; pintar(); }
+$("otra").onclick = reiniciar;
+
+const video = $("video");
+$("tirar").onclick = () => {
+  if (jugando || tiros.length >= TANDA) return;
+  const clave = `${cer}_${pot}${zona}`;
+  jugando = true; pintar();
+  $("escenario").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center"});
+  $("cargando").hidden = false; $("aviso").hidden = true;
+  video.src = `/mosca/clips/tiro_${clave}.mp4`;
+  video.hidden = false;
+  video.play().catch(() => {});
+  video.onplaying = () => { $("cargando").hidden = true; $("poster").hidden = true; };
+  video.onended = () => {
+    tiros.push(RESULTADOS[clave] || "atajada");
+    jugando = false; pintar();
+    $("aviso").hidden = false;
+    $("aviso").textContent = tiros.length < TANDA ? `Penal ${tiros.length + 1} de ${TANDA}: elige otro punto` : "Fin de la tanda";
+  };
+  video.onerror = () => { jugando = false; $("cargando").hidden = true; $("aviso").hidden = false; $("aviso").textContent = "No se pudo cargar ese tiro. Intenta de nuevo."; pintar(); };
+};
+pintar();
+</script>
