@@ -42,3 +42,6 @@ next-env.d.ts
 
 # dev server log
 devlog.txt
+
+# Diagnosticos de clientes: material interno, no va al repo publico
+tools/geo-visibility/resultados/autycom/
