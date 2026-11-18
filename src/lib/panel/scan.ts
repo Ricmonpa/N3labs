@@ -2,10 +2,12 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { after } from "next/server";
 import type { Report } from "@/lib/geo-visibility/report.ts";
-import type { Study } from "@/lib/geo-visibility/types.ts";
+import type { EngineId, Study } from "@/lib/geo-visibility/types.ts";
+import { ENGINE_IDS } from "@/lib/geo-visibility/study.ts";
 import { internalStepToken } from "./auth";
 import { db } from "./db";
 import { getInvite, inviteUsable, useInvite } from "./invites";
+import { verifyKey, type ApiKeys } from "./keys";
 import { auditSite } from "./readability";
 import { createRun, createStudy, getRun, progress, setRunAudit } from "./store";
 import { suggestStudy } from "./suggest";
@@ -19,7 +21,7 @@ import { kickRun } from "./worker";
  */
 
 export class ScanError extends Error {
-  constructor(public code: "invalid_url" | "invalid_email" | "rate_limited" | "busy" | "unavailable") {
+  constructor(public code: "invalid_url" | "invalid_email" | "invalid_key" | "rate_limited" | "busy" | "unavailable") {
     super(code);
   }
 }
@@ -42,6 +44,8 @@ type ScanRow = {
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** Scans a single visitor (email or IP) can start per day. */
 const PER_CLIENT = 3;
+/** Con sus propias llaves el scan no nos cuesta respuestas; el límite solo frena abusos. */
+const PER_CLIENT_OWN_KEYS = 20;
 /** Scans per day for everyone, so a burst can't run up the bill. */
 const DAILY_CAP = Number(process.env.GEO_SCAN_DAILY_CAP ?? 40);
 /** A site scanned recently gets the same result instead of a new, paid run. */
@@ -77,9 +81,20 @@ function domainOf(raw: string) {
   }
 }
 
-/** Todas las preguntas propuestas, en un solo motor (el único con llave hoy). */
-function lite(study: Study): Study {
-  return { ...study, runs: RUNS, engines: ["gemini"] };
+/** Todas las preguntas propuestas, en Gemini con la llave de N3 o en los motores del visitante. */
+function lite(study: Study, engines: EngineId[]): Study {
+  return { ...study, runs: RUNS, engines };
+}
+
+/** Las llaves que mandó el visitante, solo de motores conocidos y con texto. */
+export function cleanKeys(raw: unknown): ApiKeys {
+  if (!raw || typeof raw !== "object") return {};
+  const out: ApiKeys = {};
+  for (const e of ENGINE_IDS) {
+    const v = (raw as Record<string, unknown>)[e];
+    if (typeof v === "string" && v.trim()) out[e] = v.trim().slice(0, 400);
+  }
+  return out;
 }
 
 /** Codes that unlock /scan-geo for a prospect, from GEO_SCAN_CODES (separados por coma). */
@@ -106,7 +121,7 @@ export function scanAllowed(code?: string | null) {
 }
 
 export async function startScan(
-  input: { url: string; name: string; email: string; lang: "es" | "en"; country?: string; ip: string; code?: string; invite?: string },
+  input: { url: string; name: string; email: string; lang: "es" | "en"; country?: string; ip: string; code?: string; invite?: string; keys?: ApiKeys },
   origin: string,
 ) {
   const site = domainOf(input.url.trim());
@@ -119,20 +134,29 @@ export async function startScan(
 
   const sql = await db();
   const market = scanMarket(input.country, input.lang);
+  const keys = input.keys ?? {};
+  const ownEngines = ENGINE_IDS.filter((e) => keys[e]);
 
-  // El mismo dominio en otro mercado es otro estudio: solo se reutiliza dentro del mismo país.
-  const recent = (await sql`
-    SELECT id, token FROM geo_scans
-    WHERE domain = ${site.domain} AND country = ${market} AND status <> 'failed'
-      AND created_at > now() - make_interval(hours => ${REUSE_HOURS})
-    ORDER BY created_at DESC LIMIT 1`) as { id: string; token: string }[];
-  if (recent[0]) return recent[0];
+  if (ownEngines.length) {
+    // Se comprueban antes de arrancar (consulta gratuita), para no dejar al visitante esperando un error.
+    const checks = await Promise.all(ownEngines.map((e) => verifyKey(e, keys[e]!)));
+    if (checks.includes(false)) throw new ScanError("invalid_key");
+  } else {
+    // El mismo dominio en otro mercado es otro estudio: solo se reutiliza dentro del mismo país.
+    const recent = (await sql`
+      SELECT id, token FROM geo_scans
+      WHERE domain = ${site.domain} AND country = ${market} AND status <> 'failed'
+        AND created_at > now() - make_interval(hours => ${REUSE_HOURS})
+      ORDER BY created_at DESC LIMIT 1`) as { id: string; token: string }[];
+    if (recent[0]) return recent[0];
+  }
 
   const [usage] = (await sql`
     SELECT count(*) FILTER (WHERE email = ${email} OR ip = ${input.ip})::int AS mine, count(*)::int AS everyone
     FROM geo_scans WHERE created_at > now() - interval '24 hours'`) as { mine: number; everyone: number }[];
-  if (usage.mine >= PER_CLIENT) throw new ScanError("rate_limited");
-  if (usage.everyone >= DAILY_CAP) throw new ScanError("busy");
+  if (usage.mine >= (ownEngines.length ? PER_CLIENT_OWN_KEYS : PER_CLIENT)) throw new ScanError("rate_limited");
+  // El tope diario cuida el gasto de N3; un scan con llaves propias no lo toca.
+  if (!ownEngines.length && usage.everyone >= DAILY_CAP) throw new ScanError("busy");
 
   const token = randomBytes(24).toString("base64url");
   const [row] = (await sql`
@@ -141,12 +165,12 @@ export async function startScan(
     RETURNING id`) as { id: string }[];
 
   if (invite) await useInvite(invite.token, email);
-  after(() => prepare(row.id, site.url, input.lang, market, email, origin));
+  after(() => prepare(row.id, site.url, input.lang, market, email, origin, ownEngines.length ? keys : null));
   return { id: row.id, token };
 }
 
 /** Drafts the study from the site, then starts its run. Runs after the response is sent. */
-async function prepare(scanId: string, url: string, lang: "es" | "en", market: ScanCountry, email: string, origin: string) {
+async function prepare(scanId: string, url: string, lang: "es" | "en", market: ScanCountry, email: string, origin: string, keys: ApiKeys | null) {
   const sql = await db();
   try {
     // La legibilidad se guarda con el estudio, para que el panel lo muestre completo.
@@ -158,8 +182,9 @@ async function prepare(scanId: string, url: string, lang: "es" | "en", market: S
     if (suggestion.source !== "ai") throw new Error(suggestion.warnings.join(" ") || "no AI draft");
 
     const owner = `scan:${email}`;
-    const study = await createStudy(lite(suggestion.study), owner);
-    const runId = await createRun(study, { engines: ["gemini"], runs: RUNS, simulated: false }, owner);
+    const engines: EngineId[] = keys ? ENGINE_IDS.filter((e) => keys[e]) : ["gemini"];
+    const study = await createStudy(lite(suggestion.study, engines), owner);
+    const runId = await createRun(study, { engines, runs: RUNS, simulated: false, keys: keys ?? undefined }, owner);
     await setRunAudit(runId, audit);
     await sql`UPDATE geo_scans SET status = 'running', run_id = ${runId} WHERE id = ${scanId}`;
 

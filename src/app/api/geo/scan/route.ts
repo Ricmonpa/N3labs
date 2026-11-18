@@ -1,11 +1,11 @@
 import { NotConfiguredError } from "@/lib/panel/db";
 import { fail, ok, readJson } from "@/lib/panel/http";
-import { ScanError, startScan } from "@/lib/panel/scan";
+import { cleanKeys, ScanError, startScan } from "@/lib/panel/scan";
 
 // Drafting the study (reading the site + a model call with web search) runs after the response.
 export const maxDuration = 300;
 
-type Body = { url?: unknown; name?: unknown; email?: unknown; lang?: unknown; country?: unknown; code?: unknown; invite?: unknown };
+type Body = { url?: unknown; name?: unknown; email?: unknown; lang?: unknown; country?: unknown; code?: unknown; invite?: unknown; keys?: unknown };
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -28,6 +28,7 @@ export async function POST(request: Request) {
           ip,
           code: str(body?.code, 80),
           invite: str(body?.invite, 80),
+          keys: cleanKeys(body?.keys),
         },
         new URL(request.url).origin,
       ),

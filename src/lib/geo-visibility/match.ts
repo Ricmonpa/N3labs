@@ -11,8 +11,9 @@ function escapeRegex(s: string): string {
 /**
  * Bumped when matching changes, so saved reports get rebuilt from their stored answers.
  * v2: "Nissan México" also counts when the answer only says "Nissan".
+ * v3: el informe suma búsquedas internas de la IA, fuentes por tipo y lugar frente a la competencia.
  */
-export const MATCHER_VERSION = 2;
+export const MATCHER_VERSION = 3;
 
 const COUNTRY_SUFFIX = /\s+(?:de\s+)?(?:m[eé]xico|mx)$/i;
 

@@ -54,7 +54,8 @@ export type Engine = {
   /** Environment variable that must hold the API key. */
   envKey: string;
   model: string;
-  ask(prompt: string, market: Market): Promise<EngineAnswer>;
+  /** `apiKey` es la llave del cliente; sin ella se usa la del servidor (envKey). */
+  ask(prompt: string, market: Market, apiKey?: string): Promise<EngineAnswer>;
 };
 
 /** One line of responses.jsonl. */

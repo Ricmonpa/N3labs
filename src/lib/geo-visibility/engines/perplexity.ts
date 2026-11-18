@@ -29,11 +29,11 @@ export const perplexityEngine: Engine = {
   label: "Perplexity",
   envKey: "PERPLEXITY_API_KEY",
   model: MODEL,
-  async ask(prompt: string, market: Market): Promise<EngineAnswer> {
+  async ask(prompt: string, market: Market, apiKey?: string): Promise<EngineAnswer> {
     const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+        Authorization: `Bearer ${apiKey ?? process.env.PERPLEXITY_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

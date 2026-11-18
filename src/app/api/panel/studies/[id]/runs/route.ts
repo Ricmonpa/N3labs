@@ -1,8 +1,7 @@
 import { after } from "next/server";
-import { createRun, getStudy, MAX_CALLS_PER_RUN } from "@/lib/panel/store";
+import { createRun, enginesWithKeys, getStudy, MAX_CALLS_PER_RUN, studyKeys } from "@/lib/panel/store";
 import { auditLang, auditRun, siteOf } from "@/lib/panel/readability";
 import { fail, ok, panelRoute, readJson } from "@/lib/panel/http";
-import { ENGINES } from "@/lib/geo-visibility/engines/index.ts";
 import { ENGINE_IDS } from "@/lib/geo-visibility/study.ts";
 import type { EngineId } from "@/lib/geo-visibility/types.ts";
 
@@ -22,7 +21,8 @@ export const POST = panelRoute(async ({ request, session, id }) => {
   if (!Number.isInteger(runs) || runs < 1 || runs > 10) return fail(422, "invalid_runs");
   if (limit !== undefined && (!Number.isInteger(limit) || limit < 1)) return fail(422, "invalid_limit");
   if (!simulated) {
-    const missing: EngineId[] = engines.filter((e) => !process.env[ENGINES[e].envKey]);
+    const usable = enginesWithKeys(engines, await studyKeys(id));
+    const missing: EngineId[] = engines.filter((e) => !usable.includes(e));
     if (missing.length) return fail(422, "missing_keys", { engines: missing });
   }
   const prompts = limit ? Math.min(limit, study.data.prompts.length) : study.data.prompts.length;

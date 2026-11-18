@@ -51,7 +51,7 @@ export async function executeTask(
   task: Task,
   engine: Engine,
   study: Study,
-  opts: { simulated: boolean; signal?: AbortSignal },
+  opts: { simulated: boolean; signal?: AbortSignal; apiKey?: string },
 ): Promise<RunRecord> {
   const started = Date.now();
   const base = {
@@ -65,7 +65,7 @@ export async function executeTask(
   };
   for (let attempt = 1; ; attempt++) {
     try {
-      const answer = await engine.ask(task.prompt.text, study.market);
+      const answer = await engine.ask(task.prompt.text, study.market, opts.apiKey);
       return { ...base, at: new Date().toISOString(), ms: Date.now() - started, ok: true, answer };
     } catch (err) {
       if (attempt < MAX_ATTEMPTS && isTransient(err) && !opts.signal?.aborted) {

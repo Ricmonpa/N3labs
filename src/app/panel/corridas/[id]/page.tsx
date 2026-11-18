@@ -8,14 +8,14 @@ import AnswersExplorer from "@/components/panel/AnswersExplorer";
 import RunReadability from "@/components/panel/RunReadability";
 import { auditLang } from "@/lib/panel/readability";
 import { UUID } from "@/lib/panel/http";
-import { getRun, progress } from "@/lib/panel/store";
+import { getRun, previousRun, progress } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
 
 async function RunPage({ id }: { id: string }) {
   const run = UUID.test(id) ? await getRun(id) : null;
   if (!run) notFound();
-  const { answered, failed, errors } = await progress(id);
+  const [{ answered, failed, errors }, previous] = await Promise.all([progress(id), previousRun(run)]);
   const report = run.report?.responses.ok ? run.report : null;
   const date = new Date(run.created_at).toISOString().slice(0, 10);
   const fileName = `${run.study.name}-${date}`.replace(/[^\p{L}\p{N}-]+/gu, "-");
@@ -36,7 +36,7 @@ async function RunPage({ id }: { id: string }) {
       />
       <h2 className="pt-2 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">¿Te recomiendan?</h2>
       {report ? (
-        <ReportView report={report} />
+        <ReportView report={report} previous={previous ?? undefined} />
       ) : (
         run.status !== "running" && <p className="text-sm text-zinc-400">Esta corrida no tiene respuestas válidas todavía, así que no hay informe.</p>
       )}

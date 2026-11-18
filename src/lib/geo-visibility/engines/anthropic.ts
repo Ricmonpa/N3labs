@@ -9,8 +9,8 @@ export const anthropicEngine: Engine = {
   label: "Claude",
   envKey: "ANTHROPIC_API_KEY",
   model: MODEL,
-  async ask(prompt: string, market: Market): Promise<EngineAnswer> {
-    const client = new Anthropic();
+  async ask(prompt: string, market: Market, apiKey?: string): Promise<EngineAnswer> {
+    const client = new Anthropic(apiKey ? { apiKey } : undefined);
     const messages: Anthropic.Beta.BetaMessageParam[] = [{ role: "user", content: prompt }];
     const turns: Anthropic.Beta.BetaMessage[] = [];
 

@@ -1,18 +1,92 @@
 import type { Report, Rate } from "@/lib/geo-visibility/report.ts";
 import { ENGINE_LABEL, TYPE_LABEL } from "@/lib/geo-visibility/report.ts";
 import { METHOD_NOTES } from "@/lib/geo-visibility/markdown.ts";
+import FanoutSection from "./FanoutSection";
+import SourcesSection from "./SourcesSection";
+import { num, pct, range, Section, Stat } from "./report-ui";
 
-const pct = (x: number) => `${Math.round(x * 100)}%`;
-const range = (r: Rate) => (r.n ? `${pct(r.low)}–${pct(r.high)}` : "—");
+/** La medición anterior del mismo estudio, para comparar. */
+export type PreviousRun = { report: Report; date: string };
 
-function Section({ eyebrow, title, intro, children }: { eyebrow?: string; title: string; intro?: string; children: React.ReactNode }) {
+const shortDate = (iso: string) => new Date(iso).toLocaleDateString("es-MX", { day: "numeric", month: "short" });
+
+/** Cambio frente a la medición anterior. Si los rangos se cruzan, puede ser ruido y se dice. */
+function Delta({ now, before, date }: { now: Rate; before: Rate | undefined; date: string }) {
+  if (!before?.n || !now.n) return null;
+  const pts = Math.round((now.rate - before.rate) * 100);
+  const overlap = now.low <= before.high && before.low <= now.high;
+  const arrow = pts > 0 ? "▲" : pts < 0 ? "▼" : "=";
+  const tone = overlap || pts === 0 ? "text-zinc-400" : pts > 0 ? "text-emerald-400" : "text-red-400";
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5 sm:p-7 break-inside-avoid print:border-zinc-300 print:bg-white">
-      {eyebrow && <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-red-500 mb-1.5">{eyebrow}</p>}
-      <h2 className="text-lg sm:text-xl font-bold text-white print:text-black">{title}</h2>
-      {intro && <p className="text-zinc-400 text-sm mt-1.5 leading-relaxed max-w-3xl print:text-zinc-600">{intro}</p>}
-      <div className="mt-5">{children}</div>
-    </section>
+    <span className={`inline-flex flex-wrap items-center gap-x-1.5 ${tone}`}>
+      <span className="tabular-nums">
+        {arrow} {pts > 0 ? "+" : ""}
+        {pts} pts vs {date}
+      </span>
+      <span className="text-zinc-500">{overlap ? "· dentro del margen" : "· cambio claro"}</span>
+    </span>
+  );
+}
+
+/** Tablero de arriba: las cuatro cifras que resumen la medición. */
+function Scoreboard({ report, previous }: { report: Report; previous?: PreviousRun }) {
+  const b = report.brand.name;
+  const vis = report.overall.unbranded.mention;
+  const sov = report.shareOfVoice[0];
+  const prevDate = previous ? shortDate(previous.date) : "";
+  const prevStanding = previous?.report.standing;
+  const standing = report.standing;
+  const rivals = report.competitors.length > 0;
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <Stat
+        label="Visibilidad"
+        value={vis.n ? pct(vis.rate) : "—"}
+        hint="Respuestas que mencionan la marca, en preguntas que no la nombran"
+        foot={
+          <>
+            <span className="block">
+              {vis.hits} de {vis.n} respuestas · rango {range(vis)}
+            </span>
+            {previous && <Delta now={vis} before={previous.report.overall.unbranded.mention} date={prevDate} />}
+          </>
+        }
+      />
+      <Stat
+        label="Lugar frente a la competencia"
+        value={standing && rivals ? `#${standing.rank}` : "—"}
+        hint="Posición por visibilidad entre las marcas del estudio"
+        foot={
+          standing && rivals ? (
+            <>
+              <span className="block">
+                de {standing.of} marcas
+                {standing.tiedWith.length > 0 && ` · empatada con ${standing.tiedWith.slice(0, 3).join(", ")}${standing.tiedWith.length > 3 ? "…" : ""}`}
+              </span>
+              {prevStanding && prevStanding.rank !== standing.rank && (
+                <span className="text-zinc-400">
+                  antes #{prevStanding.rank} ({prevDate})
+                </span>
+              )}
+            </>
+          ) : (
+            "Sin competidores en el estudio"
+          )
+        }
+      />
+      <Stat
+        label="Participación de voz"
+        value={sov && rivals ? pct(sov.share) : "—"}
+        hint="De todas las menciones a marcas del estudio, cuántas son tuyas"
+        foot={sov ? `${sov.mentions} menciones de ${b}, entre ${report.shareOfVoice.length} marcas` : undefined}
+      />
+      <Stat
+        label="Marcas por respuesta"
+        value={report.brandsPerAnswer != null ? num(report.brandsPerAnswer) : "—"}
+        hint="Cuántas marcas del estudio nombra la IA en cada respuesta"
+        foot={`Opciones del estudio que la IA nombra en cada respuesta`}
+      />
+    </div>
   );
 }
 
@@ -30,11 +104,14 @@ function Kpi({ label, rate, hint }: { label: string; rate: Rate; hint: string })
 }
 
 /** Horizontal bar with the 95% interval drawn as a thin whisker. */
-function RateBar({ label, rate, emphasis = true }: { label: string; rate: Rate; emphasis?: boolean }) {
+function RateBar({ label, rate, emphasis = true, bare = false }: { label: string; rate: Rate; emphasis?: boolean; bare?: boolean }) {
   const tip = rate.n ? `${label}: ${pct(rate.rate)} (${rate.hits}/${rate.n}), rango probable ${range(rate)}` : `${label}: sin datos`;
   return (
-    <div className="grid grid-cols-[7.5rem_1fr_3.5rem] sm:grid-cols-[9rem_1fr_4rem] items-center gap-3 py-1.5 group" title={tip}>
-      <span className="text-sm text-zinc-300 truncate print:text-zinc-800">{label}</span>
+    <div
+      className={`grid ${bare ? "grid-cols-[1fr_3.5rem]" : "grid-cols-[7.5rem_1fr_3.5rem] sm:grid-cols-[9rem_1fr_4rem]"} items-center gap-3 py-1.5 group`}
+      title={tip}
+    >
+      {!bare && <span className="text-sm text-zinc-300 truncate print:text-zinc-800">{label}</span>}
       <div className="relative h-5 rounded-md bg-white/[0.05] print:bg-zinc-100" role="img" aria-label={tip}>
         {rate.n > 0 && (
           <>
@@ -82,7 +159,7 @@ function Legend() {
   );
 }
 
-export default function ReportView({ report, audience = "team" }: { report: Report; audience?: "team" | "client" }) {
+export default function ReportView({ report, audience = "team", previous }: { report: Report; audience?: "team" | "client"; previous?: PreviousRun }) {
   const b = report.brand.name;
   const engines = report.engines.map((e) => e.id);
   const { unbranded, branded } = report.overall;
@@ -115,6 +192,8 @@ export default function ReportView({ report, audience = "team" }: { report: Repo
         </dl>
         <p className="mt-4 text-xs text-zinc-500">Generado el {new Date(report.generatedAt).toLocaleDateString("es-MX", { dateStyle: "long" })}</p>
       </header>
+
+      {report.standing !== undefined && <Scoreboard report={report} previous={previous} />}
 
       <Section
         eyebrow="La cifra principal"
@@ -172,19 +251,51 @@ export default function ReportView({ report, audience = "team" }: { report: Repo
       )}
 
       {report.competitors.length > 0 && (
-        <Section title="Frente a la competencia" intro="Qué tanto menciona cada marca la IA en las preguntas sin nombre.">
-          {report.shareOfVoice.map((x, i) => (
-            <RateBar key={x.name} label={x.name} rate={x.overall} emphasis={i === 0} />
-          ))}
+        <Section
+          title="Frente a la competencia"
+          intro="Qué tanto menciona y enlaza la IA a cada marca en las preguntas que no nombran a nadie. La línea blanca es el rango probable: si dos rangos se cruzan, la diferencia puede ser ruido."
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead>
+                <tr className="text-left text-xs text-zinc-500">
+                  <th className="py-2 pr-3 font-medium w-8">#</th>
+                  <th className="py-2 pr-3 font-medium">Marca</th>
+                  <th className="py-2 pr-3 font-medium w-[40%]">Visibilidad</th>
+                  <th className="py-2 pr-3 font-medium text-right">Enlaza su sitio</th>
+                  <th className="py-2 pr-3 font-medium text-right">Participación</th>
+                </tr>
+              </thead>
+              <tbody>
+                {report.shareOfVoice
+                  .map((x, i) => ({ ...x, isBrand: i === 0 }))
+                  .sort((x, y) => y.overall.rate - x.overall.rate || Number(y.isBrand) - Number(x.isBrand))
+                  .map((x, i) => (
+                    <tr key={x.name} className={`border-t border-white/[0.06] print:border-zinc-200 ${x.isBrand ? "bg-red-500/[0.06]" : ""}`}>
+                      <td className="py-2 pr-3 text-zinc-500 tabular-nums">{i + 1}</td>
+                      <td className={`py-2 pr-3 ${x.isBrand ? "font-semibold text-white" : "text-zinc-300"} print:text-zinc-800`}>{x.name}</td>
+                      <td className="py-2 pr-3">
+                        <RateBar label={x.name} rate={x.overall} emphasis={x.isBrand} bare />
+                      </td>
+                      <td className="py-2 pr-3 text-right tabular-nums text-zinc-300">{x.citation?.n ? pct(x.citation.rate) : "—"}</td>
+                      <td className="py-2 pr-3 text-right tabular-nums text-zinc-300">{pct(x.share)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
           <Legend />
           <p className="mt-3 text-xs text-zinc-500">
             {report.averageBrandRank !== null
               ? `Cuando aparece, ${b} es en promedio la marca #${report.averageBrandRank.toFixed(1).replace(/\.0$/, "")} en ser mencionada.`
-              : `${b} no apareció en ninguna respuesta sin su nombre.`}{" "}
-            Participación de voz de {b}: {pct(report.shareOfVoice[0]?.share ?? 0)} de todas las menciones.
+              : `${b} no apareció en ninguna respuesta sin su nombre.`}
           </p>
         </Section>
       )}
+
+      {report.fanout && <FanoutSection fanout={report.fanout} brand={b} />}
+
+      {report.sources && <SourcesSection sources={report.sources} brand={b} />}
 
       {report.citedWhenBrandIsNot.length > 0 && (
         <Section

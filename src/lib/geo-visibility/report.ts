@@ -1,4 +1,5 @@
 import { firstMention, citesEntity, hostOf, hostMatches, wilson, MATCHER_VERSION } from "./match.ts";
+import { fanoutInsights, sourceInsights } from "./insights.ts";
 import type { EngineId, Entity, PromptType, RunRecord, Study } from "./types.ts";
 
 export type Rate = { hits: number; n: number; rate: number; low: number; high: number };
@@ -101,9 +102,25 @@ export function buildReport(study: Study, lines: RunRecord[]) {
       engines.map((e) => [e, rate(unbranded.filter((s) => s.rec.engine === e && s.mentioned[i]).length, unbranded.filter((s) => s.rec.engine === e).length)]),
     );
     const mentions = unbranded.filter((s) => s.mentioned[i]).length;
-    return { name: ent.name, perEngine, overall: rate(mentions, unbranded.length), mentions };
+    const citation = rate(unbranded.filter((s) => s.cited[i]).length, unbranded.length);
+    return { name: ent.name, perEngine, overall: rate(mentions, unbranded.length), citation, mentions };
   });
   const totalMentions = shareOfVoice.reduce((n, x) => n + x.mentions, 0);
+
+  // Lugar de la marca por visibilidad. Si su rango probable se cruza con el de otra marca,
+  // la diferencia puede ser ruido: el informe lo dice como empate.
+  const brandRate = shareOfVoice[0]?.overall;
+  const standing = brandRate
+    ? {
+        rank: 1 + shareOfVoice.slice(1).filter((x) => x.overall.rate > brandRate.rate).length,
+        of: shareOfVoice.length,
+        tiedWith: shareOfVoice
+          .slice(1)
+          .filter((x) => x.overall.n && x.overall.low <= brandRate.high && brandRate.low <= x.overall.high)
+          .map((x) => x.name),
+      }
+    : null;
+  const brandsPerAnswer = unbranded.length ? unbranded.reduce((n, s) => n + s.mentioned.filter(Boolean).length, 0) / unbranded.length : null;
 
   const ranks = unbranded.map((s) => s.brandRank).filter((r): r is number => r !== null);
   const avgRank = ranks.length ? ranks.reduce((a, b) => a + b, 0) / ranks.length : null;
@@ -161,10 +178,14 @@ export function buildReport(study: Study, lines: RunRecord[]) {
     byEngine,
     shareOfVoice: shareOfVoice.map((x) => ({ ...x, share: totalMentions ? x.mentions / totalMentions : 0 })),
     averageBrandRank: avgRank,
+    standing,
+    brandsPerAnswer,
     byType,
     byPrompt,
     citedWhenBrandIsNot: citedInstead,
     topCitedDomains: topCited,
+    fanout: fanoutInsights(study, ok),
+    sources: sourceInsights(study, ok),
     knownCostUsd: costs.length ? costs.reduce((a, b) => a + b, 0) : null,
     failures: failed.map((f) => ({ key: f.key, error: f.error })),
   };

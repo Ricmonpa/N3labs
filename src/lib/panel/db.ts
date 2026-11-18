@@ -47,6 +47,11 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
   await sql`CREATE INDEX IF NOT EXISTS geo_runs_study_idx ON geo_runs (study_id, created_at DESC)`;
   // La revisión de legibilidad del sitio, tomada al arrancar cada medición.
   await sql`ALTER TABLE geo_runs ADD COLUMN IF NOT EXISTS audit jsonb`;
+  // Llaves de API del cliente, cifradas (ver keys.ts). En una medición se borran al terminar.
+  await sql`ALTER TABLE geo_runs ADD COLUMN IF NOT EXISTS api_keys text`;
+  await sql`ALTER TABLE geo_studies ADD COLUMN IF NOT EXISTS api_keys text`;
+  // Seguimiento automático: cada cuánto se vuelve a medir el estudio (ver tracking.ts).
+  await sql`ALTER TABLE geo_studies ADD COLUMN IF NOT EXISTS tracking jsonb`;
   await sql`CREATE TABLE IF NOT EXISTS geo_responses (
     run_id uuid NOT NULL REFERENCES geo_runs(id) ON DELETE CASCADE,
     key text NOT NULL,

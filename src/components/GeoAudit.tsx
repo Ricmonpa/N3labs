@@ -75,7 +75,12 @@ const copy = {
     scanReasons: {
       rate_limited: "Ya hiciste varios diagnósticos hoy.",
       busy: "Hoy tuvimos muchos diagnósticos.",
+      invalid_key: "Una de tus llaves de API no funcionó; revisa que esté completa y activa.",
     } as Record<string, string>,
+    keysTitle: "Mide con tus propias llaves de API (opcional)",
+    keysText:
+      "Sin límite diario y en las IAs que elijas: ChatGPT, Claude, Gemini o Perplexity. Cada respuesta se cobra en tu cuenta del proveedor (un diagnóstico son 78 respuestas por IA). La llave se usa solo para este diagnóstico, se guarda cifrada mientras corre y se borra al terminar.",
+    keyPlaceholder: "Pega tu llave",
     sampleNote:
       "Muestra con un motor (Gemini): 26 preguntas, tres veces cada una. Es una foto de hoy, no un promedio, y por eso cada número trae su rango probable.",
     nextTitle: "Mídelo en los cuatro motores, cada mes",
@@ -137,7 +142,12 @@ const copy = {
     scanReasons: {
       rate_limited: "You've already run several audits today.",
       busy: "We've had a lot of audits today.",
+      invalid_key: "One of your API keys didn't work; check that it's complete and active.",
     } as Record<string, string>,
+    keysTitle: "Measure with your own API keys (optional)",
+    keysText:
+      "No daily limit, on the AIs you choose: ChatGPT, Claude, Gemini or Perplexity. Each answer is billed to your provider account (an audit is 78 answers per AI). The key is used only for this audit, stored encrypted while it runs and deleted when it ends.",
+    keyPlaceholder: "Paste your key",
     sampleNote:
       "A sample with one engine (Gemini): 26 questions, three times each. A snapshot of today, not an average, which is why every number comes with its likely range.",
     nextTitle: "Measure it on all four engines, every month",
@@ -283,6 +293,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState(lang === "en" ? "US" : "MX");
+  const [keys, setKeys] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [report, setReport] = useState<AuditReport | null>(null);
@@ -343,7 +354,16 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
       const res = await fetch("/api/geo/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: auditedUrl, name, email, lang, country, code: scanCode, invite }),
+        body: JSON.stringify({
+          url: auditedUrl,
+          name,
+          email,
+          lang,
+          country,
+          code: scanCode,
+          invite,
+          keys: Object.fromEntries(Object.entries(keys).filter(([, v]) => v.trim())),
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -489,6 +509,34 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
                   className={inputCls}
                 />
               </div>
+              <details className="sm:col-span-2 group rounded-xl border border-white/[0.07] px-3 py-2">
+                <summary className="cursor-pointer list-none text-xs font-semibold text-zinc-400 hover:text-white">{c.keysTitle}</summary>
+                <p className="mt-2 text-xs text-zinc-500 leading-relaxed">{c.keysText}</p>
+                <div className="mt-3 grid sm:grid-cols-2 gap-2">
+                  {(
+                    [
+                      ["openai", "ChatGPT (OpenAI)"],
+                      ["anthropic", "Claude (Anthropic)"],
+                      ["gemini", "Gemini (Google)"],
+                      ["perplexity", "Perplexity"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <label key={id} className="block">
+                      <span className="block text-[11px] text-zinc-500 mb-1">{label}</span>
+                      <input
+                        type="password"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={keys[id] ?? ""}
+                        onChange={(e) => setKeys((k) => ({ ...k, [id]: e.target.value }))}
+                        placeholder={c.keyPlaceholder}
+                        disabled={loading}
+                        className={`${inputCls} font-mono text-xs`}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </details>
               <button
                 type="submit"
                 disabled={loading}

@@ -19,8 +19,8 @@ export const geminiEngine: Engine = {
   envKey: "GEMINI_API_KEY",
   model: MODEL,
   // The Google Search grounding tool has no user-location setting, so the market isn't applied here.
-  async ask(prompt: string): Promise<EngineAnswer> {
-    const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  async ask(prompt: string, _market, apiKey?: string): Promise<EngineAnswer> {
+    const client = new GoogleGenAI({ apiKey: apiKey ?? process.env.GEMINI_API_KEY });
     const interaction = await client.interactions.create({
       model: MODEL,
       input: prompt,

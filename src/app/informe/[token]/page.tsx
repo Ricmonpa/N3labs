@@ -6,7 +6,8 @@ import ReportView from "@/components/panel/ReportView";
 import PrintButton from "@/components/panel/PrintButton";
 import Readability from "@/components/geo/Readability";
 import { auditLang, isAudit } from "@/lib/panel/readability";
-import { getRunByToken } from "@/lib/panel/store";
+import TrendChart from "@/components/panel/TrendChart";
+import { getRunByToken, listTrend, previousRun } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,11 @@ export default async function SharedReport({ params }: PageProps<"/informe/[toke
   const { token } = await params;
   const run = await getRunByToken(token).catch(() => null);
   if (!run?.report?.responses.ok) notFound();
+  // Solo lo medido hasta este informe: una medición posterior no cambia lo que ya se compartió.
+  const [previous, trend] = await Promise.all([
+    previousRun(run).catch(() => null),
+    listTrend(run.study_id).then((t) => t.filter((p) => p.at <= run.created_at)).catch(() => []),
+  ]);
 
   return (
     <div className="min-h-screen bg-[#06060c] print:bg-white">
@@ -32,7 +38,12 @@ export default async function SharedReport({ params }: PageProps<"/informe/[toke
         </div>
       </header>
       <main className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
-        <ReportView report={run.report} audience="client" />
+        <ReportView report={run.report} audience="client" previous={previous ?? undefined} />
+        {trend.length > 1 && (
+          <div className="mt-5">
+            <TrendChart points={trend} brand={run.study.brand.name} />
+          </div>
+        )}
         {isAudit(run.audit) && (
           <section className="mt-10">
             <h2 className="mb-4 text-xs font-semibold tracking-[0.2em] uppercase text-red-500">¿Te pueden leer?</h2>

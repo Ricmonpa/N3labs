@@ -7,9 +7,12 @@ import StudySummary from "@/components/panel/StudySummary";
 import NewStudyWizard from "@/components/panel/NewStudyWizard";
 import NewRunForm from "@/components/panel/NewRunForm";
 import { RunList } from "@/components/panel/RunList";
+import TrendChart from "@/components/panel/TrendChart";
+import TrackingCard from "@/components/panel/TrackingCard";
+import StudyKeys from "@/components/panel/StudyKeys";
 import { engineAvailability } from "@/lib/geo-visibility/engines/index.ts";
 import { UUID } from "@/lib/panel/http";
-import { getStudy, listRuns, MAX_CALLS_PER_RUN } from "@/lib/panel/store";
+import { getStudy, listRuns, listTrend, MAX_CALLS_PER_RUN, studyKeyHints } from "@/lib/panel/store";
 
 export const dynamic = "force-dynamic";
 
@@ -25,13 +28,27 @@ async function StudyPage({ id }: { id: string }) {
   }
   const study = UUID.test(id) ? await getStudy(id) : null;
   if (!study) notFound();
-  const runs = await listRuns(id);
+  const [runs, trend, hints] = await Promise.all([listRuns(id), listTrend(id), studyKeyHints(id)]);
+  // Un motor puede medir con la llave del cliente aunque N3 no tenga la suya.
+  const withClientKeys = engines.map((e) => ({ ...e, hasKey: e.hasKey || !!hints[e.id] }));
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-black text-white">{study.data.name}</h1>
       <div className="rounded-2xl border border-red-500/25 bg-red-950/10 p-5 sm:p-6">
-        <NewRunForm studyId={id} promptCount={study.data.prompts.length} defaultRuns={study.data.runs} engines={engines} maxCalls={MAX_CALLS_PER_RUN} />
+        <NewRunForm studyId={id} promptCount={study.data.prompts.length} defaultRuns={study.data.runs} engines={withClientKeys} maxCalls={MAX_CALLS_PER_RUN} />
+      </div>
+      {trend.length > 0 && <TrendChart points={trend} brand={study.data.brand.name} />}
+      <div className="grid lg:grid-cols-2 gap-4 items-start">
+        <TrackingCard
+          studyId={id}
+          initial={study.tracking}
+          engines={engines.map((e) => ({ id: e.id, label: e.label, serverKey: e.hasKey, clientKey: !!hints[e.id] }))}
+          promptCount={study.data.prompts.length}
+          maxCalls={MAX_CALLS_PER_RUN}
+          lastRun={runs[0]?.created_at ?? null}
+        />
+        <StudyKeys studyId={id} engines={engines.map((e) => ({ id: e.id, label: e.label, serverKey: e.hasKey }))} initial={hints} />
       </div>
       {runs.length > 0 && (
         <section>

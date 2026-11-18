@@ -9,8 +9,8 @@ export const openaiEngine: Engine = {
   label: "ChatGPT (OpenAI)",
   envKey: "OPENAI_API_KEY",
   model: MODEL,
-  async ask(prompt: string, market: Market): Promise<EngineAnswer> {
-    const client = new OpenAI();
+  async ask(prompt: string, market: Market, apiKey?: string): Promise<EngineAnswer> {
+    const client = new OpenAI(apiKey ? { apiKey } : undefined);
     const response = await client.responses.create({
       model: MODEL,
       input: prompt,
