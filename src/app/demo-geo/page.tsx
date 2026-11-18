@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import DemoShell, { DemoBadge, DemoCta } from "@/components/demo/DemoShell";
+import BrandSearch from "@/components/demo/BrandSearch";
 import { ENGINE_LABEL } from "@/lib/geo-visibility/report.ts";
 import { demoIndustries, demoReport, slugOf } from "@/lib/demo";
 import { pct, range } from "@/components/panel/report-ui";
@@ -20,7 +21,9 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-static";
 
-const longDate = (iso: string) => new Date(iso).toLocaleDateString("es-MX", { dateStyle: "long" });
+const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
+
+const longDate =(iso: string) => new Date(iso).toLocaleDateString("es-MX", { dateStyle: "long" });
 
 export default function DemoIndex() {
   const industries = demoIndustries().flatMap((industry) => {
@@ -40,6 +43,24 @@ export default function DemoIndex() {
         repetimos cada pregunta varias veces. Esto es lo que respondió. Elige una industria y ve el informe completo desde
         el lado de cualquier marca.
       </p>
+
+      {industries.length > 0 && (
+        <BrandSearch
+          brands={industries.flatMap(({ industry, report }) =>
+            report.shareOfVoice.map((r) => {
+              const ent = industry.brands.find((b) => b.name === r.name)!;
+              return {
+                name: r.name,
+                terms: [r.name, ...(ent.aliases ?? []), ...ent.domains].map((t) => norm(t)),
+                industry: industry.id,
+                industryLabel: industry.label,
+                href: `/demo-geo/${industry.id}/${slugOf(r.name)}`,
+                visibility: pct(r.overall.rate),
+              };
+            }),
+          )}
+        />
+      )}
 
       {industries.length === 0 ? (
         <p className="mt-10 rounded-xl border border-white/10 p-6 text-zinc-400">La medición del demo se está preparando.</p>
