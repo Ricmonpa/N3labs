@@ -36,9 +36,9 @@ function navLinkProps(href: string) {
 }
 
 export default function Nav() {
-  const { t, lang } = useLanguage();
-  // El anzuelo es una página estática: cada idioma tiene su archivo.
-  const geoHref = lang === "en" ? "/geotest-en.html" : "/geotest.html";
+  const { t } = useLanguage();
+  // El producto principal de GEO es el demo: marcas ya medidas gratis y medición con la llave del cliente.
+  const geoHref = "/demo-geo";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -84,7 +84,7 @@ export default function Nav() {
             className="text-[13px] xl:text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
           >
             <Radar size={13} className="hidden xl:block" />
-            Scan GEO
+            Demo GEO
           </a>
         </nav>
 
@@ -147,7 +147,7 @@ export default function Nav() {
                 className="text-red-400 font-semibold text-base flex items-center gap-1.5"
               >
                 <Radar size={14} />
-                Scan GEO
+                Demo GEO
               </a>
               <a
                 href={ENGEL_CALENDLY}
