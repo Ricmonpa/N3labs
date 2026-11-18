@@ -161,8 +161,8 @@ export async function startScan(
 
   const token = randomBytes(24).toString("base64url");
   const [row] = (await sql`
-    INSERT INTO geo_scans (token, domain, url, name, email, ip, lang, country)
-    VALUES (${token}, ${site.domain}, ${site.url}, ${input.name.trim().slice(0, 120)}, ${email}, ${input.ip}, ${input.lang}, ${market})
+    INSERT INTO geo_scans (token, domain, url, name, email, ip, lang, country, own_keys)
+    VALUES (${token}, ${site.domain}, ${site.url}, ${input.name.trim().slice(0, 120)}, ${email}, ${input.ip}, ${input.lang}, ${market}, ${ownEngines.length > 0})
     RETURNING id`) as { id: string }[];
 
   if (invite) await useInvite(invite.token, email);
@@ -236,4 +236,30 @@ export async function getScan(id: string, token: string, origin: string): Promis
   if (run.report?.responses.ok) return { status: "done", report: run.report };
   await sql`UPDATE geo_scans SET status = 'failed', error = 'run ended without answers' WHERE id = ${id}`;
   return { status: "failed" };
+}
+
+export type ScanLead = {
+  id: string;
+  name: string;
+  email: string;
+  domain: string;
+  country: string;
+  status: string;
+  own_keys: boolean;
+  created_at: string;
+  run_id: string | null;
+  share_token: string | null;
+  engines: EngineId[] | null;
+  visibility: number | null;
+};
+
+/** Prospectos que pidieron su diagnóstico, del más reciente al más viejo. */
+export async function listScanLeads(limit = 50): Promise<ScanLead[]> {
+  const sql = await db();
+  return (await sql`
+    SELECT s.id, s.name, s.email, s.domain, s.country, s.status, s.own_keys, s.created_at, s.run_id,
+           r.share_token, r.engines,
+           (r.report->'overall'->'unbranded'->'mention'->>'rate')::float AS visibility
+    FROM geo_scans s LEFT JOIN geo_runs r ON r.id = s.run_id
+    ORDER BY s.created_at DESC LIMIT ${limit}`) as ScanLead[];
 }

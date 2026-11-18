@@ -78,6 +78,8 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
   )`;
   // Tablas creadas antes de que el scan admitiera varios mercados.
   await sql`ALTER TABLE geo_scans ADD COLUMN IF NOT EXISTS country text NOT NULL DEFAULT 'MX'`;
+  // Si el prospecto midió con sus propias llaves (no le costó a N3).
+  await sql`ALTER TABLE geo_scans ADD COLUMN IF NOT EXISTS own_keys boolean NOT NULL DEFAULT false`;
   await sql`CREATE INDEX IF NOT EXISTS geo_scans_recent_idx ON geo_scans (created_at DESC)`;
   // Links de un solo uso que el equipo comparte con un prospecto.
   await sql`CREATE TABLE IF NOT EXISTS geo_invites (
