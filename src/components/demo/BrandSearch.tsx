@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, KeyRound, Search } from "lucide-react";
 
 export type SearchBrand = { name: string; terms: string[]; industry: string; industryLabel: string; href: string; visibility: string };
 
@@ -72,10 +72,23 @@ export default function BrandSearch({ brands }: { brands: SearchBrand[] }) {
 
       {query && results.length === 0 && (
         <p className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-zinc-400">
-          Esa marca todavía no está en el demo. Aquí están {brands.length} marcas de autos, bancos, seguros, tiendas y telefonía en México. Para
-          medir la tuya, agenda abajo y la medimos con las preguntas de tus clientes.
+          Esa marca todavía no está en el demo. Aquí están {brands.length} marcas de autos, bancos, seguros, tiendas y telefonía en México.
+          Para medir la tuya ahora, usa tu propia llave de API.
         </p>
       )}
+
+      <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3 border-t border-white/10 pt-5">
+        <Link
+          href="/scan-geo?modo=llave"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm px-5 py-3 transition-colors"
+        >
+          <KeyRound size={15} />
+          Mide cualquier marca con tu llave de API
+        </Link>
+        <p className="text-xs text-zinc-500 leading-relaxed">
+          Escribes tu sitio, pegas tu llave de ChatGPT, Claude, Gemini o Perplexity y la medición corre con tu cuenta. N3 no cobra nada.
+        </p>
+      </div>
     </section>
   );
 }

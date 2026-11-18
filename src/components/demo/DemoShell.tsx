@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, Radar } from "lucide-react";
+import { Calendar, KeyRound, Radar } from "lucide-react";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -52,6 +52,13 @@ export function DemoCta() {
           <Calendar size={15} />
           Agendar 25 minutos
         </a>
+        <Link
+          href="/scan-geo?modo=llave"
+          className="inline-flex items-center gap-2 rounded-xl border border-red-500/40 hover:border-red-500 text-white text-sm font-semibold px-6 py-3 transition-colors"
+        >
+          <KeyRound size={15} />
+          Medir con mi llave de API
+        </Link>
         <Link
           href="/demo-geo"
           className="inline-flex items-center gap-2 rounded-xl border border-white/10 hover:border-red-500/50 text-zinc-300 text-sm font-semibold px-6 py-3 transition-colors"

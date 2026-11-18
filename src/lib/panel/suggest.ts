@@ -15,6 +15,8 @@ export type SuggestInput = {
   timezone?: string;
   /** Si la industria está en el catálogo, arma el estudio sin IA (preguntas y competidores fijos). */
   catalogFirst?: boolean;
+  /** Llave de Gemini del cliente. `null`: el cliente paga y no trajo llave de Gemini, así que no se usa la del servidor. */
+  geminiKey?: string | null;
 };
 
 export type Suggestion = {
@@ -146,8 +148,8 @@ Devuelve:
   Solo las de tipo "brand" pueden mencionar a la marca. Ninguna pregunta debe mencionar a los competidores.`;
 }
 
-async function draftWithGemini(input: SuggestInput, site: Awaited<ReturnType<typeof readSite>>) {
-  const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+async function draftWithGemini(input: SuggestInput, site: Awaited<ReturnType<typeof readSite>>, apiKey: string) {
+  const client = new GoogleGenAI({ apiKey });
   const request = {
     model: process.env.GEMINI_MODEL ?? "gemini-3.8-flash",
     input: instructions(input, site),
@@ -198,7 +200,7 @@ export async function suggestStudy(input: SuggestInput): Promise<Suggestion> {
   const warnings: string[] = [];
   if (!site.reachable) warnings.push("No se pudo leer el sitio; la propuesta se basa en lo que se encontró en la web.");
   const market = { country: input.country, city: input.city, region: input.city, timezone: input.timezone, language: input.language };
-  const where = input.city || input.country;
+  const where = input.city || ({ MX: "México", US: "Estados Unidos", CA: "Canadá" } as Record<string, string>)[input.country] || input.country;
   const fallbackName = site.siteName || site.title.split(/[|–—-]/)[0]?.trim() || site.domain.split(".")[0];
 
   if (input.catalogFirst && input.country === "MX" && input.language.startsWith("es")) {
@@ -206,7 +208,7 @@ export async function suggestStudy(input: SuggestInput): Promise<Suggestion> {
     if (match) {
       const brand = match.brand ?? { name: fallbackName, aliases: [], domains: [site.domain] };
       const prompts = [
-        ...industryPrompts(match.industry, where === "MX" ? "México" : where),
+        ...industryPrompts(match.industry, where),
         { type: "brand" as const, text: `¿Qué es ${brand.name} y qué ofrece en México?` },
         { type: "brand" as const, text: `¿${brand.name} es una buena opción? ¿Qué opinan sus clientes?` },
         { type: "brand" as const, text: `¿Qué ventajas y desventajas tiene ${brand.name} frente a otras opciones?` },
@@ -228,9 +230,10 @@ export async function suggestStudy(input: SuggestInput): Promise<Suggestion> {
     }
   }
 
-  if (process.env.GEMINI_API_KEY) {
+  const geminiKey = input.geminiKey === undefined ? process.env.GEMINI_API_KEY : input.geminiKey;
+  if (geminiKey) {
     try {
-      const draft = await draftWithGemini(input, site);
+      const draft = await draftWithGemini(input, site, geminiKey);
       const brandName = draft.brandName?.trim() || fallbackName;
       const seen = new Set([site.domain]);
       const candidates = (draft.competitors ?? [])

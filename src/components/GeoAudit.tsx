@@ -61,7 +61,7 @@ const copy = {
     scanStarting: "Arrancando el estudio…",
     scanPreparing: "Leyendo tu sitio y armando las preguntas que haría tu cliente…",
     scanPreparingHint: "Buscamos en la web qué vendes y quién es tu competencia. Menos de un minuto.",
-    scanRunning: "Preguntándole a Gemini lo que preguntaría tu cliente",
+    scanRunning: "Preguntándole a la IA lo que preguntaría tu cliente",
     scanRunningHint: "Cada pregunta va tres veces, porque la IA no siempre responde igual. Puedes quedarte aquí: el resultado aparece solo.",
     answers: "respuestas",
     buildingTitle: "Estamos armando tu diagnóstico",
@@ -81,8 +81,14 @@ const copy = {
     keysText:
       "Sin límite diario y en las IAs que elijas: ChatGPT, Claude, Gemini o Perplexity. Cada respuesta se cobra en tu cuenta del proveedor (un diagnóstico son 78 respuestas por IA). La llave se usa solo para este diagnóstico, se guarda cifrada mientras corre y se borra al terminar.",
     keyPlaceholder: "Pega tu llave",
+    subtitleOwn:
+      "Revisamos tu página en vivo —si ChatGPT, Claude, Perplexity y Google pueden entrar y entenderla— sin costo y sin IA. Luego le hacemos a la IA de tu llave las preguntas que haría tu cliente, para ver si te recomienda a ti o a tu competencia.",
+    keyRequired: "Pega al menos una llave de API: con este acceso la medición corre con tu cuenta.",
+    keysRequiredTitle: "Tu llave de API (obligatoria)",
+    keysRequiredText:
+      "La medición corre con tu cuenta del proveedor: N3 no paga nada y tú no pagas a N3. Pega la llave de una o varias IAs: ChatGPT, Claude, Gemini o Perplexity. Son 78 respuestas por cada IA que pongas. Si incluyes la de Gemini, también la usamos para armar las preguntas cuando tu industria no está en nuestro catálogo. La llave se guarda cifrada mientras corre y se borra al terminar.",
     sampleNote:
-      "Muestra con un motor (Gemini): 26 preguntas, tres veces cada una. Es una foto de hoy, no un promedio, y por eso cada número trae su rango probable.",
+      "Muestra: 26 preguntas, tres veces cada una, en las IAs que aparecen arriba. Es una foto de hoy, no un promedio, y por eso cada número trae su rango probable.",
     nextTitle: "Mídelo en los cuatro motores, cada mes",
     nextText:
       "El estudio de N3 mide ChatGPT, Claude, Perplexity y Gemini con más preguntas y repeticiones, te dice qué fuentes consulta la IA antes de responder y te entrega el plan para aparecer.",
@@ -128,7 +134,7 @@ const copy = {
     scanStarting: "Starting the study…",
     scanPreparing: "Reading your site and writing the questions your customers would ask…",
     scanPreparingHint: "We search the web for what you sell and who you compete with. Under a minute.",
-    scanRunning: "Asking Gemini what your customers would ask",
+    scanRunning: "Asking the AI what your customers would ask",
     scanRunningHint: "Each question runs three times, because AI doesn't always answer the same way. You can stay here: the result shows up on its own.",
     answers: "answers",
     buildingTitle: "We're putting your audit together",
@@ -148,8 +154,14 @@ const copy = {
     keysText:
       "No daily limit, on the AIs you choose: ChatGPT, Claude, Gemini or Perplexity. Each answer is billed to your provider account (an audit is 78 answers per AI). The key is used only for this audit, stored encrypted while it runs and deleted when it ends.",
     keyPlaceholder: "Paste your key",
+    subtitleOwn:
+      "We check your live page —whether ChatGPT, Claude, Perplexity and Google can get in and understand it— free and without AI. Then we ask the AI on your key the questions your customers would ask, to see if it recommends you or your competitors.",
+    keyRequired: "Paste at least one API key: with this access the measurement runs on your account.",
+    keysRequiredTitle: "Your API key (required)",
+    keysRequiredText:
+      "The measurement runs on your provider account: N3 pays nothing and you pay N3 nothing. Paste the key for one or more AIs: ChatGPT, Claude, Gemini or Perplexity. It's 78 answers per AI you add. If you include Gemini, we also use it to draft the questions when your industry isn't in our catalog. The key is stored encrypted while it runs and deleted when it finishes.",
     sampleNote:
-      "A sample with one engine (Gemini): 26 questions, three times each. A snapshot of today, not an average, which is why every number comes with its likely range.",
+      "Sample: 26 questions, three times each, on the AIs listed above. A snapshot of today, not an average, which is why every number comes with its likely range.",
     nextTitle: "Measure it on all four engines, every month",
     nextText:
       "N3's study measures ChatGPT, Claude, Perplexity and Gemini with more questions and repetitions, shows which sources the AI checks before answering, and gives you the plan to show up.",
@@ -285,7 +297,7 @@ function Visibility({ scan, c }: { scan: ScanState; c: Copy }) {
   );
 }
 
-export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invite?: string } = {}) {
+export default function GeoAudit({ scanCode, invite, ownKeysOnly = false }: { scanCode?: string; invite?: string; ownKeysOnly?: boolean } = {}) {
   const { lang } = useLanguage();
   const c = copy[lang];
 
@@ -384,6 +396,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
     if (!url.trim()) return setError(c.invalidUrl);
     if (!name.trim()) return setError(c.invalidName);
     if (!emailRe.test(email.trim())) return setError(c.invalidEmail);
+    if (ownKeysOnly && !Object.values(keys).some((v) => v.trim())) return setError(c.keyRequired);
 
     setReport(null);
     setScan(null);
@@ -453,7 +466,7 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
               {c.badge}
             </span>
             <h1 className="text-[clamp(2rem,5vw,3.2rem)] font-black text-white leading-tight mb-4">{c.title}</h1>
-            <p className="text-zinc-400 text-base font-light leading-relaxed max-w-2xl">{c.subtitle}</p>
+            <p className="text-zinc-400 text-base font-light leading-relaxed max-w-2xl">{ownKeysOnly ? c.subtitleOwn : c.subtitle}</p>
 
             <form onSubmit={run} noValidate className="mt-8 glass rounded-2xl p-4 sm:p-6 grid sm:grid-cols-2 gap-3">
               <div className="sm:col-span-2">
@@ -509,9 +522,14 @@ export default function GeoAudit({ scanCode, invite }: { scanCode?: string; invi
                   className={inputCls}
                 />
               </div>
-              <details className="sm:col-span-2 group rounded-xl border border-white/[0.07] px-3 py-2">
-                <summary className="cursor-pointer list-none text-xs font-semibold text-zinc-400 hover:text-white">{c.keysTitle}</summary>
-                <p className="mt-2 text-xs text-zinc-500 leading-relaxed">{c.keysText}</p>
+              <details
+                open={ownKeysOnly || undefined}
+                className={`sm:col-span-2 group rounded-xl border px-3 py-2 ${ownKeysOnly ? "border-red-500/40 bg-red-500/[0.04]" : "border-white/[0.07]"}`}
+              >
+                <summary className={`cursor-pointer list-none text-xs font-semibold hover:text-white ${ownKeysOnly ? "text-white" : "text-zinc-400"}`}>
+                  {ownKeysOnly ? c.keysRequiredTitle : c.keysTitle}
+                </summary>
+                <p className="mt-2 text-xs text-zinc-500 leading-relaxed">{ownKeysOnly ? c.keysRequiredText : c.keysText}</p>
                 <div className="mt-3 grid sm:grid-cols-2 gap-2">
                   {(
                     [

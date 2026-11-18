@@ -130,12 +130,13 @@ export async function startScan(
   if (!EMAIL.test(email)) throw new ScanError("invalid_email");
   // Un link de invitación del panel siempre corre, aunque el acceso esté cerrado.
   const invite = input.invite ? await getInvite(input.invite) : null;
-  if (!scanAllowed(input.code) && !inviteUsable(invite)) throw new ScanError("unavailable");
+  const keys = input.keys ?? {};
+  const ownEngines = ENGINE_IDS.filter((e) => keys[e]);
+  // Con llaves propias el visitante paga todo: corre sin código ni invitación.
+  if (!ownEngines.length && !scanAllowed(input.code) && !inviteUsable(invite)) throw new ScanError("unavailable");
 
   const sql = await db();
   const market = scanMarket(input.country, input.lang);
-  const keys = input.keys ?? {};
-  const ownEngines = ENGINE_IDS.filter((e) => keys[e]);
 
   if (ownEngines.length) {
     // Se comprueban antes de arrancar (consulta gratuita), para no dejar al visitante esperando un error.
@@ -175,11 +176,18 @@ async function prepare(scanId: string, url: string, lang: "es" | "en", market: S
   try {
     // La legibilidad se guarda con el estudio, para que el panel lo muestre completo.
     const [suggestion, audit] = await Promise.all([
-      suggestStudy({ url, country: SCAN_MARKETS[market].country, language: SCAN_MARKETS[market].language, catalogFirst: true }),
+      suggestStudy({
+        url,
+        country: SCAN_MARKETS[market].country,
+        language: SCAN_MARKETS[market].language,
+        catalogFirst: true,
+        // Con llaves propias, las preguntas se arman con su llave de Gemini o con plantilla: nunca con la nuestra.
+        ...(keys ? { geminiKey: keys.gemini ?? null } : {}),
+      }),
       auditSite(url, lang),
     ]);
     // A template study would report on generic questions; better to say it didn't run.
-    if (suggestion.source === "template") throw new Error(suggestion.warnings.join(" ") || "no AI draft");
+    if (suggestion.source === "template" && !keys) throw new Error(suggestion.warnings.join(" ") || "no AI draft");
 
     const owner = `scan:${email}`;
     const engines: EngineId[] = keys ? ENGINE_IDS.filter((e) => keys[e]) : ["gemini"];

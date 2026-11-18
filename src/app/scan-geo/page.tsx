@@ -94,14 +94,20 @@ export default async function ScanGeoPage({ searchParams }: PageProps<"/scan-geo
   const inviteToken = typeof sp.i === "string" ? sp.i : "";
   // Un link del panel (?i=) corre aunque el acceso esté cerrado.
   const invite = inviteToken ? await getInvite(inviteToken).catch(() => null) : null;
-  const allowed = scanAllowed(code) || inviteUsable(invite);
+  // ?modo=llave: el visitante mide con su propia llave de API; no cuesta nada a N3, así que no pide código.
+  const ownKeysOnly = sp.modo === "llave";
+  const allowed = ownKeysOnly || scanAllowed(code) || inviteUsable(invite);
 
   return (
     <LanguageProvider initialLang={initialLang}>
       <main className="min-h-screen bg-[#06060c]">
         <Nav />
         {allowed ? (
-          <GeoAudit scanCode={scanOpenToEveryone() ? undefined : code} invite={invite ? invite.token : undefined} />
+          <GeoAudit
+            scanCode={scanOpenToEveryone() ? undefined : code}
+            invite={invite ? invite.token : undefined}
+            ownKeysOnly={ownKeysOnly}
+          />
         ) : (
           <Invitation />
         )}
