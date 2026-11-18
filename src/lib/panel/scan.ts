@@ -175,11 +175,11 @@ async function prepare(scanId: string, url: string, lang: "es" | "en", market: S
   try {
     // La legibilidad se guarda con el estudio, para que el panel lo muestre completo.
     const [suggestion, audit] = await Promise.all([
-      suggestStudy({ url, country: SCAN_MARKETS[market].country, language: SCAN_MARKETS[market].language }),
+      suggestStudy({ url, country: SCAN_MARKETS[market].country, language: SCAN_MARKETS[market].language, catalogFirst: true }),
       auditSite(url, lang),
     ]);
     // A template study would report on generic questions; better to say it didn't run.
-    if (suggestion.source !== "ai") throw new Error(suggestion.warnings.join(" ") || "no AI draft");
+    if (suggestion.source === "template") throw new Error(suggestion.warnings.join(" ") || "no AI draft");
 
     const owner = `scan:${email}`;
     const engines: EngineId[] = keys ? ENGINE_IDS.filter((e) => keys[e]) : ["gemini"];

@@ -4,14 +4,24 @@ import { GoogleGenAI } from "@google/genai";
 import { safeFetch } from "@/lib/geo/safeFetch";
 import { elementTexts, findTags, metaContent, removeNonContent, stripToText } from "@/lib/geo/html";
 import type { PromptType, Study, StudyPrompt } from "@/lib/geo-visibility/types.ts";
+import { classifySite, industryPrompts } from "@/lib/geo-visibility/catalog.ts";
 
-export type SuggestInput = { url: string; notes?: string; city?: string; country: string; language: string; timezone?: string };
+export type SuggestInput = {
+  url: string;
+  notes?: string;
+  city?: string;
+  country: string;
+  language: string;
+  timezone?: string;
+  /** Si la industria está en el catálogo, arma el estudio sin IA (preguntas y competidores fijos). */
+  catalogFirst?: boolean;
+};
 
 export type Suggestion = {
   study: Study;
   summary: string;
-  /** "ai" when a model drafted it; "template" when no model was available. */
-  source: "ai" | "template";
+  /** "ai" when a model drafted it; "catalog" from the fixed industry catalog; "template" when neither was possible. */
+  source: "ai" | "catalog" | "template";
   warnings: string[];
 };
 
@@ -190,6 +200,33 @@ export async function suggestStudy(input: SuggestInput): Promise<Suggestion> {
   const market = { country: input.country, city: input.city, region: input.city, timezone: input.timezone, language: input.language };
   const where = input.city || input.country;
   const fallbackName = site.siteName || site.title.split(/[|–—-]/)[0]?.trim() || site.domain.split(".")[0];
+
+  if (input.catalogFirst && input.country === "MX" && input.language.startsWith("es")) {
+    const match = classifySite(site.domain, [site.title, site.siteName, site.description, ...site.headings, site.text].join(" "));
+    if (match) {
+      const brand = match.brand ?? { name: fallbackName, aliases: [], domains: [site.domain] };
+      const prompts = [
+        ...industryPrompts(match.industry, where === "MX" ? "México" : where),
+        { type: "brand" as const, text: `¿Qué es ${brand.name} y qué ofrece en México?` },
+        { type: "brand" as const, text: `¿${brand.name} es una buena opción? ¿Qué opinan sus clientes?` },
+        { type: "brand" as const, text: `¿Qué ventajas y desventajas tiene ${brand.name} frente a otras opciones?` },
+      ];
+      return {
+        source: "catalog",
+        summary: match.industry.about,
+        warnings,
+        study: {
+          name: brand.name,
+          brand,
+          competitors: match.industry.brands.filter((b) => b !== match.brand),
+          market,
+          runs: 3,
+          engines: ["openai", "anthropic", "perplexity", "gemini"],
+          prompts: withIds(prompts),
+        },
+      };
+    }
+  }
 
   if (process.env.GEMINI_API_KEY) {
     try {

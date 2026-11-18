@@ -182,7 +182,7 @@ function typeOf(url: string, host: string, study: Study, competitorDomains: stri
   if (hostMatches(host, competitorDomains)) return "competitor";
   if (hasAny(host, STORES)) return "store";
   if (hasAny(host, SOCIAL)) return "social";
-  if (hasAny(host, REFERENCE) || /\.(gob|gov|edu)(\.[a-z]{2})?$/.test(host) || /\.edu$|\.gov$/.test(host)) return "reference";
+  if (hasAny(host, REFERENCE) || /(^|\.)(gob|gov|edu)(\.[a-z]{2})?$/.test(host)) return "reference";
   if (hasAny(host, MEDIA) || /(^|\.)(news|noticias|periodico|diario)/.test(host)) return "media";
   let path = "";
   try {

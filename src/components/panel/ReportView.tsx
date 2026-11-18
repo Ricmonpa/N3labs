@@ -8,7 +8,9 @@ import { num, pct, range, Section, Stat } from "./report-ui";
 /** La medición anterior del mismo estudio, para comparar. */
 export type PreviousRun = { report: Report; date: string };
 
-const shortDate = (iso: string) => new Date(iso).toLocaleDateString("es-MX", { day: "numeric", month: "short" });
+const COUNTRY_NAME: Record<string, string> = { MX: "México", US: "Estados Unidos", CA: "Canadá", CO: "Colombia", AR: "Argentina", CL: "Chile", PE: "Perú", PA: "Panamá" };
+
+const shortDate =(iso: string) => new Date(iso).toLocaleDateString("es-MX", { day: "numeric", month: "short" });
 
 /** Cambio frente a la medición anterior. Si los rangos se cruzan, puede ser ruido y se dice. */
 function Delta({ now, before, date }: { now: Rate; before: Rate | undefined; date: string }) {
@@ -163,7 +165,8 @@ export default function ReportView({ report, audience = "team", previous }: { re
   const b = report.brand.name;
   const engines = report.engines.map((e) => e.id);
   const { unbranded, branded } = report.overall;
-  const market = [...new Set([report.market.city, report.market.region, report.market.country].filter(Boolean))].join(", ");
+  const country = COUNTRY_NAME[report.market.country] ?? report.market.country;
+  const market = [...new Set([report.market.city, report.market.region, country].filter(Boolean))].join(", ");
   const maxCited = Math.max(1, ...report.citedWhenBrandIsNot.map((d) => d.runs));
 
   return (
