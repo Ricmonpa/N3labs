@@ -86,7 +86,7 @@ export default function BrandSearch({ brands }: { brands: SearchBrand[] }) {
           Mide cualquier marca con tu llave de API
         </Link>
         <p className="text-xs text-zinc-500 leading-relaxed">
-          Escribes tu sitio, pegas tu llave de ChatGPT, Claude, Gemini o Perplexity y la medición corre con tu cuenta. N3 no cobra nada.
+          Escribes tu sitio, pegas tu llave de Gemini, ChatGPT, Claude o Perplexity y la medición corre con tu cuenta. N3 no cobra nada.
         </p>
       </div>
     </section>

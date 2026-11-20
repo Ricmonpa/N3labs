@@ -79,14 +79,14 @@ const copy = {
     } as Record<string, string>,
     keysTitle: "Mide con tus propias llaves de API (opcional)",
     keysText:
-      "Sin límite diario y en las IAs que elijas: ChatGPT, Claude, Gemini o Perplexity. Cada respuesta se cobra en tu cuenta del proveedor (un diagnóstico son 78 respuestas por IA). La llave se usa solo para este diagnóstico, se guarda cifrada mientras corre y se borra al terminar.",
+      "Sin límite diario y en las IAs que elijas: Gemini, ChatGPT, Claude o Perplexity. Cada respuesta se cobra en tu cuenta del proveedor (un diagnóstico son 78 respuestas por IA). La llave se usa solo para este diagnóstico, se guarda cifrada mientras corre y se borra al terminar.",
     keyPlaceholder: "Pega tu llave",
     subtitleOwn:
       "Revisamos tu página en vivo —si ChatGPT, Claude, Perplexity y Google pueden entrar y entenderla— sin costo y sin IA. Luego le hacemos a la IA de tu llave las preguntas que haría tu cliente, para ver si te recomienda a ti o a tu competencia.",
     keyRequired: "Pega al menos una llave de API: con este acceso la medición corre con tu cuenta.",
     keysRequiredTitle: "Tu llave de API (obligatoria)",
     keysRequiredText:
-      "La medición corre con tu cuenta del proveedor: N3 no paga nada y tú no pagas a N3. Pega la llave de una o varias IAs: ChatGPT, Claude, Gemini o Perplexity. Son 78 respuestas por cada IA que pongas. Si incluyes la de Gemini, también la usamos para armar las preguntas cuando tu industria no está en nuestro catálogo. La llave se guarda cifrada mientras corre y se borra al terminar.",
+      "La medición corre con tu cuenta del proveedor: N3 no paga nada y tú no pagas a N3. Pega la llave de una o varias IAs: Gemini, ChatGPT, Claude o Perplexity. Son 78 respuestas por cada IA que pongas. Si incluyes la de Gemini, también la usamos para armar las preguntas cuando tu industria no está en nuestro catálogo. La llave se guarda cifrada mientras corre y se borra al terminar.",
     sampleNote:
       "Muestra: 26 preguntas, tres veces cada una, en las IAs que aparecen arriba. Es una foto de hoy, no un promedio, y por eso cada número trae su rango probable.",
     nextTitle: "Mídelo en los cuatro motores, cada mes",
@@ -152,14 +152,14 @@ const copy = {
     } as Record<string, string>,
     keysTitle: "Measure with your own API keys (optional)",
     keysText:
-      "No daily limit, on the AIs you choose: ChatGPT, Claude, Gemini or Perplexity. Each answer is billed to your provider account (an audit is 78 answers per AI). The key is used only for this audit, stored encrypted while it runs and deleted when it ends.",
+      "No daily limit, on the AIs you choose: Gemini, ChatGPT, Claude or Perplexity. Each answer is billed to your provider account (an audit is 78 answers per AI). The key is used only for this audit, stored encrypted while it runs and deleted when it ends.",
     keyPlaceholder: "Paste your key",
     subtitleOwn:
       "We check your live page —whether ChatGPT, Claude, Perplexity and Google can get in and understand it— free and without AI. Then we ask the AI on your key the questions your customers would ask, to see if it recommends you or your competitors.",
     keyRequired: "Paste at least one API key: with this access the measurement runs on your account.",
     keysRequiredTitle: "Your API key (required)",
     keysRequiredText:
-      "The measurement runs on your provider account: N3 pays nothing and you pay N3 nothing. Paste the key for one or more AIs: ChatGPT, Claude, Gemini or Perplexity. It's 78 answers per AI you add. If you include Gemini, we also use it to draft the questions when your industry isn't in our catalog. The key is stored encrypted while it runs and deleted when it finishes.",
+      "The measurement runs on your provider account: N3 pays nothing and you pay N3 nothing. Paste the key for one or more AIs: Gemini, ChatGPT, Claude or Perplexity. It's 78 answers per AI you add. If you include Gemini, we also use it to draft the questions when your industry isn't in our catalog. The key is stored encrypted while it runs and deleted when it finishes.",
     sampleNote:
       "Sample: 26 questions, three times each, on the AIs listed above. A snapshot of today, not an average, which is why every number comes with its likely range.",
     nextTitle: "Measure it on all four engines, every month",
@@ -533,9 +533,9 @@ export default function GeoAudit({ scanCode, invite, ownKeysOnly = false }: { sc
                 <div className="mt-3 grid sm:grid-cols-2 gap-2">
                   {(
                     [
+                      ["gemini", "Gemini (Google)"],
                       ["openai", "ChatGPT (OpenAI)"],
                       ["anthropic", "Claude (Anthropic)"],
-                      ["gemini", "Gemini (Google)"],
                       ["perplexity", "Perplexity"],
                     ] as const
                   ).map(([id, label]) => (
