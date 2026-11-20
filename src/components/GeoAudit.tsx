@@ -23,6 +23,8 @@ const ACCESS_KEY = "n3-geo-access";
 const PROMPTER_KEY = "n3-prompter-access";
 /** The last diagnosis, so a reload (or a phone that dropped the tab) picks it back up. */
 const LAST_KEY = "n3-geo-last";
+/** Cuánto tiempo se retoma el último diagnóstico al volver a la página. */
+const RESUME_MS = 6 * 60 * 60 * 1000;
 const POLL_MS = 3000;
 
 type ScanRef = { id: string; token: string };
@@ -297,11 +299,16 @@ function Visibility({ scan, c }: { scan: ScanState; c: Copy }) {
   );
 }
 
-export default function GeoAudit({ scanCode, invite, ownKeysOnly = false }: { scanCode?: string; invite?: string; ownKeysOnly?: boolean } = {}) {
+export default function GeoAudit({
+  scanCode,
+  invite,
+  ownKeysOnly = false,
+  initialUrl = "",
+}: { scanCode?: string; invite?: string; ownKeysOnly?: boolean; initialUrl?: string } = {}) {
   const { lang } = useLanguage();
   const c = copy[lang];
 
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState(initialUrl);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState(lang === "en" ? "US" : "MX");
@@ -315,12 +322,14 @@ export default function GeoAudit({ scanCode, invite, ownKeysOnly = false }: { sc
   const waiting = !!scan && scan.status !== "done" && scan.status !== "failed";
 
   // Prefill from an earlier sign-up and pick up the last diagnosis after a reload.
+  // Solo se retoma un diagnóstico reciente (alguien que recargó a medio estudio) y nunca si llega con un sitio nuevo:
+  // antes se retomaba para siempre y mostraba diagnósticos de hace meses.
   useEffect(() => {
     const lead = readJson<{ name?: string; email?: string }>(ACCESS_KEY) ?? readJson<{ name?: string; email?: string }>(PROMPTER_KEY);
     if (lead?.name) setName(lead.name);
     if (lead?.email) setEmail(lead.email);
-    const last = readJson<{ report: AuditReport; scan: ScanRef | null }>(LAST_KEY);
-    if (last?.report) {
+    const last = initialUrl ? null : readJson<{ report: AuditReport; scan: ScanRef | null; at?: number }>(LAST_KEY);
+    if (last?.report && last.at && Date.now() - last.at < RESUME_MS) {
       setReport(last.report);
       if (last.scan) {
         setScanRef(last.scan);
@@ -429,7 +438,7 @@ export default function GeoAudit({ scanCode, invite, ownKeysOnly = false }: { sc
       writeJson(ACCESS_KEY, lead);
 
       const ref = await startScan(audit.finalUrl);
-      writeJson(LAST_KEY, { report: audit, scan: ref });
+      writeJson(LAST_KEY, { report: audit, scan: ref, at: Date.now() });
     } catch {
       setError(c.errors.unreachable);
     } finally {

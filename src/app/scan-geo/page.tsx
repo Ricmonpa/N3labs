@@ -85,8 +85,11 @@ export default async function ScanGeoPage({ searchParams }: PageProps<"/scan-geo
   const sp = await searchParams;
   const cookieStore = await cookies();
 
+  // El N3 GeoTool está en español: su medición sigue en español aunque el navegador tenga guardado otro idioma.
+  const fromGeoTool = sp.modo === "llave";
   const initialLang: Lang =
     resolve(typeof sp.lang === "string" ? sp.lang : undefined) ??
+    (fromGeoTool ? "es" : null) ??
     resolve(cookieStore.get("n3-lang")?.value) ??
     resolve(cookieStore.get("n3-geo")?.value) ??
     "es";
@@ -107,7 +110,7 @@ export default async function ScanGeoPage({ searchParams }: PageProps<"/scan-geo
           ownKeysOnly ? (
             // Medir con su llave es parte del N3 GeoTool: también pide el registro.
             <GeoToolGate frame="px-4 sm:px-6 pt-28 pb-16">
-              <GeoAudit ownKeysOnly />
+              <GeoAudit ownKeysOnly initialUrl={typeof sp.sitio === "string" ? sp.sitio.slice(0, 300) : ""} />
             </GeoToolGate>
           ) : (
             <GeoAudit scanCode={scanOpenToEveryone() ? undefined : code} invite={invite ? invite.token : undefined} />

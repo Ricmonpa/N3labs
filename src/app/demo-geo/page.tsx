@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import DemoShell, { DemoBadge, DemoCta } from "@/components/demo/DemoShell";
 import BrandSearch from "@/components/demo/BrandSearch";
+import MeasureCard from "@/components/demo/MeasureCard";
 import { ENGINE_LABEL } from "@/lib/geo-visibility/report.ts";
 import { demoIndustries, demoReport, slugOf } from "@/lib/demo";
 import { pct, range } from "@/components/panel/report-ui";
@@ -23,6 +24,8 @@ export const dynamic = "force-static";
 
 /** Las tarjetas de ranking por industria distraen de lo principal; se guardan apagadas hasta decidir dónde van. */
 const SHOW_INDUSTRY_RANKINGS = false;
+/** Buscar entre las marcas ya medidas y desplegar su informe guardado, sin correr nada. Apagado por ahora. */
+const SHOW_BRAND_SEARCH = false;
 
 const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
 
@@ -39,14 +42,17 @@ export default function DemoIndex() {
     <DemoShell>
       <DemoBadge />
       <h1 className="mt-5 text-[clamp(2rem,5vw,3.2rem)] font-black text-white leading-tight">
-        ¿A qué marcas recomiendan las IAs en México?
+        ¿Las IAs recomiendan tu marca, o a tu competencia?
       </h1>
       <p className="mt-4 max-w-2xl text-zinc-400 leading-relaxed">
-        Le preguntamos a la IA lo que preguntaría un cliente que todavía no ha elegido marca, y medimos a quién recomienda.
-        Busca tu marca o mídela con tu propia llave de API.
+        Le preguntamos a la IA lo que preguntaría un cliente que todavía no ha elegido marca, y medimos a quién recomienda: a
+        ti o a tu competencia. Cada número trae su muestra y su rango probable.
       </p>
 
-      {industries.length > 0 && (
+      <MeasureCard />
+
+      {/* Búsqueda entre marcas ya medidas (muestra el informe guardado): apagada, hoy el valor está en medir en vivo. */}
+      {SHOW_BRAND_SEARCH && industries.length > 0 && (
         <BrandSearch
           brands={industries.flatMap(({ industry, report }) =>
             report.shareOfVoice.map((r) => {
