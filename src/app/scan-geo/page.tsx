@@ -6,6 +6,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import type { Lang } from "@/lib/translations";
 import Nav from "@/components/Nav";
 import GeoAudit from "@/components/GeoAudit";
+import GeoToolGate from "@/components/demo/GeoToolGate";
 import Footer from "@/components/Footer";
 import { ENGEL_CALENDLY } from "@/components/Calendly";
 import { getInvite, inviteUsable } from "@/lib/panel/invites";
@@ -103,11 +104,14 @@ export default async function ScanGeoPage({ searchParams }: PageProps<"/scan-geo
       <main className="min-h-screen bg-[#06060c]">
         <Nav />
         {allowed ? (
-          <GeoAudit
-            scanCode={scanOpenToEveryone() ? undefined : code}
-            invite={invite ? invite.token : undefined}
-            ownKeysOnly={ownKeysOnly}
-          />
+          ownKeysOnly ? (
+            // Medir con su llave es parte del N3 GeoTool: también pide el registro.
+            <GeoToolGate frame="px-4 sm:px-6 pt-28 pb-16">
+              <GeoAudit ownKeysOnly />
+            </GeoToolGate>
+          ) : (
+            <GeoAudit scanCode={scanOpenToEveryone() ? undefined : code} invite={invite ? invite.token : undefined} />
+          )
         ) : (
           <Invitation />
         )}

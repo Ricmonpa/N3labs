@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/demo-geo/[industr
   const data = demoReport(industria, marca);
   const industry = demoIndustries().find((i) => i.id === industria);
   if (!data || !industry) return {};
-  const title = `${data.study.brand.name} en las respuestas de IA · ${industry.label} en México · Demo N3`;
+  const title = `${data.study.brand.name} en las respuestas de IA · ${industry.label} en México · N3 GeoTool`;
   return {
     title,
     description: `Qué tan seguido recomiendan ChatGPT, Gemini, Claude o Perplexity a ${data.study.brand.name} frente a su competencia. Medición real con muestra y rango probable.`,

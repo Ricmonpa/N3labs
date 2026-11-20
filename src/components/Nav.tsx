@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, Radar } from "lucide-react";
+import { Menu, X, Sparkles, Radar, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { ENGEL_CALENDLY } from "./Calendly";
@@ -36,11 +36,15 @@ function navLinkProps(href: string) {
 }
 
 export default function Nav() {
-  const { t } = useLanguage();
-  // El producto principal de GEO es el demo: marcas ya medidas gratis y medición con la llave del cliente.
-  const geoHref = "/demo-geo";
+  const { t, lang } = useLanguage();
+  // Pestaña GEO: primero el anzuelo (Geo Scan, página estática por idioma), luego la herramienta con registro.
+  const geoLinks = [
+    { href: lang === "en" ? "/geotest-en.html" : "/geotest.html", label: "Geo Scan", hint: lang === "en" ? "Quick free test" : "Prueba rápida gratis" },
+    { href: "/demo-geo", label: "N3 GeoTool", hint: lang === "en" ? "Full tool · sign-up" : "Herramienta completa · con registro" },
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [geoOpen, setGeoOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -79,13 +83,31 @@ export default function Nav() {
             <Sparkles size={13} className="hidden xl:block" />
             {t.prompter.navLabel}
           </a>
-          <a
-            href={geoHref}
-            className="text-[13px] xl:text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <Radar size={13} className="hidden xl:block" />
-            Demo GEO
-          </a>
+          <div className="relative group" onMouseLeave={() => setGeoOpen(false)}>
+            <button
+              type="button"
+              onClick={() => setGeoOpen((v) => !v)}
+              aria-expanded={geoOpen}
+              aria-haspopup="true"
+              className="text-[13px] xl:text-sm font-semibold text-red-400 hover:text-red-300 transition-colors duration-200 flex items-center gap-1.5 whitespace-nowrap"
+            >
+              <Radar size={13} className="hidden xl:block" />
+              GEO
+              <ChevronDown size={13} className="transition-transform group-hover:rotate-180" />
+            </button>
+            <div
+              className={`absolute left-1/2 -translate-x-1/2 top-full pt-3 w-64 ${geoOpen ? "block" : "hidden"} group-hover:block group-focus-within:block`}
+            >
+              <div className="glass rounded-xl border border-white/10 p-1.5 shadow-xl shadow-black/40">
+                {geoLinks.map((g) => (
+                  <a key={g.href} href={g.href} className="block rounded-lg px-3 py-2.5 hover:bg-white/[0.06]">
+                    <span className="block text-sm font-semibold text-white">{g.label}</span>
+                    <span className="block text-xs text-zinc-400">{g.hint}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </nav>
 
         {/* CTA + lang */}
@@ -141,14 +163,20 @@ export default function Nav() {
                 <Sparkles size={14} />
                 {t.prompter.navLabel}
               </a>
-              <a
-                href={geoHref}
-                onClick={() => setOpen(false)}
-                className="text-red-400 font-semibold text-base flex items-center gap-1.5"
-              >
-                <Radar size={14} />
-                Demo GEO
-              </a>
+              <div>
+                <p className="text-red-400 font-semibold text-base flex items-center gap-1.5">
+                  <Radar size={14} />
+                  GEO
+                </p>
+                <div className="mt-3 ml-5 flex flex-col gap-3 border-l border-white/10 pl-4">
+                  {geoLinks.map((g) => (
+                    <a key={g.href} href={g.href} onClick={() => setOpen(false)}>
+                      <span className="block text-slate-200 font-medium text-base">{g.label}</span>
+                      <span className="block text-xs text-zinc-500">{g.hint}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
               <a
                 href={ENGEL_CALENDLY}
                 target="_blank"

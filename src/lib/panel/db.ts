@@ -80,6 +80,19 @@ async function ensureSchema(sql: ReturnType<typeof neon>) {
   await sql`ALTER TABLE geo_scans ADD COLUMN IF NOT EXISTS country text NOT NULL DEFAULT 'MX'`;
   // Si el prospecto midió con sus propias llaves (no le costó a N3).
   await sql`ALTER TABLE geo_scans ADD COLUMN IF NOT EXISTS own_keys boolean NOT NULL DEFAULT false`;
+  // Registros para usar el N3 GeoTool.
+  await sql`CREATE TABLE IF NOT EXISTS geo_tool_leads (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    name text NOT NULL,
+    email text NOT NULL,
+    company text NOT NULL,
+    whatsapp text,
+    ip text NOT NULL,
+    lang text NOT NULL,
+    origin text,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )`;
+  await sql`CREATE INDEX IF NOT EXISTS geo_tool_leads_recent_idx ON geo_tool_leads (created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS geo_scans_recent_idx ON geo_scans (created_at DESC)`;
   // Links de un solo uso que el equipo comparte con un prospecto.
   await sql`CREATE TABLE IF NOT EXISTS geo_invites (

@@ -7,7 +7,7 @@ import { ENGINE_LABEL } from "@/lib/geo-visibility/report.ts";
 import { demoIndustries, demoReport, slugOf } from "@/lib/demo";
 import { pct, range } from "@/components/panel/report-ui";
 
-const TITLE = "Demo GEO: ¿a qué marcas recomiendan las IAs en México? · N3";
+const TITLE = "N3 GeoTool: ¿a qué marcas recomiendan las IAs en México?";
 const DESCRIPTION =
   "Medición real de qué marcas de autos, bancos, seguros, tiendas y telefonía recomiendan las IAs en México, con su muestra y rango probable.";
 

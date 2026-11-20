@@ -4,8 +4,9 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ENGEL_CALENDLY } from "@/components/Calendly";
+import GeoToolGate from "./GeoToolGate";
 
-/** Marco de las páginas del demo: navegación, fondo y la invitación a medir la marca propia. */
+/** Marco de las páginas del N3 GeoTool: navegación, fondo y registro antes de entrar. */
 export default function DemoShell({ children }: { children: React.ReactNode }) {
   return (
     <LanguageProvider initialLang="es">
@@ -16,7 +17,9 @@ export default function DemoShell({ children }: { children: React.ReactNode }) {
             className="absolute top-20 left-1/2 -translate-x-1/2 w-[520px] max-w-full h-[380px] rounded-full blur-[140px] pointer-events-none"
             style={{ background: "rgba(220, 38, 38, 0.08)" }}
           />
-          <div className="relative z-10 mx-auto max-w-5xl">{children}</div>
+          <div className="relative z-10 mx-auto max-w-5xl">
+            <GeoToolGate>{children}</GeoToolGate>
+          </div>
         </div>
         <Footer />
       </main>
@@ -28,7 +31,7 @@ export function DemoBadge() {
   return (
     <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-medium">
       <Radar size={12} className="text-red-500" />
-      Demo GEO · medición real
+      N3 GeoTool · medición real
     </span>
   );
 }

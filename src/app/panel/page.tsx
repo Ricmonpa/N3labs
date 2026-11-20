@@ -5,6 +5,8 @@ import { RunList } from "@/components/panel/RunList";
 import DeleteStudyButton from "@/components/panel/DeleteStudyButton";
 import InviteLinks from "@/components/panel/InviteLinks";
 import LeadList from "@/components/panel/LeadList";
+import GeoToolLeads from "@/components/panel/GeoToolLeads";
+import { listGeoToolLeads } from "@/lib/panel/geotool";
 import { listScanLeads } from "@/lib/panel/scan";
 import { listInvites } from "@/lib/panel/invites";
 import { engineAvailability } from "@/lib/geo-visibility/engines/index.ts";
@@ -13,7 +15,13 @@ import { listRuns, listStudies, MAX_CALLS_PER_RUN } from "@/lib/panel/store";
 export const dynamic = "force-dynamic";
 
 async function Dashboard() {
-  const [studies, runs, invites, leads] = await Promise.all([listStudies(), listRuns(undefined, 10), listInvites(), listScanLeads()]);
+  const [studies, runs, invites, leads, toolLeads] = await Promise.all([
+    listStudies(),
+    listRuns(undefined, 10),
+    listInvites(),
+    listScanLeads(),
+    listGeoToolLeads(),
+  ]);
   const engines = engineAvailability().map(({ id, label, model, hasKey }) => ({ id, label, model, hasKey }));
   return (
     <div className="space-y-8">
@@ -21,6 +29,8 @@ async function Dashboard() {
         <h1 className="text-2xl font-black text-white">Estudios de visibilidad en IA</h1>
         <p className="text-sm text-zinc-400 mt-1">Pregunta a ChatGPT, Claude, Perplexity y Gemini como lo haría un cliente, mide si recomiendan la marca y revisa si pueden leer su sitio.</p>
       </div>
+
+      <GeoToolLeads leads={toolLeads} />
 
       <LeadList leads={leads} />
 
