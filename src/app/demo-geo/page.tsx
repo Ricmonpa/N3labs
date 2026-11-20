@@ -21,6 +21,9 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-static";
 
+/** Las tarjetas de ranking por industria distraen de lo principal; se guardan apagadas hasta decidir dónde van. */
+const SHOW_INDUSTRY_RANKINGS = false;
+
 const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
 
 const longDate =(iso: string) => new Date(iso).toLocaleDateString("es-MX", { dateStyle: "long" });
@@ -39,9 +42,8 @@ export default function DemoIndex() {
         ¿A qué marcas recomiendan las IAs en México?
       </h1>
       <p className="mt-4 max-w-2xl text-zinc-400 leading-relaxed">
-        Le hicimos a la IA las preguntas que haría un cliente que todavía no ha elegido marca, sin nombrar a ninguna, y
-        repetimos cada pregunta varias veces. Esto es lo que respondió. Elige una industria y ve el informe completo desde
-        el lado de cualquier marca.
+        Le preguntamos a la IA lo que preguntaría un cliente que todavía no ha elegido marca, y medimos a quién recomienda.
+        Busca tu marca o mídela con tu propia llave de API.
       </p>
 
       {industries.length > 0 && (
@@ -62,9 +64,8 @@ export default function DemoIndex() {
         />
       )}
 
-      {industries.length === 0 ? (
-        <p className="mt-10 rounded-xl border border-white/10 p-6 text-zinc-400">La medición del demo se está preparando.</p>
-      ) : (
+      {/* Rankings por industria: guardados, no se muestran hasta decidir dónde van (SHOW_INDUSTRY_RANKINGS). */}
+      {SHOW_INDUSTRY_RANKINGS && industries.length > 0 && (
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
           {industries.map(({ industry, report }) => {
             const ranking = [...report.shareOfVoice].sort((a, b) => b.overall.rate - a.overall.rate);
@@ -114,12 +115,15 @@ export default function DemoIndex() {
         </div>
       )}
 
-      <p className="mt-6 text-xs text-zinc-500 leading-relaxed max-w-3xl">
-        Medición independiente de N3 Thinktech. Ninguna de estas marcas la pidió ni la pagó, y N3 no tiene relación con
-        ellas. Las respuestas de las IAs cambian con el tiempo: cada cifra vale para su fecha y su muestra.
-      </p>
-
-      <DemoCta />
+      {SHOW_INDUSTRY_RANKINGS && (
+        <>
+          <p className="mt-6 text-xs text-zinc-500 leading-relaxed max-w-3xl">
+            Medición independiente de N3 Thinktech. Ninguna de estas marcas la pidió ni la pagó, y N3 no tiene relación con
+            ellas. Las respuestas de las IAs cambian con el tiempo: cada cifra vale para su fecha y su muestra.
+          </p>
+          <DemoCta />
+        </>
+      )}
     </DemoShell>
   );
 }
