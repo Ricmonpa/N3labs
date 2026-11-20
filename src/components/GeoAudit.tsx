@@ -328,7 +328,8 @@ export default function GeoAudit({
     const lead = readJson<{ name?: string; email?: string }>(ACCESS_KEY) ?? readJson<{ name?: string; email?: string }>(PROMPTER_KEY);
     if (lead?.name) setName(lead.name);
     if (lead?.email) setEmail(lead.email);
-    const last = initialUrl ? null : readJson<{ report: AuditReport; scan: ScanRef | null; at?: number }>(LAST_KEY);
+    // En el N3 GeoTool cada medición corre en vivo: nunca se retoma nada guardado.
+    const last = initialUrl || ownKeysOnly ? null : readJson<{ report: AuditReport; scan: ScanRef | null; at?: number }>(LAST_KEY);
     if (last?.report && last.at && Date.now() - last.at < RESUME_MS) {
       setReport(last.report);
       if (last.scan) {
