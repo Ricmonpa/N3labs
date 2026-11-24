@@ -5,9 +5,8 @@ import { useLanguage } from "@/context/LanguageContext";
 
 /**
  * "Ask AI about us": opens each assistant with the N3 Labs question already written.
- * ChatGPT, Claude, Perplexity and Copilot accept the question in the URL.
- * Gemini has no public URL parameter, so the question is copied to the clipboard
- * and Gemini opens ready for the visitor to paste it.
+ * Every link carries the question in its URL; "Gemini" opens Google's AI Mode,
+ * which runs on Gemini, because gemini.google.com accepts no prompt parameter.
  */
 
 type Bot = { name: string; domain: string; url: (q: string) => string; paste?: boolean };
@@ -16,7 +15,8 @@ const BOTS: Bot[] = [
   { name: "ChatGPT", domain: "chatgpt.com", url: (q) => `https://chatgpt.com/?q=${q}` },
   { name: "Claude", domain: "claude.ai", url: (q) => `https://claude.ai/new?q=${q}` },
   { name: "Perplexity", domain: "perplexity.ai", url: (q) => `https://www.perplexity.ai/search?q=${q}` },
-  { name: "Gemini", domain: "gemini.google.com", url: () => "https://gemini.google.com/app", paste: true },
+  // gemini.google.com has no URL parameter for a prompt; Google's AI Mode runs on Gemini and accepts one.
+  { name: "Gemini", domain: "gemini.google.com", url: (q) => `https://www.google.com/search?udm=50&q=${q}` },
   { name: "Copilot", domain: "copilot.microsoft.com", url: (q) => `https://copilot.microsoft.com/?q=${q}` },
 ];
 
