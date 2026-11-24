@@ -192,6 +192,14 @@ export const translations = {
         loading: "Cargando calendario…",
       },
     },
+    askAi: {
+      label: "Pregúntale a la IA",
+      title: "¿Qué dicen las IAs de N3 Labs?",
+      lead: "Abre tu IA favorita con esta pregunta ya escrita:",
+      prompt: "¿Cómo puede ayudarme N3 Labs para mejorar mi negocio y crecer como persona usando la IA?",
+      ask: "Preguntar en",
+      pasted: "Pregunta copiada: pégala en Gemini con Ctrl+V o Cmd+V.",
+    },
     footer: {
       rights: "Todos los derechos reservados.",
       links: [
@@ -482,6 +490,14 @@ export const translations = {
         prompt: "Choose who you'd like to meet with:",
         loading: "Loading calendar…",
       },
+    },
+    askAi: {
+      label: "Ask AI",
+      title: "What do AIs say about N3 Labs?",
+      lead: "Open your favorite AI with this question already written:",
+      prompt: "How can N3 Labs help me improve my business and grow as a person using AI?",
+      ask: "Ask",
+      pasted: "Question copied: paste it into Gemini with Ctrl+V or Cmd+V.",
     },
     footer: {
       rights: "All rights reserved.",

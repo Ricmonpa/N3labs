@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
+import AskAI from "@/components/AskAI";
 
 export default function Footer() {
   const { t } = useLanguage();
   return (
+    <>
+    <AskAI />
     <footer className="border-t border-white/[0.05] py-10 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <Image src="/n3-logo.png" alt="N3 Thinktech IA Laboratory" width={130} height={51} />
@@ -27,5 +30,6 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }
