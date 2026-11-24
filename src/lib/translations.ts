@@ -202,6 +202,7 @@ export const translations = {
     },
     footer: {
       rights: "Todos los derechos reservados.",
+      on: "en",
       links: [
         { label: "Servicios", href: "#servicios" },
         { label: "Soluciones", href: "#soluciones" },
@@ -501,6 +502,7 @@ export const translations = {
     },
     footer: {
       rights: "All rights reserved.",
+      on: "on",
       links: [
         { label: "Services", href: "#servicios" },
         { label: "Solutions", href: "#soluciones" },

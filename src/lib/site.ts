@@ -7,7 +7,12 @@ export const SITE_DESCRIPTION =
 
 // Official N3 profiles (LinkedIn, Instagram, YouTube, Wikidata…).
 // They become `sameAs` in the Organization JSON-LD. Only add real URLs.
-export const SAME_AS: string[] = [];
+export const SOCIAL = [
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/n3-labs" },
+  { name: "Instagram", href: "https://www.instagram.com/n3uronai/" },
+] as const;
+
+export const SAME_AS: string[] = SOCIAL.map((s) => s.href);
 
 // The shared card comes from src/app/opengraph-image.tsx (1200×630, generated).
 // Metadata here must not set `images`, or it would override that file.
