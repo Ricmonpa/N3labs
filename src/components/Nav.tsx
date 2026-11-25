@@ -41,6 +41,7 @@ export default function Nav() {
   const geoLinks = [
     { href: lang === "en" ? "/geotest-en.html" : "/geotest.html", label: "Geo Scan", hint: lang === "en" ? "Quick free test" : "Prueba rápida gratis" },
     { href: "/demo-geo", label: "N3 GeoTool", hint: lang === "en" ? "Full tool · sign-up" : "Herramienta completa · con registro" },
+    { href: lang === "en" ? "/iaready-en.html" : "/iaready.html", label: "IA Ready", hint: lang === "en" ? "Free test · how ready are you for AI?" : "Test gratis · ¿qué tan listo estás para la IA?" },
   ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);

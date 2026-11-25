@@ -7,7 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SOCIAL } from "@/lib/site";
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   return (
     <>
     <AskAI />
@@ -29,6 +29,12 @@ export default function Footer() {
               {l.label}
             </a>
           ))}
+          <a
+            href={lang === "en" ? "/iaready-en.html" : "/iaready.html"}
+            className="text-zinc-600 hover:text-zinc-300 text-xs transition-colors"
+          >
+            {lang === "en" ? "IA Ready test" : "Test IA Ready"}
+          </a>
           <span className="hidden md:block w-px h-3 bg-white/10" aria-hidden="true" />
           {SOCIAL.map((s) => (
             <a
