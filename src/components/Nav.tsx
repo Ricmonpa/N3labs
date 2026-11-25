@@ -42,7 +42,8 @@ export default function Nav() {
     { href: lang === "en" ? "/geotest-en.html" : "/geotest.html", label: "Geo Scan", hint: lang === "en" ? "Quick free test" : "Prueba rápida gratis" },
     { href: "/demo-geo", label: "N3 GeoTool", hint: lang === "en" ? "Full tool · sign-up" : "Herramienta completa · con registro" },
     { href: lang === "en" ? "/iaready-en.html" : "/iaready.html", label: "IA Ready", hint: lang === "en" ? "Free test · how ready are you for AI?" : "Test gratis · ¿qué tan listo estás para la IA?" },
-  ];
+
+    { href: "/glosario", label: lang === "en" ? "Glossary" : "Glosario", hint: lang === "en" ? "GEO, AEO, fan-outs, tokens and more" : "GEO, AEO, fan-outs, tokens y más" },  ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [geoOpen, setGeoOpen] = useState(false);
