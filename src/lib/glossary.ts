@@ -3,13 +3,14 @@
 
 export type GlossaryTerm = { term: string; sub: string; def: string; n3?: string };
 
-export const glossary: Record<"es" | "en", { title: string; intro: string; placeholder: string; none: string; n3: string; terms: GlossaryTerm[] }> = {
+export const glossary: Record<"es" | "en", { title: string; intro: string; placeholder: string; none: string; n3: string; propose: { title: string; btn: string; msg: string }; terms: GlossaryTerm[] }> = {
   es: {
     title: "Glosario GEO",
     intro: "Los términos que verás cuando se hable de visibilidad en IA, explicados en corto.",
     placeholder: "Buscar un término…",
     none: "Sin resultados.",
     n3: "En N3",
+    propose: { title: "¿Falta un término?", btn: "Proponer un término por WhatsApp", msg: "te recomiendo agregar el término: " },
     terms: [
       { term: "GEO", sub: "Generative Engine Optimization", def: "Optimizar tu marca y tu contenido para que las IA generativas (ChatGPT, Gemini, Claude, Perplexity, Copilot) te citen, mencionen y recomienden en sus respuestas. Es la evolución del SEO.", n3: "No hay un solo GEO sino un GEO sistémico: cada IA piensa distinto (SPA), así que se trabaja motor por motor." },
       { term: "SEO", sub: "Search Engine Optimization", def: "Optimizar tu sitio para aparecer en la lista de resultados de Google o Bing. Sigue siendo la base, pero cada vez más búsquedas terminan sin un solo clic." },
@@ -35,6 +36,7 @@ export const glossary: Record<"es" | "en", { title: string; intro: string; place
     placeholder: "Search a term…",
     none: "No results.",
     n3: "At N3",
+    propose: { title: "Missing a term?", btn: "Suggest a term on WhatsApp", msg: "I recommend adding the term: " },
     terms: [
       { term: "GEO", sub: "Generative Engine Optimization", def: "Optimizing your brand and content so generative AIs (ChatGPT, Gemini, Claude, Perplexity, Copilot) cite, mention and recommend you in their answers. It is the evolution of SEO.", n3: "There is no single GEO but a systemic GEO: each AI thinks differently (ATS), so it is worked engine by engine." },
       { term: "SEO", sub: "Search Engine Optimization", def: "Optimizing your site to appear in Google or Bing result lists. Still the foundation, but more and more searches end without a single click." },
