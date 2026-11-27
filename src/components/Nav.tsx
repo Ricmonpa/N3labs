@@ -42,6 +42,7 @@ export default function Nav() {
     { href: "/servicios-geo", label: lang === "en" ? "GEO services" : "Servicios GEO", hint: lang === "en" ? "Diagnosis, rankings, CDN, G3olink and Neurowriting" : "Diagnóstico, rankings, CDN, G3olink y Neuroescritura" },
     { href: "/glosario", label: lang === "en" ? "Glossary" : "Glosario", hint: lang === "en" ? "GEO, AEO, fan-outs, tokens and more" : "GEO, AEO, fan-outs, tokens y más" },
     { href: "/articulos-geo", label: lang === "en" ? "Articles of interest" : "Artículos de interés", hint: lang === "en" ? "Reading by Engel Fonseca" : "Lecturas de Engel Fonseca" },
+    { href: "/demo-geo", label: "N3 GeoTool", hint: lang === "en" ? "Full tool · sign-up" : "Herramienta completa · con registro" },
   ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
