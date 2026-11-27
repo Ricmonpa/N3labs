@@ -183,6 +183,19 @@ width:0; height:0; border-left:6px solid transparent; border-right:6px solid tra
 .threats{list-style:none;padding:0;margin:0}
 .threats li{border-left:3px solid var(--line);padding:8px 12px;margin:8px 0;font-size:13.5px;line-height:1.55;background:rgba(255,255,255,.025);border-radius:0 8px 8px 0}
 .threats li small{display:block;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.gl-q{width:100%;margin:6px 0 14px;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg-panel-2);color:var(--text);font:inherit;font-size:14px}
+.gl-q:focus{outline:none;border-color:var(--cyan)}
+.gl{border:1px solid var(--line);border-radius:12px;margin:8px 0;background:rgba(255,255,255,.025)}
+.gl summary{cursor:pointer;list-style:none;padding:12px 14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.gl summary::-webkit-details-marker{display:none}
+.gl summary::after{content:'+';margin-left:auto;color:var(--text-dim);font-family:'JetBrains Mono'}
+.gl[open] summary::after{content:'–'}
+.gl summary b{font-family:'Space Grotesk';font-size:15px;color:var(--cyan)}
+.gl summary span{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim)}
+.gl .gl-b{padding:0 14px 14px;font-size:14px;line-height:1.65;color:#eef1f7}
+.gl .gl-n3{margin-top:8px;padding:8px 12px;border-left:3px solid var(--ready);background:rgba(140,107,255,.08);border-radius:0 8px 8px 0;font-size:13px;color:var(--text-dim)}
+.gl .gl-n3 b{color:var(--ready)}
+.gl-none{display:none;color:var(--text-dim);font-size:14px;padding:8px 2px}
 .stats{margin-top:22px;padding:18px 18px 14px;border:1px solid var(--line,rgba(255,255,255,.12));border-radius:14px;background:rgba(255,255,255,.03)}
 .stats-n{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .stats-n b{font-size:34px;line-height:1;font-weight:600}
@@ -407,6 +420,31 @@ fill="none" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" fil
 <div class="section">
 <h2><span class="n">05</span> Una carta de tu yo del futuro</h2>
 <div class="letter" id="letterBox"></div>
+</div>
+
+<div class="section" id="glosario">
+<h2><span class="n">06</span> Glosario GEO</h2>
+<p class="result-lead">Los términos que verás cuando se hable de visibilidad en IA, explicados en corto.</p>
+<input class="gl-q" id="glQ" type="search" placeholder="Buscar un término…" aria-label="Buscar un término…" autocomplete="off">
+<div id="glList">
+<details class="gl"><summary><b>GEO</b><span>Generative Engine Optimization</span></summary><div class="gl-b">Optimizar tu marca y tu contenido para que las IA generativas (ChatGPT, Gemini, Claude, Perplexity, Copilot) te citen, mencionen y recomienden en sus respuestas. Es la evolución del SEO.<div class="gl-n3"><b>En N3:</b> No hay un solo GEO sino un GEO sistémico: cada IA piensa distinto (SPA), así que se trabaja motor por motor.</div></div></details>
+<details class="gl"><summary><b>SEO</b><span>Search Engine Optimization</span></summary><div class="gl-b">Optimizar tu sitio para aparecer en la lista de resultados de Google o Bing. Sigue siendo la base, pero cada vez más búsquedas terminan sin un solo clic.</div></details>
+<details class="gl"><summary><b>AIO</b><span>AI Optimization · IAO</span></summary><div class="gl-b">Término amplio para ajustar tu contenido a que los sistemas de IA lo entiendan y lo usen. Incluye al GEO y al AEO.</div></details>
+<details class="gl"><summary><b>AEO</b><span>Answer Engine Optimization</span></summary><div class="gl-b">Preparar tu contenido para ser la respuesta directa que dan los buscadores con IA, asistentes y snippets: preguntas claras, respuestas cortas y verificables.</div></details>
+<details class="gl"><summary><b>Fan-outs</b><span>Query fan-out</span></summary><div class="gl-b">Cuando una IA recibe una pregunta, la descompone y lanza varias búsquedas internas en paralelo antes de responder. Tu marca no compite por una palabra clave, sino por varias sub-preguntas.<div class="gl-n3"><b>En N3:</b> El N3 GeoTool mide qué busca cada IA por dentro antes de contestar.</div></div></details>
+<details class="gl"><summary><b>CDN</b><span>Content Delivery Network</span></summary><div class="gl-b">Red de servidores que entrega tu sitio rápido desde puntos cercanos al visitante. También puede servir a los agentes de IA una versión más legible de tu sitio.<div class="gl-n3"><b>En N3:</b> En el modelo GEO de N3, un CDN con agente inteligente pesa 15% en la recomendación.</div></div></details>
+<details class="gl"><summary><b>Markdown</b><span>Texto con estructura simple</span></summary><div class="gl-b">Formato de texto plano con marcas sencillas (#, -, **) para títulos, listas y énfasis. Las IA lo procesan con mucha menos fricción que un HTML recargado.</div></details>
+<details class="gl"><summary><b>Tokens</b><span>Unidad de texto de la IA</span></summary><div class="gl-b">Fragmentos en que una IA divide el texto para leerlo y escribirlo (aprox. 3 a 4 caracteres). Se cobra y se limita por tokens: menos tokens, respuesta más barata y rápida.</div></details>
+<details class="gl"><summary><b>Mapa LLM (llms.txt)</b><span>Mapa de tu sitio para IA</span></summary><div class="gl-b">Archivo de texto en la raíz de tu sitio (tusitio.com/llms.txt) que resume qué contiene y dónde está lo importante, para que las IA lo encuentren. Es una propuesta abierta: no todos los motores lo leen aún.</div></details>
+<details class="gl"><summary><b>Agente</b><span>Agente de IA</span></summary><div class="gl-b">Sistema de IA que no solo responde: decide pasos y usa herramientas (buscar, leer, escribir, ejecutar) para cumplir un objetivo.</div></details>
+<details class="gl"><summary><b>Agente orquestador</b><span>Coordinador de agentes</span></summary><div class="gl-b">Agente que dirige a otros agentes especializados: reparte tareas, junta resultados y decide el siguiente paso.<div class="gl-n3"><b>En N3:</b> En las presentaciones de N3 se le llama AGO.</div></div></details>
+<details class="gl"><summary><b>LLM</b><span>Large Language Model</span></summary><div class="gl-b">Modelo de lenguaje entrenado con enormes cantidades de texto, el motor detrás de ChatGPT, Gemini o Claude.</div></details>
+<details class="gl"><summary><b>Prompt</b><span>Instrucción a la IA</span></summary><div class="gl-b">La pregunta o instrucción que le das a una IA. Cómo la formulas cambia la calidad de la respuesta.</div></details>
+<details class="gl"><summary><b>Schema · JSON-LD</b><span>Datos estructurados</span></summary><div class="gl-b">Etiquetas invisibles en tu página que describen quién eres, qué ofreces y dónde estás, en un formato que las máquinas entienden sin adivinar.</div></details>
+<details class="gl"><summary><b>E-E-A-T</b><span>Experiencia, Especialización, Autoridad, Confianza</span></summary><div class="gl-b">Criterios con los que buscadores e IA juzgan si eres una fuente confiable. Las menciones de terceros pesan mucho.<div class="gl-n3"><b>En N3:</b> En el modelo GEO de N3, las menciones de terceros son el factor más grande: 40%.</div></div></details>
+<details class="gl"><summary><b>SPH · SPA</b><span>Sistemas de pensamiento</span></summary><div class="gl-b">SPH: tu Sistema de Pensamiento Humano (cómo piensas). SPA: el Sistema de Pensamiento Artificial, cómo una IA prioriza, filtra y reacciona. La IA rinde más cuando tu SPH la guía.</div></details>
+</div>
+<div class="gl-none" id="glNone">Sin resultados.</div>
 </div>
 
 <div class="footer-actions">
@@ -964,6 +1002,14 @@ document.getElementById('result').classList.remove('active');
 document.getElementById('intro').style.display = 'block';
 window.scrollTo({top:0, behavior:'smooth'});
 }
+</script>
+<script>
+(function(){ var q=document.getElementById('glQ'); if(!q) return;
+var items=[].slice.call(document.querySelectorAll('#glList .gl')), none=document.getElementById('glNone');
+q.addEventListener('input',function(){ var v=q.value.trim().toLowerCase(), n=0;
+items.forEach(function(d){ var ok=!v||d.textContent.toLowerCase().indexOf(v)>-1; d.style.display=ok?'':'none'; if(ok) n++; if(v&&ok) d.open=true; else if(!v) d.open=false; });
+none.style.display=n?'none':'block'; });
+})();
 </script>
 </body>
 </html>
